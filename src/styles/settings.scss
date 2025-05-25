@@ -8,3 +8,9 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+
+@use "vuetify" with (
+  $utilities: false,
+  $color-pack: false,
+  $reset: false
+);
