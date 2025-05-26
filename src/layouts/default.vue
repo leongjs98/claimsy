@@ -1,11 +1,13 @@
 <template>
-  <navbar />
+  <v-container class="w-75">
+    <navbar />
 
-  <v-main>
-    <router-view />
-  </v-main>
+    <v-main>
+      <router-view />
+    </v-main>
 
-  <AppFooter />
+    <AppFooter />
+  </v-container>
 </template>
 
 <script setup>
