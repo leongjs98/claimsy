@@ -1,4 +1,5 @@
 <template>
+  <v-container class="w-75">
   <navbar />
 
   <v-main>
@@ -6,6 +7,7 @@
   </v-main>
 
   <AppFooter />
+  </v-container>
 </template>
 
 <script setup>
