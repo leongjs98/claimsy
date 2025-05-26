@@ -23,3 +23,14 @@ Examples:
 
 1. Node packages
    `npm install`
+
+2. [TailwindCSS Plugin](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+   For autocomplete
+
+## Development
+
+1. TailwindCSS
+   `npm run tailwindcss`
+
+2. Development Server
+   `npm run dev`
