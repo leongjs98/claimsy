@@ -10,7 +10,7 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --fix",
-    "lint2": "prettier . --write --vue-indent-script-and-style"
+    "format": "prettier . --write --vue-indent-script-and-style"
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.5",

@@ -17,3 +17,7 @@ Create branches before each push. Following the naming convention below:
 
 Examples:
 `FE_aisya_add-mock-data`, `BE_mark_add-fastapi`, `AI_diana_remove-bug`
+
+## Setup
+1. Node packages
+`npm install`
