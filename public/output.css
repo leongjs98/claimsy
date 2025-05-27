@@ -7,16 +7,10 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
-    --color-red-500: oklch(63.7% 0.237 25.331);
-    --color-red-800: oklch(44.4% 0.177 26.899);
     --color-blue-900: oklch(37.9% 0.146 265.522);
     --color-black: #000;
     --color-white: #fff;
     --spacing: 0.25rem;
-    --text-3xl: 1.875rem;
-    --text-3xl--line-height: calc(2.25 / 1.875);
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
   }
@@ -167,64 +161,41 @@
   }
 }
 @layer utilities {
-  .mt-2 {
-    margin-top: calc(var(--spacing) * 2);
-  }
-  .mb-6 {
-    margin-bottom: calc(var(--spacing) * 6);
-  }
   .flex {
     display: flex;
   }
-  .table {
-    display: table;
+  .w-7 {
+    width: calc(var(--spacing) * 7);
   }
-  .border-collapse {
-    border-collapse: collapse;
+  .w-75 {
+    width: calc(var(--spacing) * 75);
   }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
   }
-  .resize {
-    resize: both;
+  .items-center {
+    align-items: center;
   }
-  .justify-center {
-    justify-content: center;
+  .justify-between {
+    justify-content: space-between;
   }
   .gap-2 {
     gap: calc(var(--spacing) * 2);
   }
-  .border {
-    border-style: var(--tw-border-style);
-    border-width: 1px;
-  }
-  .bg-black {
-    background-color: var(--color-black);
+  .gap-8 {
+    gap: calc(var(--spacing) * 8);
   }
   .bg-blue-900 {
     background-color: var(--color-blue-900);
   }
-  .px-4 {
-    padding-inline: calc(var(--spacing) * 4);
-  }
-  .py-1 {
-    padding-block: calc(var(--spacing) * 1);
-  }
-  .text-center {
-    text-align: center;
+  .p-4 {
+    padding: calc(var(--spacing) * 4);
   }
   .text-white {
     color: var(--color-white);
   }
   .italic {
     font-style: italic;
-  }
-  .underline {
-    text-decoration-line: underline;
-  }
-  .outline {
-    outline-style: var(--tw-outline-style);
-    outline-width: 1px;
   }
 }
 @property --tw-rotate-x {
@@ -247,16 +218,6 @@
   syntax: "*";
   inherits: false;
 }
-@property --tw-border-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
-}
-@property --tw-outline-style {
-  syntax: "*";
-  inherits: false;
-  initial-value: solid;
-}
 @layer properties {
   @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
     *, ::before, ::after, ::backdrop {
@@ -265,8 +226,6 @@
       --tw-rotate-z: initial;
       --tw-skew-x: initial;
       --tw-skew-y: initial;
-      --tw-border-style: solid;
-      --tw-outline-style: solid;
     }
   }
 }
