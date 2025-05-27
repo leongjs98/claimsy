@@ -1,4 +1,5 @@
 <template>
+
   <div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
       <!-- Card Container -->
@@ -182,3 +183,9 @@ const uploadFile = async () => {
   }
 }
 </script>
+
+<!-- <div class="mx-auto w-full max-w-6xl py-14">
+    <div class="flex w-min flex-col">Employee Claim Upload</div>
+  </div>
+</template> -->
+
