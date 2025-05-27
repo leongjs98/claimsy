@@ -1,11 +1,14 @@
 <template>
-  <navbar />
+  <v-container>
+    <Navbar />
 
-  <v-main>
-    <router-view />
-  </v-main>
+    <v-main>
+      <router-view />
+    </v-main>
 
-  <AppFooter />
+    <!-- <AppFooter /> -->
+    <Chatbot />
+  </v-container>
 </template>
 
 <script setup>
