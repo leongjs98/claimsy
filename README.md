@@ -21,16 +21,18 @@ Examples:
 
 ## Setup
 
-1. Node packages
-   `npm install`
+1. Install all node packages:
 
-2. [TailwindCSS Plugin](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
-   For autocomplete
+`npm install`
+
+2. Install [TailwindCSS Plugin](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) for autocomplete
 
 ## Development
 
 1. TailwindCSS
+
    `npm run tailwindcss`
 
 2. Development Server
+
    `npm run dev`
