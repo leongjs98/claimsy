@@ -1,12 +1,13 @@
 <template>
-  <v-container class="w-75">
+  <v-container class="">
     <navbar />
+    <chatbot />
 
     <v-main>
       <router-view />
     </v-main>
 
-    <AppFooter />
+    <!-- <AppFooter /> -->
   </v-container>
 </template>
 

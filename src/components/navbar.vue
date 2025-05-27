@@ -1,19 +1,27 @@
 <template>
-  <div>
-    <header class="bg-blue-900 text-white p-4">
+  <div class="mx-auto w-full max-w-6xl">
+    <header
+      class="rounded-2xl bg-blue-900 px-4 text-white shadow-xl/30 shadow-blue-900"
+    >
       <div class="flex justify-between">
         <nav class="flex items-center">
           <a href="/">
             <img class="w-7" src="/logo.svg" alt="Claimsy Logo" />
           </a>
         </nav>
-        <nav class="flex gap-8 justify-between items-center">
-          <a href="employee/claim/all">My Claims</a>
-          <a href="employee/claim/upload">Receipt Upload</a>
-          <a href="#">Point & Rewards</a>
-          <a href="#">Ask Claimsy</a>
+        <nav
+          class="flex items-center justify-between gap-8 text-lg font-semibold"
+        >
+          <a class="py-4" href="employee/claim/all">My Claims</a>
+          <a class="py-4" href="employee/claim/upload">Receipt Upload</a>
+          <a class="py-4" href="#">Point & Rewards</a>
+          <a class="py-4" href="#">Ask Claimsy</a>
+          <!-- <a class="py-4 border-b-blue-900 border-b-5" href="employee/claim/all">My Claims</a> -->
+          <!-- <a class="py-4 border-b-yellow-500 border-b-5" href="employee/claim/upload">Receipt Upload</a> -->
+          <!-- <a class="py-4 border-b-blue-900 border-b-5" href="#">Point & Rewards</a> -->
+          <!-- <a class="py-4 border-b-blue-900 border-b-5" href="#">Ask Claimsy</a> -->
         </nav>
-        <nav class="flex gap-2 items-center">
+        <nav class="flex items-center gap-2">
           <button>
             <v-icon icon="mdi-bell-outline"></v-icon>
           </button>
