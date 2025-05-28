@@ -395,9 +395,17 @@
     border-style: var(--tw-border-style);
     border-width: 1px;
   }
+  .border-1 {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
   .border-2 {
     border-style: var(--tw-border-style);
     border-width: 2px;
+  }
+  .border-5 {
+    border-style: var(--tw-border-style);
+    border-width: 5px;
   }
   .border-b {
     border-bottom-style: var(--tw-border-style);
@@ -509,6 +517,9 @@
   }
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
+  }
+  .py-5 {
+    padding-block: calc(var(--spacing) * 5);
   }
   .py-6 {
     padding-block: calc(var(--spacing) * 6);
@@ -782,6 +793,13 @@
     &:hover {
       @media (hover: hover) {
         background-color: #0353A4;
+      }
+    }
+  }
+  .hover\:bg-\[\#FFAD05\] {
+    &:hover {
+      @media (hover: hover) {
+        background-color: #FFAD05;
       }
     }
   }

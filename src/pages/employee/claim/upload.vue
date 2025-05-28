@@ -3,7 +3,7 @@
     <div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-3xl mx-auto">
         <!-- Card Container -->
-        <div class="bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all hover:shadow-3xl px-35">
+        <div class="bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all hover:shadow-3xl px-20 py-5">
           <!-- Card Header -->
           <div class="px-8 py-6 pb-0 text-center">
             <h2 class="text-2xl font-bold text-[#00246A]">Upload Your Receipts</h2>
@@ -43,7 +43,7 @@
                 <div class="mt-4 flex flex-col items-center justify-center space-y-3">
                   <p class="text-gray-400 text-xs">Drop your files here or</p>
                   <label
-                    class="relative cursor-pointer bg-[#4077B0] rounded-2xl px-10 py-1 text-white hover:bg-[#0353A4] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 transition-colors duration-200"
+                    class="relative cursor-pointer bg-[#4077B0] rounded-xl px-10 py-1 text-white hover:bg-[#0353A4] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 transition-colors duration-200"
                   >
                     <span class="text-xs">Browse Files</span>
                     <input
@@ -89,7 +89,7 @@
             <div class="mt-6 flex justify-center space-x-10">
               <button
                 @click="cancelUpload"
-                class="px-10 py-2 border-2 border-[#00246A] text-[#00246A] rounded-xl shadow-lg hover:bg-blue-50 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-blue-300 transition-colors duration-200 bg-white text-xs font-medium"
+                class="px-10 py-2 border-1 border-[#00246A] text-[#00246A] rounded-xl shadow-lg hover:bg-blue-50 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-blue-300 transition-colors duration-200 bg-white text-xs font-medium"
               >
                 Cancel
               </button>
