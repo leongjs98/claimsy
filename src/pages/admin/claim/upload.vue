@@ -3,11 +3,11 @@
   <div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-3xl mx-auto">
       <!-- Card Container -->
-      <div class="bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all hover:shadow-3xl px-20 py-5">
+      <div class="bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all hover:shadow-3xl px-20 py-6">
         <!-- Card Header -->
-        <div class="px-8 py-6 pb-0 text-center">
+        <div class="px-8 py-5=4 pb-0 text-center">
           <h2 class="text-2xl font-bold text-[#00246A]">Claim Policy</h2>
-          <p class="mt-2 text-[#4077B0] text-sm">Please upload the latest claim policy here</p>
+          <p class="mt-2 text-[#4077B0] text-sm">Please upload the latest claim policy below</p>
         </div>
 
         <!-- Card Body -->
