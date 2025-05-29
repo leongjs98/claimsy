@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div class="bg-gray-100">
     <Navbar />
 
     <v-main>
@@ -8,7 +8,7 @@
 
     <!-- <AppFooter /> -->
     <Chatbot />
-  </v-container>
+  </div>
 </template>
 
 <script setup>

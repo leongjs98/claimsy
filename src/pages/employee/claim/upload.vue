@@ -1,13 +1,13 @@
 <template>
 
-    <div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-3xl mx-auto">
         <!-- Card Container -->
         <div class="bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all hover:shadow-3xl px-20 py-6">
           <!-- Card Header -->
           <div class="px-8 py-4 pb-0 text-center">
-            <h2 class="text-2xl font-bold text-[#00246A]">Upload Your Receipts</h2>
-            <p class="mt-2 text-[#4077B0] text-sm">Please provide your receipt below</p>
+            <h2 class="text-2xl font-bold text-theme-300">Upload Your Receipts</h2>
+            <p class="mt-2 text-theme-100 text-sm">Please provide your receipt below</p>
           </div>
   
           <!-- Card Body -->
@@ -25,7 +25,7 @@
                 <!-- New circular upload icon -->
                 <div class="mx-auto h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center mb-4">
                   <svg
-                    class="h-10 w-10 text-[#4077B0]"
+                    class="h-10 w-10 text-theme-100"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -43,7 +43,7 @@
                 <div class="mt-4 flex flex-col items-center justify-center space-y-3">
                   <p class="text-gray-400 text-xs">Drop your files here or</p>
                   <label
-                    class="relative cursor-pointer bg-[#4077B0] rounded-xl px-10 py-1 text-white hover:bg-[#0353A4] focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 transition-colors duration-200"
+                    class="relative cursor-pointer bg-theme-100 rounded-xl px-10 py-1 text-white hover:bg-theme-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 transition-colors duration-200"
                   >
                     <span class="text-xs">Browse Files</span>
                     <input
@@ -82,14 +82,14 @@
             </div>
   
             <!-- "Supported Format" text -->
-            <p class="text-xs text-[#4077B0] mt-2 pt-2 text-center">
+            <p class="text-xs text-theme-100 mt-2 pt-2 text-center">
                   Supported formats: PDF, DOC, DOCX, JPG or PNG (max 10MB)
           </p>
             <!-- Upload and Cancel buttons -->
             <div class="mt-6 flex justify-center space-x-10">
               <button
                 @click="cancelUpload"
-                class="px-10 py-2 border-1 border-[#00246A] text-[#00246A] rounded-xl shadow-lg hover:bg-blue-50 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-blue-300 transition-colors duration-200 bg-white text-xs font-medium"
+                class="px-10 py-2 border-1 border-theme-300 text-theme-300 rounded-xl shadow-lg hover:bg-blue-50 focus:outline-none focus:ring-1 focus:ring-offset-2 focus:ring-blue-300 transition-colors duration-200 bg-white text-xs font-medium"
               >
                 Cancel
               </button>
@@ -98,7 +98,7 @@
                 :disabled="!selectedFile"
                 class="px-10 py-2 rounded-xl shadow-lg text-xs font-medium text-white transition-all duration-200 ease-in-out"
                 :class="{
-                  'bg-[#00246A] hover:bg-[#00246A] focus:ring-2 focus:ring-offset-2 focus:ring-blue-500': selectedFile,
+                  'bg-theme-300 hover:bg-theme-300 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500': selectedFile,
                   'bg-gray-400 cursor-not-allowed': !selectedFile
                 }"
               >
