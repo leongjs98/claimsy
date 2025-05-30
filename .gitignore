@@ -181,4 +181,4 @@ node_modules/
 **/**/*.html
 !./index.html
 
-./public/output.css
+public/output.css
