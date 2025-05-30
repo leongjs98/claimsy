@@ -14,6 +14,8 @@ declare module 'vue' {
     Navbar: typeof import('./components/navbar/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Table: typeof import('./components/Table.vue')['default']
+    TableComponent: typeof import('./components/TableComponent.vue')['default']
     Upload: typeof import('./components/upload.vue')['default']
     UploadCard: typeof import('./components/UploadCard.vue')['default']
   }
