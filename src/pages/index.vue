@@ -1,26 +1,30 @@
 <template>
   <div class="mx-auto w-full max-w-6xl py-14">
     <div class="flex w-min flex-col gap-3">
-      <a
+      <RouterLink
         class="w-max border-b border-b-blue-900 hover:font-semibold hover:text-blue-900"
-        href="employee/claim/all"
-        >Employee: My Claims</a
-      >
-      <a
+        to="employee/claim/all"
+        >
+        Employee: My Claims
+      </RouterLink >
+      <RouterLink
         class="w-max border-b border-b-blue-900 hover:font-semibold hover:text-blue-900"
-        href="employee/claim/upload"
-        >Employee: Upload Receipt</a
-      >
-      <a
+        to="employee/claim/upload"
+        >
+        Employee: Upload Receipt
+      </RouterLink >
+      <RouterLink
         class="w-max border-b border-b-blue-900 hover:font-semibold hover:text-blue-900"
-        href="admin/claim/all"
-        >Admin: All Claims</a
-      >
-      <a
+        to="admin/claim/all"
+        >
+        Admin: Claim Center
+      </RouterLink >
+      <RouterLink
         class="w-max border-b border-b-blue-900 hover:font-semibold hover:text-blue-900"
-        href="admin/claim/upload"
-        >Admin: Upload Policy</a
-      >
+        to="admin/policy/upload"
+        >
+        Admin: Upload Policy
+      </RouterLink >
     </div>
   </div>
 </template>
