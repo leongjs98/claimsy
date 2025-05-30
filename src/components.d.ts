@@ -9,8 +9,11 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
+    Espu: typeof import('./components/espu.vue')['default']
+    MerchantName: typeof import('./components/MerchantName.vue')['default']
     Navbar: typeof import('./components/navbar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TextInput: typeof import('./components/TextInput.vue')['default']
   }
 }
