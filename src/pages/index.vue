@@ -4,27 +4,27 @@
       <RouterLink
         class="w-max border-b border-b-blue-900 hover:font-semibold hover:text-blue-900"
         to="employee/claim/upload"
-        >
+      >
         Employee: Upload Receipt
-      </RouterLink >
+      </RouterLink>
       <RouterLink
         class="w-max border-b border-b-blue-900 hover:font-semibold hover:text-blue-900"
         to="employee/claim/edit"
-        >
+      >
         Employee: Edit Receipt
-      </RouterLink >
+      </RouterLink>
       <RouterLink
         class="w-max border-b border-b-blue-900 hover:font-semibold hover:text-blue-900"
         to="admin/claim/all"
-        >
+      >
         Admin: Claim Center
-      </RouterLink >
+      </RouterLink>
       <RouterLink
         class="w-max border-b border-b-blue-900 hover:font-semibold hover:text-blue-900"
         to="admin/policy/upload"
-        >
+      >
         Admin: Upload Policy
-      </RouterLink >
+      </RouterLink>
     </div>
   </div>
 </template>

@@ -1,3 +1,3 @@
 <template>
-  <h1 class="font-semibold text-4xl">Empty</h1>
+  <h1 class="text-4xl font-semibold">Empty</h1>
 </template>
