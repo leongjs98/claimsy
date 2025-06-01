@@ -70,14 +70,6 @@
 </template>
 
 <script setup>
-  import { watch } from "vue";
   import { useRoute } from "vue-router";
   const route = useRoute();
-
-  watch(
-    () => route.path,
-    (oldPath, newPath) => {
-      console.log(route.path);
-    },
-  );
 </script>

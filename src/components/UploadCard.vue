@@ -53,7 +53,10 @@
                 <label
                   class="relative cursor-pointer rounded-xl bg-theme-100 px-10 py-1 text-white transition-colors duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 focus-within:outline-none hover:bg-theme-200"
                 >
-                  <span class="text-xs">Browse Files</span>
+                  <span
+                    class="flex items-center justify-center px-3 py-2 text-center text-xs"
+                    >Browse Files</span
+                  >
                   <input
                     type="file"
                     class="sr-only"

@@ -2,12 +2,10 @@
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
     <div class="mt-16 sm:flex sm:items-center">
       <div class="sm:flex-auto">
-        <h1 class="text-base font-semibold text-gray-900">Claim Submitted</h1>
+        <h1 class="text-base font-semibold text-gray-900">Claims Submitted</h1>
         <p class="mt-2 text-sm text-gray-700">
-          A claim list from all the Employees in your account.
+          A claim list from all the employees in your account.
         </p>
-      </div>
-      <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
       </div>
     </div>
     <div class="mt-8 flow-root">
@@ -17,31 +15,57 @@
             <table class="min-w-full divide-y divide-gray-300 bg-gray-100">
               <thead class="bg-theme-300 text-white">
                 <tr>
-                  <th scope="col" class="rounded-tl-lg py-3 pr-3.5 pl-4 text-right text-sm font-semibold sm:pl-6">
+                  <th
+                    scope="col"
+                    class="rounded-tl-lg py-3 pr-3.5 pl-4 text-right text-sm font-semibold sm:pl-6"
+                  >
                     #
                   </th>
-                  <th scope="col" class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold">
+                  <th
+                    scope="col"
+                    class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold"
+                  >
                     Name
                   </th>
-                  <th scope="col" class="w-fit px-3 py-3.5 text-left text-sm font-semibold ">
+                  <th
+                    scope="col"
+                    class="w-fit px-3 py-3.5 text-left text-sm font-semibold"
+                  >
                     Email
                   </th>
-                  <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold ">
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-left text-sm font-semibold"
+                  >
                     Date
                   </th>
-                  <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold ">
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-center text-sm font-semibold"
+                  >
                     Item(s)
                   </th>
-                  <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold ">
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-right text-sm font-semibold"
+                  >
                     Total (RM)
                   </th>
-                  <th scope="col" class="rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold ">
-                  </th>
+                  <th
+                    scope="col"
+                    class="rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold"
+                  ></th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
-                <tr v-for="(person, index) in people" :key="person.email" class="shadow-md">
-                  <td class="py-4 pr-3 pl-4 text-right text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">
+                <tr
+                  v-for="(person, index) in people"
+                  :key="person.email"
+                  class="shadow-md"
+                >
+                  <td
+                    class="py-4 pr-3 pl-4 text-right text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6"
+                  >
                     {{ index + 1 }}
                   </td>
                   <!-- <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{{ person.Name }}</td> -->
@@ -49,26 +73,36 @@
                     <div class="flex flex-col">
                       <span class="font-medium text-gray-900">{{
                         person.Name
-                        }}</span>
+                      }}</span>
                       <span class="text-xs text-gray-500">{{
                         person.title
-                        }}</span>
+                      }}</span>
                     </div>
                   </td>
-                  <td class="px-3 py-4 w-fit text-sm whitespace-nowrap text-gray-500">
+                  <td
+                    class="w-fit px-3 py-4 text-sm whitespace-nowrap text-gray-500"
+                  >
                     {{ person.email }}
                   </td>
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                     {{ person.Date }}
                   </td>
-                  <td class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500">
+                  <td
+                    class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
+                  >
                     {{ person.item }}
                   </td>
-                  <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500">
+                  <td
+                    class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
+                  >
                     {{ person.Total }}
                   </td>
-                  <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-theme-300">
-                    <RouterLink class="hover:underline" to="#">Details</RouterLink>
+                  <td
+                    class="px-4 py-4 text-right text-sm whitespace-nowrap text-theme-300"
+                  >
+                    <RouterLink class="hover:underline" to="#"
+                      >Details</RouterLink
+                    >
                   </td>
                   <!-- <td class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
                     <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, {{ person.name
@@ -85,7 +119,7 @@
 </template>
 
 <script setup>
-  // will be connect to the database later
+  // will be connecting to the database later
 
   const people = [
     {
@@ -188,6 +222,4 @@
       Total: "600.00",
     },
   ];
-  //
-  // More people...
 </script>
