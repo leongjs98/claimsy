@@ -182,3 +182,4 @@ node_modules/
 !./index.html
 
 public/output.css
+src/auto-imports.d.ts

@@ -62,6 +62,7 @@
                     class="sr-only"
                     @change="handleFileInput"
                     accept=".pdf,.jpg,.jpeg,.png"
+                    multiple
                   />
                 </label>
               </div>
