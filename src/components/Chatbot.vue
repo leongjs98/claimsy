@@ -1,6 +1,5 @@
 <template>
   <div
-    x-data="{ isOpen: false }"
     class="fixed inset-x-0 bottom-8 mx-auto flex w-full max-w-6xl justify-end"
   >
     <div
@@ -8,26 +7,18 @@
       aria-labelledby="claimsy-chatbot"
       role="dialog"
       aria-modal="true"
-      x-show="isOpen"
-      x-transition:enter="ease-out duration-300"
-      x-transition:enter-start="opacity-0"
-      x-transition:enter-end="opacity-100"
-      x-transition:leave="ease-in duration-200"
-      x-transition:leave-start="opacity-100"
-      x-transition:leave-end="opacity-0"
     >
+    <Transition name="backdrop">
       <div
         class="fixed inset-0 bg-gray-200/75 transition-opacity"
         aria-hidden="true"
+        v-show="isOpen"
+        @click="isOpen = false"
       ></div>
+    </Transition>
+    <Transition name="pane">
       <div
-        x-show="isOpen"
-        x-transition:enter="ease-out duration-300"
-        x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-        x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-        x-transition:leave="ease-in duration-200"
-        x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-        x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        v-show="isOpen"
         class="absolute right-8 bottom-20 z-20 h-[50rem] min-h-[50rem] transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:w-full sm:min-w-lg md:min-w-xl"
       >
         <!-- <h2 class="absolute inset-x-0 h-16 bg-theme-300 py-4 text-center text-xl font-semibold text-white"> -->
@@ -96,9 +87,10 @@
           </form>
         </div>
       </div>
+    </Transition>
     </div>
     <button
-      x-on:click="isOpen = !isOpen"
+      @click="isOpen = !isOpen"
       class="fadeInRight z-50 rounded-full bg-theme-300 p-4 shadow-xl/30 shadow-blue-900 transition hover:bg-theme-200 hover:shadow-xl/20 focus:bg-theme-200 focus:shadow-xl/20"
     >
       <img class="w-10" src="/logo.svg" alt="Claimsy Logo" />
@@ -107,6 +99,8 @@
 </template>
 
 <script setup>
+  import {ref} from 'vue'
+  const isOpen = ref(false)
   let conversation = [
     {
       isSenderUser: true,
@@ -136,6 +130,28 @@
 </script>
 
 <style scoped>
+
+      .backdrop-enter-from {
+        transition-timing-function: var(--ease-out);
+        transition-duration: 300ms;
+      }
+      .backdrop-enter-active {
+        opacity: 0%;
+      }
+      .backdrop-enter-to {
+        opacity: 100%;
+      }
+      .backdrop-leave-from {
+        transition-timing-function: var(--ease-in);
+        transition-duration: 200ms;
+      }
+      .backdrop-leave-active {
+        opacity: 100%;
+      }
+      .backdrop-leave-to {
+        opacity: 0%;
+      }
+
   @keyframes fadeInRight {
     from {
       opacity: 0;
