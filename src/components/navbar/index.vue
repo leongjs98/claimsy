@@ -53,7 +53,7 @@
               v-show="!route.path.includes('admin')"
             >
             </NavLink>
-            <NavLink name="Ask Claimsy" link="/employee/ask-claimsy"> </NavLink>
+            <NavLink name="Ask Claimsy" link="/ask-claimsy"> </NavLink>
           </ul>
         </nav>
         <nav class="flex items-center gap-2">
