@@ -1,12 +1,25 @@
 # Claimsy
-
 !! **only group leader can push to main branch** !!
 
 everyone needs to develop in your own branch and ask to merge to main
 
-refer TeamHub for the tasks to do
+## Development
 
-refer GitHub requests for specific codes
+1. TailwindCSS
+
+   `npm run tailwindcss`
+
+2. Development Server
+
+   `npm run dev`
+
+## Setup
+
+1. Install all node packages:
+
+`npm install`
+
+2. Install [TailwindCSS Plugin](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) for autocomplete
 
 ## Branch naming convention:
 
@@ -19,20 +32,3 @@ Create branches before each push. Following the naming convention below:
 Examples:
 `FE_aisya_add-mock-data`, `BE_mark_add-fastapi`, `AI_diana_remove-bug`
 
-## Setup
-
-1. Install all node packages:
-
-`npm install`
-
-2. Install [TailwindCSS Plugin](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) for autocomplete
-
-## Development
-
-1. TailwindCSS
-
-   `npm run tailwindcss`
-
-2. Development Server
-
-   `npm run dev`
