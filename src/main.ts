@@ -16,7 +16,6 @@ import { createApp } from "vue";
 // Styles
 // import "unfonts.css";
 import "../public/output.css";
-import "../public/alpine.min.js";
 
 const app = createApp(App);
 

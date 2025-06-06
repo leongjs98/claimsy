@@ -5,3 +5,51 @@
   --color-theme-200: #0353a4;
   --color-theme-300: #00246a;
 }
+
+.pane-enter-from {
+  @apply ease-out duration-300;
+}
+
+.pane-enter-active {
+  @apply opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95;
+}
+
+.pane-enter-to {
+  @apply opacity-100 translate-y-0 sm:scale-100;
+}
+
+.pane-leave-from {
+  @apply ease-in duration-200;
+}
+
+.pane-leave-active {
+  @apply opacity-100 translate-y-0 sm:scale-100;
+}
+
+.pane-leave-to {
+  @apply opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95;
+}
+
+.backdrop-enter-from {
+  @apply ease-out duration-300;
+}
+
+.backdrop-enter-active {
+  @apply opacity-0;
+}
+
+.backdrop-enter-to {
+  @apply opacity-100;
+}
+
+.backdrop-leave-from {
+  @apply ease-in duration-200;
+}
+
+.backdrop-leave-active {
+  @apply opacity-100;
+}
+
+.backdrop-leave-to {
+  @apply opacity-0;
+}
