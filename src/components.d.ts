@@ -11,15 +11,13 @@ declare module 'vue' {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     CalendarInput: typeof import('./components/form/CalendarInput.vue')['default']
     Chatbot: typeof import('./components/Chatbot.vue')['default']
+    ClaimDetailsDialog: typeof import('./components/dialogs/ClaimDetailsDialog.vue')['default']
     DropdownInput: typeof import('./components/form/DropdownInput.vue')['default']
     Navbar: typeof import('./components/navbar/index.vue')['default']
     NavLink: typeof import('./components/navbar/NavLink.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Table: typeof import('./components/Table.vue')['default']
-    TableComponent: typeof import('./components/TableComponent.vue')['default']
     TextInput: typeof import('./components/form/TextInput.vue')['default']
-    Upload: typeof import('./components/upload.vue')['default']
     UploadCard: typeof import('./components/UploadCard.vue')['default']
   }
 }

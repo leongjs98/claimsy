@@ -100,9 +100,7 @@
                   <td
                     class="px-4 py-4 text-right text-sm whitespace-nowrap text-theme-300"
                   >
-                    <RouterLink class="hover:underline" to="#"
-                      >Details</RouterLink
-                    >
+                  <button class="text-theme-300 hover:underline" @click="openDetails(person)">Details</button>
                   </td>
                   <!-- <td class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
                     <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, {{ person.name
@@ -116,10 +114,31 @@
       </div>
     </div>
   </div>
+
+  <!-- claim detail dialog popup -->
+    <ClaimDetailsDialog
+      v-model="showDialog"
+      :data="selectedPerson"
+    />
+
+
 </template>
 
 <script setup>
   // will be connecting to the database later
+
+
+  //script for claim detail dialog 
+  import ClaimDetailsDialog from '../../../components/dialogs/ClaimDetailsDialog.vue';
+  import { ref } from 'vue';
+
+  const showDialog = ref(false);
+    const selectedPerson = ref(null);
+
+    const openDetails = (person) => {
+      selectedPerson.value = person;
+      showDialog.value = true;
+    };
 
   const people = [
     {
