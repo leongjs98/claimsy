@@ -6,6 +6,8 @@
     <select
       :id="id"
       :name="name"
+      :value="modelValue"      
+      :disabled="disabled"
       class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-gray-200 py-2 pr-9 pl-4 text-base text-theme-300 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-theme-200 sm:text-sm/6"
     >
       <option v-for="option in options" :key="option">{{ option }}</option>
@@ -36,6 +38,8 @@
       options: { type: Array, required: true },
       // autocomplete: {type: String, default: "off"},
       // placeholder: {type: String, default: ""},
+      modelValue: { type: [String, Number], default: "" },
+      disabled: { type: Boolean, default: false },
     },
   };
 </script>
