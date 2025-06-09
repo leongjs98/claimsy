@@ -1,33 +1,25 @@
 <template>
-  <div
-    class="fadeInRight fixed inset-x-0 bottom-8 mx-auto flex w-full max-w-6xl justify-end"
-  >
     <div
-      class="relative z-10"
-      aria-labelledby="claimsy-chatbot"
-      role="dialog"
-      aria-modal="true"
+      class="h-[55rem] grid grid-cols-6 gap-4 pb-12 mx-auto mt-15 max-w-5xl rounded-2xl border border-gray-200 bg-white px-15 py-10 shadow-lg"
     >
-    <Transition name="backdrop">
       <div
-        class="fixed inset-0 bg-gray-200/75 transition-opacity"
-        aria-hidden="true"
-        v-show="isOpen"
-        @click="isOpen = false"
-      ></div>
-    </Transition>
-    <Transition name="pane">
-      <div
-        v-show="isOpen"
-        class="absolute right-8 bottom-20 z-20 h-[50rem] min-h-[50rem] transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:w-full sm:min-w-lg md:min-w-xl"
+        class="col-span-2 transform h-full rounded-xl bg-white shadow-xl transition-all p-4"
       >
-        <!-- <h2 class="absolute inset-x-0 h-16 bg-theme-300 py-4 text-center text-xl font-semibold text-white"> -->
-        <!--   Claimsy AI -->
-        <!-- </h2> -->
+      <button type="button" class="hover:cursor-pointer w-full border border-theme-300 hover:text-white transition rounded-xl text-theme-300 px-4 py-2.5 text-sm font-semibold shadow-xs hover:bg-theme-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-300">New Chat</button>
+      <ul class="space-y-4 divide-y divide-gray-200 mt-8">
+        <li v-for="(chat, index) in chatHistory" class="py-4">
+          <button class="text-left hover:cursor-pointer hover:text-theme-200 transition transition-300" :class="index == 1? 'text-theme-300 font-semibold': ''">{{chat}}</button>
+        </li>
+      </ul>
+      </div>
+      <div
+        class="grid grid-rows-12 relative col-span-4 transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:w-full sm:min-w-lg md:min-w-xl"
+      >
+        <div class="text-center row-span-1 text-white bg-theme-300 font-semibold py-5">{{chatHistory[1]}}</div>
         <div
-          class="flex h-full flex-col items-center justify-between px-4 pb-5 sm:p-6"
+          class="flex row-span-10 flex-col items-center justify-between px-4 sm:px-6"
         >
-          <div class="h-full w-full space-y-6 overflow-y-auto py-4 pr-2">
+          <div class="pt-8 w-full space-y-6 overflow-y-auto pb-4 pr-2">
             <div
               v-for="(convo, index) in conversation"
               :key="`convo-${index}`"
@@ -35,7 +27,7 @@
               :class="convo.isSenderUser ? 'justify-end' : ''"
             >
               <p
-                class="w-fit max-w-80 rounded-lg p-3"
+                class="w-fit max-w-lg rounded-lg p-3"
                 :class="
                   convo.isSenderUser ? 'bg-blue-100' : 'bg-theme-200 text-white'
                 "
@@ -44,7 +36,7 @@
               </p>
             </div>
           </div>
-          <form action class="grid w-full grid-cols-1">
+          <form action class="absolute bottom-5 left-5 right-5 grid grid-cols-1">
             <label for="chat-input" class="hidden"> Chat Input </label>
             <input
               type="text"
@@ -87,15 +79,8 @@
           </form>
         </div>
       </div>
-    </Transition>
+
     </div>
-    <button
-      @click="isOpen = !isOpen"
-      class="z-50 rounded-full bg-theme-300 p-4 shadow-xl/30 shadow-blue-900 transition hover:bg-theme-200 hover:shadow-xl/20 focus:bg-theme-200 focus:shadow-xl/20"
-    >
-      <img class="w-10" src="/logo.svg" alt="Claimsy Logo" />
-    </button>
-  </div>
 </template>
 
 <script setup>
@@ -126,24 +111,24 @@
       isSenderUser: false,
       text: "You're welcome! Is there anything else I can help you with regarding expense claims?",
     },
+    {
+      isSenderUser: true,
+      text: "Great, thanks!",
+    },
+    {
+      isSenderUser: false,
+      text: "You're welcome! Is there anything else I can help you with regarding expense claims?",
+    },
   ];
+
+  let chatHistory = [
+"WFH Setup Claims: What's Covered and What’s Not",
+"Transportation Claims: Rules, Limits, and Exceptions",
+"Gray Area Claims: What Happens When It’s Not So Clear",
+"How do i claim travel days vs work days?",
+"WiFi subsidy still active?",
+"Submitted wrong amount—can i edit a claim?"
+]
+
 </script>
 
-<style scoped>
-  @keyframes fadeInRight {
-    from {
-      opacity: 0;
-      transform: translate3d(10%, 0, 0);
-    }
-
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
-  }
-
-  .fadeInRight {
-    animation: fadeInRight;
-    animation-duration: 2s;
-  }
-</style>
