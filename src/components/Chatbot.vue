@@ -130,6 +130,28 @@
 </script>
 
 <style scoped>
+
+      .backdrop-enter-from {
+        transition-timing-function: var(--ease-out);
+        transition-duration: 300ms;
+      }
+      .backdrop-enter-active {
+        opacity: 0%;
+      }
+      .backdrop-enter-to {
+        opacity: 100%;
+      }
+      .backdrop-leave-from {
+        transition-timing-function: var(--ease-in);
+        transition-duration: 200ms;
+      }
+      .backdrop-leave-active {
+        opacity: 100%;
+      }
+      .backdrop-leave-to {
+        opacity: 0%;
+      }
+
   @keyframes fadeInRight {
     from {
       opacity: 0;
