@@ -7,7 +7,7 @@
     </v-main>
 
     <!-- <AppFooter /> -->
-    <Chatbot v-show="!route.path.includes('ask-claimsy')" />
+    <Chatbot v-if="!route.path.includes('ask-claimsy')" />
   </div>
 </template>
 

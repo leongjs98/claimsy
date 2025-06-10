@@ -18,7 +18,7 @@ export default createVuetify({
   },
   defaults: {
     VCard: {
-      style: 'border-radius: 12px', 
+      style: "border-radius: 12px",
     },
   },
 });
