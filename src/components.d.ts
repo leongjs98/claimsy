@@ -16,10 +16,7 @@ declare module 'vue' {
     NavLink: typeof import('./components/navbar/NavLink.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Table: typeof import('./components/Table.vue')['default']
-    TableComponent: typeof import('./components/TableComponent.vue')['default']
     TextInput: typeof import('./components/form/TextInput.vue')['default']
-    Upload: typeof import('./components/upload.vue')['default']
     UploadCard: typeof import('./components/UploadCard.vue')['default']
   }
 }

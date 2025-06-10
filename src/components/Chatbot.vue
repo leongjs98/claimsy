@@ -8,86 +8,88 @@
       role="dialog"
       aria-modal="true"
     >
-    <Transition name="backdrop">
-      <div
-        class="fixed inset-0 bg-gray-200/75 transition-opacity"
-        aria-hidden="true"
-        v-show="isOpen"
-        @click="isOpen = false"
-      ></div>
-    </Transition>
-    <Transition name="pane">
-      <div
-        v-show="isOpen"
-        class="absolute right-8 bottom-20 z-20 h-[50rem] min-h-[50rem] transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:w-full sm:min-w-lg md:min-w-xl"
-      >
-        <!-- <h2 class="absolute inset-x-0 h-16 bg-theme-300 py-4 text-center text-xl font-semibold text-white"> -->
-        <!--   Claimsy AI -->
-        <!-- </h2> -->
+      <Transition name="backdrop">
         <div
-          class="flex h-full flex-col items-center justify-between px-4 pb-5 sm:p-6"
+          class="fixed inset-0 bg-gray-200/75 transition-opacity"
+          aria-hidden="true"
+          v-show="isOpen"
+          @click="isOpen = false"
+        ></div>
+      </Transition>
+      <Transition name="pane">
+        <div
+          v-show="isOpen"
+          class="absolute right-8 bottom-20 z-20 h-[50rem] min-h-[50rem] transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:w-full sm:min-w-lg md:min-w-xl"
         >
-          <div class="h-full w-full space-y-6 overflow-y-auto py-4 pr-2">
-            <div
-              v-for="(convo, index) in conversation"
-              :key="`convo-${index}`"
-              class="flex"
-              :class="convo.isSenderUser ? 'justify-end' : ''"
-            >
-              <p
-                class="w-fit max-w-80 rounded-lg p-3"
-                :class="
-                  convo.isSenderUser ? 'bg-blue-100' : 'bg-theme-200 text-white'
-                "
+          <!-- <h2 class="absolute inset-x-0 h-16 bg-theme-300 py-4 text-center text-xl font-semibold text-white"> -->
+          <!--   Claimsy AI -->
+          <!-- </h2> -->
+          <div
+            class="flex h-full flex-col items-center justify-between px-4 pb-5 sm:p-6"
+          >
+            <div class="h-full w-full space-y-6 overflow-y-auto py-4 pr-2">
+              <div
+                v-for="(convo, index) in conversation"
+                :key="`convo-${index}`"
+                class="flex"
+                :class="convo.isSenderUser ? 'justify-end' : ''"
               >
-                {{ convo.text }}
-              </p>
-            </div>
-          </div>
-          <form action class="grid w-full grid-cols-1">
-            <label for="chat-input" class="hidden"> Chat Input </label>
-            <input
-              type="text"
-              id="chat-input"
-              name="chatInput"
-              class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-gray-200 py-2 pr-9 pl-4 text-base text-theme-300 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-theme-200 sm:text-sm/6"
-            />
-            <button
-              type="button"
-              class="col-start-1 row-start-1 mr-2 size-7 self-center justify-self-end text-theme-300 transition hover:text-theme-200 sm:size-6"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  fill-opacity="0"
-                  stroke="currentColor"
-                  stroke-dasharray="40"
-                  stroke-dashoffset="40"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 6l10 6l-10 6Z"
+                <p
+                  class="w-fit max-w-80 rounded-lg p-3"
+                  :class="
+                    convo.isSenderUser
+                      ? 'bg-blue-100'
+                      : 'bg-theme-200 text-white'
+                  "
                 >
-                  <animate
-                    fill="freeze"
-                    attributeName="fill-opacity"
-                    begin="0.5s"
-                    dur="0.5s"
-                    values="0;1"
-                  />
-                  <animate
-                    fill="freeze"
-                    attributeName="stroke-dashoffset"
-                    dur="0.5s"
-                    values="40;0"
-                  />
-                </path>
-              </svg>
-            </button>
-          </form>
+                  {{ convo.text }}
+                </p>
+              </div>
+            </div>
+            <form action class="grid w-full grid-cols-1">
+              <label for="chat-input" class="hidden"> Chat Input </label>
+              <input
+                type="text"
+                id="chat-input"
+                name="chatInput"
+                class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-gray-200 py-2 pr-9 pl-4 text-base text-theme-300 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-theme-200 sm:text-sm/6"
+              />
+              <button
+                type="button"
+                class="col-start-1 row-start-1 mr-2 size-7 self-center justify-self-end text-theme-300 transition hover:text-theme-200 sm:size-6"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path
+                    fill="currentColor"
+                    fill-opacity="0"
+                    stroke="currentColor"
+                    stroke-dasharray="40"
+                    stroke-dashoffset="40"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 6l10 6l-10 6Z"
+                  >
+                    <animate
+                      fill="freeze"
+                      attributeName="fill-opacity"
+                      begin="0.5s"
+                      dur="0.5s"
+                      values="0;1"
+                    />
+                    <animate
+                      fill="freeze"
+                      attributeName="stroke-dashoffset"
+                      dur="0.5s"
+                      values="40;0"
+                    />
+                  </path>
+                </svg>
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
-    </Transition>
+      </Transition>
     </div>
     <button
       @click="isOpen = !isOpen"
@@ -99,8 +101,8 @@
 </template>
 
 <script setup>
-  import {ref} from 'vue'
-  const isOpen = ref(false)
+  import { ref } from "vue";
+  const isOpen = ref(false);
   let conversation = [
     {
       isSenderUser: true,
@@ -130,27 +132,26 @@
 </script>
 
 <style scoped>
-
-      .backdrop-enter-from {
-        transition-timing-function: var(--ease-out);
-        transition-duration: 300ms;
-      }
-      .backdrop-enter-active {
-        opacity: 0%;
-      }
-      .backdrop-enter-to {
-        opacity: 100%;
-      }
-      .backdrop-leave-from {
-        transition-timing-function: var(--ease-in);
-        transition-duration: 200ms;
-      }
-      .backdrop-leave-active {
-        opacity: 100%;
-      }
-      .backdrop-leave-to {
-        opacity: 0%;
-      }
+  .backdrop-enter-from {
+    transition-timing-function: var(--ease-out);
+    transition-duration: 300ms;
+  }
+  .backdrop-enter-active {
+    opacity: 0%;
+  }
+  .backdrop-enter-to {
+    opacity: 100%;
+  }
+  .backdrop-leave-from {
+    transition-timing-function: var(--ease-in);
+    transition-duration: 200ms;
+  }
+  .backdrop-leave-active {
+    opacity: 100%;
+  }
+  .backdrop-leave-to {
+    opacity: 0%;
+  }
 
   @keyframes fadeInRight {
     from {
