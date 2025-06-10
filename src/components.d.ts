@@ -11,6 +11,7 @@ declare module 'vue' {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     CalendarInput: typeof import('./components/form/CalendarInput.vue')['default']
     Chatbot: typeof import('./components/Chatbot.vue')['default']
+    ClaimDetailsDialog: typeof import('./components/dialogs/ClaimDetailsDialog.vue')['default']
     DropdownInput: typeof import('./components/form/DropdownInput.vue')['default']
     Navbar: typeof import('./components/navbar/index.vue')['default']
     NavLink: typeof import('./components/navbar/NavLink.vue')['default']
