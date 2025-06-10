@@ -114,71 +114,13 @@
 </template>
 
 <script setup lang="ts">
-  import { defineProps, PropType } from "vue";
-
-  interface Item {
-    category: string;
-    date: string;
-    merchantName: string;
-    merchantAddress: string;
-    description: string;
-    quantity: number;
-    unitPrice: number;
-  }
-
-  interface Data {
-    id: string;
-    remark: string;
-    items: Item[];
-  }
+  import { ref, watch, computed } from "vue";
 
   const props = defineProps({
-    modelValue: {
-      type: Boolean,
-      required: false, // Or true, depending on whether it's required
-    },
-    data: {
-      type: Object as PropType<Data | undefined>,
-      required: false, // Or true, depending on whether it's required
-      default: undefined,
-      validator: (value: any): boolean => {
-        if (value === undefined) {
-          return true; // Allow undefined if not required
-        }
-
-        if (typeof value !== "object" || value === null) {
-          return false;
-        }
-
-        const data = value as Data;
-
-        if (typeof data.id !== "string") {
-          return false;
-        }
-
-        if (typeof data.remark !== "string") {
-          return false;
-        }
-
-        if (!Array.isArray(data.items)) {
-          return false;
-        }
-
-        for (const item of data.items) {
-          if (typeof item.category !== "string") return false;
-          if (typeof item.date !== "string") return false;
-          if (typeof item.merchantName !== "string") return false;
-          if (typeof item.merchantAddress !== "string") return false;
-          if (typeof item.description !== "string") return false;
-          if (typeof item.quantity !== "number") return false;
-          if (typeof item.unitPrice !== "number") return false;
-        }
-
-        return true;
-      },
-    },
+    modelValue: Boolean,
+    // Expected: { id: string, remark: string, items: Array<{ category: string, date: string, merchantName: string, merchantAddress: string, description: string, quantity: number, unitPrice: number }> }
+    data: Object,
   });
-
   const emit = defineEmits(["update:modelValue"]);
 
   const isOpen = ref(props.modelValue);
