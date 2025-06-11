@@ -24,7 +24,10 @@ declare module 'vue-router/auto-routes' {
     '/admin/policy/upload': RouteRecordInfo<'/admin/policy/upload', '/admin/policy/upload', Record<never, never>, Record<never, never>>,
     '/employee/ask-claimsy': RouteRecordInfo<'/employee/ask-claimsy', '/employee/ask-claimsy', Record<never, never>, Record<never, never>>,
     '/employee/claim/all': RouteRecordInfo<'/employee/claim/all', '/employee/claim/all', Record<never, never>, Record<never, never>>,
+    '/employee/claim/approved': RouteRecordInfo<'/employee/claim/approved', '/employee/claim/approved', Record<never, never>, Record<never, never>>,
     '/employee/claim/edit': RouteRecordInfo<'/employee/claim/edit', '/employee/claim/edit', Record<never, never>, Record<never, never>>,
+    '/employee/claim/expenses': RouteRecordInfo<'/employee/claim/expenses', '/employee/claim/expenses', Record<never, never>, Record<never, never>>,
+    '/employee/claim/rejected': RouteRecordInfo<'/employee/claim/rejected', '/employee/claim/rejected', Record<never, never>, Record<never, never>>,
     '/employee/claim/upload': RouteRecordInfo<'/employee/claim/upload', '/employee/claim/upload', Record<never, never>, Record<never, never>>,
     '/employee/rewards': RouteRecordInfo<'/employee/rewards', '/employee/rewards', Record<never, never>, Record<never, never>>,
   }

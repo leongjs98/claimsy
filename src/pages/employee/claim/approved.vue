@@ -9,6 +9,7 @@
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
+
             <!-- Tabs Row -->
             <ClaimsTab />
             <table
@@ -24,40 +25,7 @@
                   <th
                     class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold"
                   >
-                    Category
-                    <span
-                      class="rounded-tl-lg relative ml-1 cursor-pointer text-xs"
-                      @mouseenter="showCategoryDropdown = true"
-                    >
-                      <button class="focus:outline-none" @click="setSort('Category')">
-                        ⇅
-                      </button>
-                      <div
-                        v-show="showCategoryDropdown"
-                        class="absolute left-0 z-10 mt-2 w-48 rounded bg-white shadow-xl font-normal text-theme-300"
-                        @mouseenter="showCategoryDropdown = true"
-                        @mouseleave="showCategoryDropdown = false"
-                        
-                      >
-                        <ul>
-                          <li
-                            v-for="cat in categories"
-                            :key="cat"
-                            @click="
-                              selectedCategory = cat;
-                              showCategoryDropdown = false;
-                            "
-                            class="cursor-pointer rounded px-4 py-2 hover:bg-[#FFAD05] hover:text-white"
-                            :class="{
-                              'bg-theme-200 text-white':
-                                selectedCategory === cat,
-                            }"
-                          >
-                            {{ cat }}
-                          </li>
-                        </ul>
-                      </div>
-                    </span>
+                    Claim ID
                   </th>
                   <th
                     class="w-fit px-3 py-3.5 text-center text-sm font-semibold"
@@ -70,99 +38,74 @@
                   <th class="px-3 py-3.5 text-center text-sm font-semibold">
                     Quantity
                   </th>
-                  <th class="w-48 px-3 py-3.5 text-left text-sm font-semibold">
-                    Remark
-                  </th>
                   <th class="px-3 py-3.5 text-right text-sm font-semibold">
                     Total (RM)
                   </th>
-                  <th
-                    class="w-48 rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold"
-                  >
-                    Action
+                  <th class="w-48 px-3 py-3.5 text-center text-sm font-semibold">
+                    Status
+                  </th>
+                  <th class="rounded-tr-lg w-48 px-3 py-3.5 text-center text-sm font-semibold">
+                    Details
                   </th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
-                  v-for="(product, index) in sortedExpenses"
-                  :key="product.Name"
+                  v-for="(group, index) in claimGroups" 
+                  :key="group.ClaimID" 
                   class="shadow-md"
                 >
                   <td
                     :class="[
                       'py-4 pr-3 pl-4 text-right text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6',
-                      index === sortedExpenses.length - 1 ? 'rounded-bl-lg' : ''
+                      index === claimGroups.length - 1 ? 'rounded-bl-lg' : ''
                     ]"
                   >
                     {{ index + 1 }}
                   </td>
                   <!-- <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{{ person.Name }}</td> -->
-                  <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                    <div class="flex flex-col">
-                      <span class="font-medium text-gray-900">{{
-                        product.Name
-                      }}</span>
-                      <span class="text-xs text-gray-500">{{
-                        product.Category
-                      }}</span>
-                    </div>
+                  <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500"
+                  >
+                    {{ group.ClaimID }}
                   </td>
                   <td
                     class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{ product.Date }}
+                    {{ group.Date }}
                   </td>
-                  <td
-                    class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
+                 <td class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
+                 >
+                    {{ group.Quantity }}
+                  </td>
+                  <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{ product.Item }}
-                  </td>
-                  <td class="w-32 px-3 py-4 text-sm text-gray-500">
-                    <span
-                      class="block w-48 truncate overflow-hidden text-ellipsis"
-                    >
-                      {{ product.Remark }}
-                    </span>
+                    {{ group.Total }}
                   </td>
 
                   <td
-                    class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
+                    class="px-4 py-4 text-center text-sm whitespace-nowrap font-semibold"
+                    :class="{
+                      'text-[#2A9D8F]': group.Status === 'Approved',
+                      'text-red-600': group.Status === 'Rejected',
+                      'text-[#FFAD05]': group.Status === 'Pending'
+                    }"
                   >
-                    {{ product.Total }}
+                    {{ group.Status }}
                   </td>
                   <td
                     :class="[
-                      'px-4 py-4 text-center text-sm whitespace-nowrap text-[#FFAD05]',
-                      index === sortedExpenses.length - 1 ? 'rounded-br-lg' : ''
+                      'px-4 py-4 text-center text-sm whitespace-nowrap text-gray-500',
+                      index === claimGroups.length - 1 ? 'rounded-br-lg' : ''
                     ]"
                   >
-                    <input
-                      type="checkbox"
-                      :value="product"
-                      v-model="selectedExpenses"
-                      class="form-checkbox h-5 w-5 accent-[#FFAD05] bg-white rounded border-gray-300 focus:ring-[#FFAD05] checked:bg-[#FFAD05]"
-                    />
+                  Details
                   </td>
-                  <!-- <td class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
-                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, {{ person.name
-                        }}</span></a>
-                  </td> -->
                 </tr>
               </tbody>
             </table>
           </div>
   
       </div>
-    </div>
-    <div class="flex justify-center px-4 sm:px-8 lg:px-14">
-          <button
-            class="mt-4 px-4 py-2 bg-theme-300 text-white rounded hover:bg-theme-400"
-            :disabled="selectedExpenses.length === 0"
-            @click="submitForApproval"
-          >
-            Submit
-          </button>
     </div>
   </div>
   
@@ -172,11 +115,9 @@
   // will be connecting to the database later
   import { ref, computed } from "vue";
   import ClaimsCard from '@/components/ClaimsCard.vue'
-  import ClaimsTab from '@/components/ClaimsTab.vue'
 
   const sortKey = ref("Date");
   const sortAsc = ref(false);
-  const showCategoryDropdown = ref(false);
 
   const expenses = [
     {
@@ -262,20 +203,6 @@
     },
   ];
 
-
-  const categories = [
-    "All",
-    "Travel Expenses",
-    "Accomodation",
-    "Meals and Entertainment",
-    "Office Supplies and Equipment",
-    "Medical Claim",
-  ];
-
-  const selectedCategory = ref("All");
-
-  const selectedExpenses = ref([]); // store selected expense indexes or IDs
-
   //sort by date in descending order (default)
   function parseDate(dateStr) {
     // Converts "DD/MM/YYYY" to a Date object
@@ -283,30 +210,38 @@
     return new Date(`${year}-${month}-${day}`);
   }
 
-  const filteredExpenses = computed(() =>
-  selectedCategory.value === "All"
-    ? expenses
-    : expenses.filter(
-        (e) =>
-          e.Category &&
-          e.Category.toLowerCase() === selectedCategory.value.toLowerCase()
-      )
-  );
+  const claimGroups = computed(() => {
+  // Filter only approved expenses
+  const approvedExpenses = expenses.filter(e => e.Status === "Approved");
+  // Get unique ClaimIDs from approved expenses
+  const ids = [...new Set(approvedExpenses.map(e => e.ClaimID))];
+  // For each ClaimID, get summary info
+  let groups = ids.map(claimId => {
+    const group = approvedExpenses.filter(e => e.ClaimID === claimId);
+    return {
+      ClaimID: claimId,
+      Date: group[0]?.Date,
+      Quantity: group.length,
+      Total: group.reduce((sum, e) => sum + Number(e.Total.replace(/,/g, "")), 0)
+        .toLocaleString("en-MY", { minimumFractionDigits: 2 }),
+      Status: group[0]?.Status,
+      Details: group, // all items with this ClaimID
+    };
+  });
 
-  const sortedExpenses = computed(() => {
-  // Only sort by Date, otherwise keep original order
+  // Sorting logic
   if (sortKey.value === "Date") {
-    return filteredExpenses.value.slice().sort((a, b) => {
+    groups = groups.sort((a, b) => {
       const dateA = parseDate(a.Date);
       const dateB = parseDate(b.Date);
       return sortAsc.value ? dateA - dateB : dateB - dateA;
     });
   }
-  return filteredExpenses.value;
+
+  return groups;
 });
 
   function setSort(key) {
-  if (key === "Date") {
     if (sortKey.value === key) {
       sortAsc.value = !sortAsc.value;
     } else {
@@ -314,7 +249,6 @@
       sortAsc.value = true;
     }
   }
-}
 
   
 </script>
