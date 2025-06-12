@@ -41,6 +41,7 @@
               v-show="!route.path.includes('admin')"
             >
             </NavLink>
+            
             <NavLink
               name="Receipt Upload"
               link="/employee/claim/upload"
