@@ -111,12 +111,18 @@
         >
           Cancel
         </button>
-        <button
-          type="button"
+        <RouterLink
+          to="/employee/claim/all"
           class="rounded-md bg-theme-300 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-theme-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
         >
           Submit
-        </button>
+        </RouterLink>
+        <!-- <button -->
+        <!--   type="button" -->
+        <!--   class="rounded-md bg-theme-300 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-theme-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200" -->
+        <!-- > -->
+        <!--   Submit -->
+        <!-- </button> -->
       </div>
     </div>
   </form>

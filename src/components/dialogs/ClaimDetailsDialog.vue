@@ -101,7 +101,7 @@
 
           <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
             <RouterLink
-              to="/employee/claim/edit"
+              to="/admin/claim/review"
               class="block rounded-md bg-theme-200 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-theme-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-100"
             >
               More Details

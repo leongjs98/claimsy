@@ -4,15 +4,10 @@
     <div
       class="mx-auto mt-15 max-w-4xl rounded-2xl border border-gray-200 bg-white px-15 py-10 shadow-lg"
     >
-
-    <!-- Back Button -->
+      <!-- Back Button -->
       <div class="space-y-1 border-b border-gray-900/10 pb-12">
         <div class="relative flex items-center justify-center">
-          <button
-             @click="router.back()"
-             type="button"
-             class="absolute left-0">
-
+          <button @click="router.back()" type="button" class="absolute left-0">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-8 w-6"
@@ -26,7 +21,9 @@
           </button>
 
           <!-- Header -->
-          <h1 class="flex justify-center text-2xl font-bold text-blue-950 mr-125">
+          <h1
+            class="mr-125 flex justify-center text-2xl font-bold text-blue-950"
+          >
             <template v-if="loading">Loading...</template>
             <template v-else-if="error">{{ error }}</template>
             <template v-else-if="staff && claim">
@@ -38,7 +35,10 @@
 
         <!-- Receipt Details -->
         <!-- Category -->
-        <div v-if="claim" class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div
+          v-if="claim"
+          class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
+        >
           <div class="sm:col-span-3">
             <DropdownInput
               v-if="!isStored"
@@ -56,7 +56,7 @@
               id="category"
               :model-value="claim.category"
               disabled
-        />
+            />
           </div>
 
           <!-- Date -->
@@ -109,11 +109,14 @@
       </div>
 
       <!-- Items/Services -->
-      <div v-if="claim"
+      <div
+        v-if="claim"
         class="grid grid-cols-1 gap-x-6 gap-y-8 border-b border-gray-900/10 pb-12 sm:grid-cols-6"
       >
         <div class="sm:col-span-full">
-          <h2 class="mt-6 text-sm font-medium text-theme-300">Items / Services</h2>
+          <h2 class="mt-6 text-sm font-medium text-theme-300">
+            Items / Services
+          </h2>
           <table
             class="col-span-full w-full border-separate border-spacing-y-4"
           >
@@ -121,24 +124,45 @@
               <tr class="">
                 <th class="rounded-l-lg px-4 py-2 text-left">Description</th>
                 <th class="px-4 py-2 text-right">Quantity</th>
-                <th class="rounded-r-lg px-4 py-2 text-right">Unit Price (RM)</th>
+                <th class="rounded-r-lg px-4 py-2 text-right">
+                  Unit Price (RM)
+                </th>
               </tr>
             </thead>
 
             <tbody>
               <tr
-                v-for="(item, index) in claim.items" :key="index"
+                v-for="(item, index) in claim.items"
+                :key="index"
                 class="bg-gray-200 text-theme-300"
               >
-                <td class="rounded-l-lg px-4 py-3">{{item.description}}</td>
-                <td class="px-4 py-3 text-right">{{item.quantity}}</td>
-                <td class="rounded-r-lg px-4 py-3 text-right">{{ item.unitPrice.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</td>
+                <td class="rounded-l-lg px-4 py-3">{{ item.description }}</td>
+                <td class="px-4 py-3 text-right">{{ item.quantity }}</td>
+                <td class="rounded-r-lg px-4 py-3 text-right">
+                  {{
+                    item.unitPrice.toLocaleString("en-MY", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  }}
+                </td>
               </tr>
 
               <tr class="text-right font-semibold text-theme-300">
                 <td></td>
                 <td class="rounded-l-lg bg-gray-200 px-4 py-3">Total</td>
-                <td class="rounded-r-lg bg-gray-200 px-4 py-3">{{claim.items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0).toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}}
+                <td class="rounded-r-lg bg-gray-200 px-4 py-3">
+                  {{
+                    claim.items
+                      .reduce(
+                        (sum, item) => sum + item.quantity * item.unitPrice,
+                        0,
+                      )
+                      .toLocaleString("en-MY", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })
+                  }}
                 </td>
               </tr>
             </tbody>
@@ -147,16 +171,16 @@
       </div>
 
       <!-- Button -->
-      <div class="mt-6 flex items-center justify-end gap-x-6 ">
+      <div class="mt-6 flex items-center justify-end gap-x-6">
         <button
           type="button"
-          class="rounded-md bg-red-400 px-5.5 py-2.5 text-sm font-semibold text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200 hover:bg-red-500"
+          class="rounded-md bg-red-400 px-5.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
         >
           Reject
         </button>
         <button
           type="button"
-          class="rounded-md bg-green-400 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200 hover:bg-green-500"
+          class="rounded-md bg-green-400 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
         >
           Approve
         </button>
@@ -180,58 +204,68 @@
   const isStored = ref(false); // <-- This flag controls the logic
   const categories = [
     "Gadget",
-  "Travel Expenses",
-  "Meals and Entertainment",
-  "Accommodation",
-  "Communication",
+    "Travel Expenses",
+    "Meals and Entertainment",
+    "Accommodation",
+    "Communication",
   ];
 
   // Example: Fetching from mock JSON (replace with your API endpoints)
-onMounted(async () => {
-  loading.value = true;
-  try {
-    // Replace with your actual endpoints or logic
+  onMounted(async () => {
+    loading.value = true;
+    try {
+      // Replace with your actual endpoints or logic
 
-    // const staffRes = await fetch("/api/staff/1"); Makes a network request to your backend API to get staff data.
-    // staff.value = await staffRes.json(); Parses the JSON response and assigns it to your staff ref.
+      // const staffRes = await fetch("/api/staff/1"); Makes a network request to your backend API to get staff data.
+      // staff.value = await staffRes.json(); Parses the JSON response and assigns it to your staff ref.
 
-          // const staffRes = await fetch("/api/staff/1");
-          // staff.value = await staffRes.json();
+      // const staffRes = await fetch("/api/staff/1");
+      // staff.value = await staffRes.json();
 
-    // const claimRes = await fetch("/api/claims/1");
-    // claim.value = await claimRes.json();
+      // const claimRes = await fetch("/api/claims/1");
+      // claim.value = await claimRes.json();
 
-          // const claimRes = await fetch("/api/claims/1");
-          // claim.value = await claimRes.json();
+      // const claimRes = await fetch("/api/claims/1");
+      // claim.value = await claimRes.json();
 
-    // Mock data for demonstration
-    // ...fetch logic...
-    staff.value = { id: "001", name: "John Doe" };
-    claim.value = {
-      id: "001",
-      category: "Gadget",
-      date: "06/05/2025",
-      merchantName: "Samsung Store",
-      merchantAddress: "123 Main St",
-      remark: "For project use",
-      items: [
-        { description: "Galaxy Tab S10 Ultra", quantity: 1, unitPrice: 4299.0 },
-        { description: '24" Essential Monitor S3', quantity: 1, unitPrice: 399.0 },
-      ],
-    };
-    // Simulate claim is already stored (set to true after saving)
-    isStored.value = true;
-  } catch (e) {
-    error.value = "Failed to load data.";
-  } finally {
-    loading.value = false;
-  }
-});
+      // Mock data for demonstration
+      // ...fetch logic...
+      staff.value = { id: "001", name: "John Doe" };
+      claim.value = {
+        id: "001",
+        category: "Gadget",
+        date: "06/05/2025",
+        merchantName: "Samsung Store",
+        merchantAddress: "123 Main St",
+        remark: "For project use",
+        items: [
+          {
+            description: "Galaxy Tab S10 Ultra",
+            quantity: 1,
+            unitPrice: 4299.0,
+          },
+          {
+            description: '24" Essential Monitor S3',
+            quantity: 1,
+            unitPrice: 399.0,
+          },
+        ],
+      };
+      // Simulate claim is already stored (set to true after saving)
+      isStored.value = true;
+    } catch (e) {
+      error.value = "Failed to load data.";
+    } finally {
+      loading.value = false;
+    }
+  });
 
-const totalAmount = computed(() =>
-  claim.value
-    ? claim.value.items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0)
-    : 0
-);
+  const totalAmount = computed(() =>
+    claim.value
+      ? claim.value.items.reduce(
+          (sum, item) => sum + item.quantity * item.unitPrice,
+          0,
+        )
+      : 0,
+  );
 </script>
-
