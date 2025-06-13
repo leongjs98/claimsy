@@ -9,9 +9,21 @@ import { createRouter, createWebHistory } from "vue-router/auto";
 import { setupLayouts } from "virtual:generated-layouts";
 import { routes } from "vue-router/auto-routes";
 
+const ourRoutes = [
+  {
+    path: '/employee',
+    redirect: '/employee/claim/all',
+  },
+  {
+    path: '/admin',
+    redirect: '/admin/dashboard',
+  },
+  ...routes, // auto-generated routes
+];
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: setupLayouts(routes),
+  routes: setupLayouts(ourRoutes),
 });
 
 // Workaround for https://github.com/vitejs/vite/issues/11804

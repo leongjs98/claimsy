@@ -1,4 +1,6 @@
-- [ ] create end-to-end project structure 
+- [ ] Populate data in employee claim edit
+- [ ] create end-to-end project structure
+
 ```
 .
 ├── backend
@@ -8,5 +10,6 @@
 ├── myvenv
 └── README.md
 ```
+
 - [ ] Setup database and create seeder
 - [ ] Create `.env`

@@ -1,4 +1,5 @@
 # Claimsy
+
 !! **only group leader can push to main branch** !!
 
 everyone needs to develop in your own branch and ask to merge to main
@@ -31,4 +32,3 @@ Create branches before each push. Following the naming convention below:
 
 Examples:
 `FE_aisya_add-mock-data`, `BE_mark_add-fastapi`, `AI_diana_remove-bug`
-
