@@ -20,38 +20,38 @@
             <NavLink
               name="Dashboard"
               link="/admin/dashboard"
-              v-show="route.path.includes('admin')"
+              v-if="route.path.includes('admin')"
             >
             </NavLink>
             <NavLink
               name="Claim Center"
               link="/admin/claim/all"
-              v-show="route.path.includes('admin')"
+              v-if="route.path.includes('admin')"
             >
             </NavLink>
             <NavLink
               name="Policy Management"
               link="/admin/policy/upload"
-              v-show="route.path.includes('admin')"
+              v-if="route.path.includes('admin')"
             >
             </NavLink>
             <NavLink
               name="My Claims"
               link="/employee/claim/all"
-              v-show="!route.path.includes('admin')"
+              v-if="!route.path.includes('admin')"
             >
             </NavLink>
-            
+
             <NavLink
               name="Receipt Upload"
               link="/employee/claim/upload"
-              v-show="!route.path.includes('admin')"
+              v-if="!route.path.includes('admin')"
             >
             </NavLink>
             <NavLink
               name="Point & Rewards"
               link="/employee/rewards"
-              v-show="!route.path.includes('admin')"
+              v-if="!route.path.includes('admin')"
             >
             </NavLink>
             <NavLink name="Ask Claimsy" link="/ask-claimsy"> </NavLink>
@@ -61,9 +61,9 @@
           <button>
             <v-icon icon="mdi-bell-outline"></v-icon>
           </button>
-          <button>
+          <RouterLink to="/login">
             <v-icon size="36px" icon="mdi-account-circle"></v-icon>
-          </button>
+          </RouterLink>
         </nav>
       </div>
     </header>

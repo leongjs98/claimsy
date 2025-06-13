@@ -3,7 +3,11 @@
     <RouterLink
       :to="link"
       class="transition-colors after:block after:origin-[0%_50%] after:scale-x-0 after:border-b-[3px] after:border-b-yellow-300 after:p-0 after:pb-1 after:transition-transform after:duration-[250ms] after:ease-in-out after:content-[''] hover:text-yellow-400 hover:after:origin-[0%_50%] hover:after:scale-x-100 sm:after:pb-4"
-      activeClass="after:origin-[0%_50%] after:scale-x-100 text-yellow-400"
+      :class="
+        isActiveLink()
+          ? 'text-yellow-400 after:origin-[0%_50%] after:scale-x-100'
+          : ''
+      "
     >
       {{ name }}
     </RouterLink>
@@ -11,8 +15,39 @@
 </template>
 
 <script setup>
+  import { useRoute } from "vue-router";
+  const route = useRoute();
   const props = defineProps({
     link: String,
     name: String,
   });
+
+  function isActiveLink() {
+    if (route.path == props.link) {
+      return true;
+    }
+
+    if (props.link === "/employee/claim/all") {
+      if (
+        route.path === "/employee/claim/expenses" ||
+        route.path === "/employee/claim/approved" ||
+        route.path === "/employee/claim/rejected"
+      ) {
+        return true;
+      }
+    }
+    if (
+      props.link === "/employee/claim/upload" &&
+      route.path === "/employee/claim/edit"
+    ) {
+      return true;
+    }
+    if (
+      props.link === "/admin/policy/upload" &&
+      route.path === "/admin/policy/edit"
+    ) {
+      return true;
+    }
+    return false;
+  }
 </script>
