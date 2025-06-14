@@ -1,0 +1,65 @@
+erDiagram
+    Invoice {
+        invoice_id int PK
+        invoice_number varchar
+        invoice_date date
+        total_amount decimal
+        created_at timestamp
+        updated_at timestamp
+    }
+
+    Claim {
+        id int PK
+        claim_number varchar
+        invoice_id int FK
+        employee_id int FK
+        claim_type varchar
+        claim_amount decimal
+        reason text
+        status varchar
+        submitted_date date
+        reviewed_date date
+        resolution text
+        created_at timestamp
+        updated_at timestamp
+    }
+
+    ClaimPolicy {
+        id int PK
+        policy_name varchar
+        id_vector_db int
+        created_at timestamp
+        updated_at timestamp
+    }
+
+    Employee {
+        id int PK
+        employee_id varchar
+        first_name varchar
+        last_name varchar
+        email varchar
+        password_hash varchar
+        phone varchar
+        position varchar
+        hire_date date
+        salary decimal
+        manager_id int FK
+        is_active boolean
+        created_at timestamp
+        updated_at timestamp
+    }
+
+    Admin {
+        id int PK
+        admin_id varchar
+        employee_id int FK
+        username varchar
+        password_hash varchar
+        created_at timestamp
+        updated_at timestamp
+    }
+
+    Invoice ||--|| Claim : "has"
+    Employee ||--o{ Claim : "submits"
+    Admin ||--o{ Claim : "manages"
+    ClaimPolicy ||--o{ Claim : "applies to"

@@ -1,15 +1,16 @@
-- [ ] Populate data in employee claim edit
-- [ ] create end-to-end project structure
+# Code-related Todo's
+## Todo
+- [ ] Setup database and create seeder
 
+## Done
+- [x] Create `.env.example` and `.env`
+- [x] create end-to-end project structure
 ```
 .
 ├── backend
-│   └── requirements.txt
+│   ├── requirements.txt
+│   └── myvenv
 ├── frontend
 │   └── package.json
-├── myvenv
 └── README.md
 ```
-
-- [ ] Setup database and create seeder
-- [ ] Create `.env`

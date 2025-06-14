@@ -5,7 +5,23 @@
 everyone needs to develop in your own branch and ask to merge to main
 
 ## Development
+`cd` into the correct directory (folder)
 
+### Backend
+
+1. Make sure you are using Python 3.12.7
+
+use `python --version` to check
+
+2. Make sure you are in your virtual environment
+
+- Create one if you don't have one
+
+3. Install Python packages
+
+   `pip install -r requirements.txt`
+
+### Frontend
 1. TailwindCSS
 
    `npm run tailwindcss`
