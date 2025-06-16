@@ -1,21 +1,15 @@
-from sqlalchemy.orm import sessionmaker
-import bcrypt
-from setup import engine
+import hashlib
+from setup import session
 from tables import Admin
-
-Session = sessionmaker(bind=engine)
-db = Session()
 
 
 def create_test_admin():
     try:
         password = "testtest"
-        hashed_password = bcrypt.hashpw(
-            password.encode("utf-8"), bcrypt.gensalt()
-        ).decode("utf-8")
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
         existing_admin = (
-            db.query(Admin)
+            session.query(Admin)
             .filter((Admin.username == "test_admin") | (Admin.admin_id == "ADM001"))
             .first()
         )
@@ -26,15 +20,15 @@ def create_test_admin():
             new_admin = Admin(
                 admin_id="ADM001", username="test_admin", password_hash=hashed_password
             )
-            db.add(new_admin)
-            db.commit()
-            db.refresh(new_admin)
+            session.add(new_admin)
+            session.commit()
+            session.refresh(new_admin)
             print(f"Test admin '{new_admin.username}' created successfully!")
     except Exception as e:
-        db.rollback()
+        session.rollback()
         print(f"Error creating test admin: {e}")
     finally:
-        db.close()
+        session.close()
 
 
 if __name__ == "__main__":

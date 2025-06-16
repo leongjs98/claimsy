@@ -1,8 +1,8 @@
 annotated-types==0.7.0
 anyio==4.9.0
-bcrypt==4.3.0
 click==8.2.1
 dotenv==0.9.9
+Faker==37.4.0
 fastapi==0.115.12
 greenlet==3.2.3
 h11==0.16.0
@@ -16,4 +16,5 @@ SQLAlchemy==2.0.41
 starlette==0.46.2
 typing-inspection==0.4.1
 typing_extensions==4.14.0
+tzdata==2025.2
 uvicorn==0.34.3
