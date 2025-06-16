@@ -21,6 +21,17 @@ use `python --version` to check
 
    `pip install -r requirements.txt`
 
+4. Create your own `.env` (for database and Gemini API)
+
+5. Create mock data (seeding)
+```
+python db/tables.py
+python db/seeder_admin.py
+python db/seeder_employee.py
+python db/seeder_invoice.py
+python db/seeder_claim.py
+```
+
 ### Frontend
 1. TailwindCSS
 

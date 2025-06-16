@@ -1,22 +1,23 @@
-from sqlalchemy.orm import sessionmaker
-import bcrypt
-from setup import engine
+"""
+Create a single admin for testing
+credentials at admin_username, admin_password
+"""
+
+import hashlib
+from setup import session
 from tables import Admin
 
-Session = sessionmaker(bind=engine)
-db = Session()
-
+admin_username = "test_admin"
+admin_password = "testtest"
 
 def create_test_admin():
     try:
-        password = "testtest"
-        hashed_password = bcrypt.hashpw(
-            password.encode("utf-8"), bcrypt.gensalt()
-        ).decode("utf-8")
+        password = admin_password
+        hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
         existing_admin = (
-            db.query(Admin)
-            .filter((Admin.username == "test_admin") | (Admin.admin_id == "ADM001"))
+            session.query(Admin)
+            .filter((Admin.username == admin_username) | (Admin.admin_id == "ADM001"))
             .first()
         )
 
@@ -24,17 +25,19 @@ def create_test_admin():
             print("Test admin already exists. Skipping creation.")
         else:
             new_admin = Admin(
-                admin_id="ADM001", username="test_admin", password_hash=hashed_password
+                admin_id="ADM001",
+                username=admin_username,
+                password_hash=hashed_password,
             )
-            db.add(new_admin)
-            db.commit()
-            db.refresh(new_admin)
+            session.add(new_admin)
+            session.commit()
+            session.refresh(new_admin)
             print(f"Test admin '{new_admin.username}' created successfully!")
     except Exception as e:
-        db.rollback()
+        session.rollback()
         print(f"Error creating test admin: {e}")
     finally:
-        db.close()
+        session.close()
 
 
 if __name__ == "__main__":
