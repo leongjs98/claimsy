@@ -3,9 +3,13 @@ erDiagram
         invoice_id int PK
         invoice_number varchar
         invoice_date date
-        total_amount decimal
         created_at timestamp
         updated_at timestamp
+        category varchar
+        merchant_name varchar
+        merchant_address varchar
+        items_services JSON
+        remark text
     }
 
     Claim {
@@ -35,16 +39,11 @@ erDiagram
     Employee {
         id int PK
         employee_id varchar
-        first_name varchar
-        last_name varchar
+        name varchar
         email varchar
         password_hash varchar
-        phone varchar
-        position varchar
+        job_title varchar
         hire_date date
-        salary decimal
-        manager_id int FK
-        is_active boolean
         created_at timestamp
         updated_at timestamp
     }
@@ -52,7 +51,6 @@ erDiagram
     Admin {
         id int PK
         admin_id varchar
-        employee_id int FK
         username varchar
         password_hash varchar
         created_at timestamp
