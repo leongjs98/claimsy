@@ -6,13 +6,13 @@
     />
     <!-- Expenses Table -->
     <div class="mt-4 mb-2"></div>
-    <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
+    <div class="mt-8 flow-root px-8 sm:px-8 lg:px-14">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
             <!-- Tabs Row -->
             <ClaimsTab />
             <table
-              class="min-w-full divide-y divide-gray-300 bg-gray-100 drop-shadow-md rounded-b-lg"
+              class="min-w-full divide-gray-300 drop-shadow-md rounded-b-lg text-xs"
             >
               <thead class="rounded-lg bg-theme-300 text-white">
                 <tr>
