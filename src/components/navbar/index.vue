@@ -12,7 +12,7 @@
         </nav>
 
         <nav
-          class="navbar__menu absolute top-16 right-0 left-0 z-40 origin-top border-b-8 border-b-yellow-300 pt-14 pb-8 font-semibold transition-transform delay-200 ease-in-out md:static md:flex md:h-16 md:items-end md:justify-end md:border-none md:p-0"
+          fluid class="navbar__menu absolute top-16 right-0 left-0 z-40 origin-top border-b-8 border-b-yellow-300 pt-14 pb-8 font-semibold transition-transform delay-200 ease-in-out md:static md:flex md:h-16 md:items-end md:justify-end md:border-none md:p-0"
         >
           <ul
             class="flex flex-col items-center justify-end gap-4 md:flex-row md:gap-5"
