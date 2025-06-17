@@ -21,6 +21,10 @@ use `python --version` to check
 
    `pip install -r requirements.txt`
 
+   If you are installing any other dependencies, make sure to include them into `requirements.txt`
+
+   `pip freeze > requirements.txt`
+
 4. Create your own `.env` (for database and Gemini API)
 
 5. Create `claimsy` database if you haven't.
