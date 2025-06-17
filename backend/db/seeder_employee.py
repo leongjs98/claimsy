@@ -9,7 +9,7 @@ from decimal import Decimal
 from setup import session
 from tables import Employee
 
-
+user_password="testtest"
 NUM_RECORDS = 2
 
 fake = Faker()
@@ -91,7 +91,7 @@ def generate_employee_id():
     return f"{prefix}{number:04d}"
 
 
-def generate_password_hash(password="defaultpass123"):
+def generate_password_hash(password=user_password):
     """Generate a simple password hash (use proper hashing in production)"""
     return hashlib.sha256(password.encode()).hexdigest()
 

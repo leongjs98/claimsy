@@ -15,7 +15,7 @@ use `python --version` to check
 
 2. Make sure you are in your virtual environment
 
-- Create one if you don't have one
+- Create one if you don't have one `python -m venv myenv`
 
 3. Install Python packages
 
@@ -23,7 +23,9 @@ use `python --version` to check
 
 4. Create your own `.env` (for database and Gemini API)
 
-5. Create mock data (seeding)
+5. Create `claimsy` database if you haven't.
+
+6. Create mock data (seeding)
 ```
 python db/tables.py
 python db/seeder_admin.py
@@ -32,7 +34,7 @@ python db/seeder_invoice.py
 python db/seeder_claim.py
 ```
 
-6. Delete mock data using `db/cleaner.py`
+7. Delete mock data using `db/cleaner.py`
 ```
 python db/cleaner.py --all
 python db/cleaner.py --table claims
@@ -52,7 +54,7 @@ python db/cleaner.py --help
 
 1. Install all node packages:
 
-`npm install`
+   `npm install`
 
 2. Install [TailwindCSS Plugin](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) for autocomplete
 
