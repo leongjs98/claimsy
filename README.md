@@ -32,6 +32,13 @@ python db/seeder_invoice.py
 python db/seeder_claim.py
 ```
 
+6. Delete mock data using `db/cleaner.py`
+```
+python db/cleaner.py --all
+python db/cleaner.py --table claims
+python db/cleaner.py --help
+```
+
 ### Frontend
 1. TailwindCSS
 
