@@ -25,12 +25,15 @@ use `python --version` to check
 
    `pip freeze > requirements.txt`
 
-4. Create your own `.env` (for database and Gemini API)
+4. Create your own `.env` (for database and Gemini API) based on `.env.example`
+   
+   `cp .env.example .env` and then configure your database
 
 5. Create `claimsy` database if you haven't.
 
 6. Create mock data (seeding)
 ```
+python db/setup.py
 python db/tables.py
 python db/seeder_admin.py
 python db/seeder_employee.py
