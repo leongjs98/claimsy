@@ -11,12 +11,12 @@ import { routes } from "vue-router/auto-routes";
 
 const ourRoutes = [
   {
-    path: '/employee',
-    redirect: '/employee/claim/all',
+    path: "/employee",
+    redirect: "/employee/claim/all",
   },
   {
-    path: '/admin',
-    redirect: '/admin/dashboard',
+    path: "/admin",
+    redirect: "/admin/dashboard",
   },
   ...routes, // auto-generated routes
 ];

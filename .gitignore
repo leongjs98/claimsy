@@ -178,9 +178,6 @@ cython_debug/
 
 node_modules/
 
-**/**/*.html
-!./index.html
-
 frontend/public/output.css
 frontend/src/auto-imports.d.ts
 frontend/src/typed-router.d.ts
