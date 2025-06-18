@@ -181,7 +181,7 @@ node_modules/
 **/**/*.html
 !./index.html
 
-public/output.css
-src/auto-imports.d.ts
-src/typed-router.d.ts
-src/components.d.ts
+frontend/public/output.css
+frontend/src/auto-imports.d.ts
+frontend/src/typed-router.d.ts
+frontend/src/components.d.ts

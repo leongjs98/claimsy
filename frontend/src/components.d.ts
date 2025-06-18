@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    afd8ba9ea7cb43ab80499c45771d45863aa6f746: src/components.d.ts
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     Badge: typeof import('./components/badge.vue')['default']
     CalendarInput: typeof import('./components/form/CalendarInput.vue')['default']
@@ -16,11 +17,15 @@ declare module 'vue' {
     ClaimsCard: typeof import('./components/ClaimsCard.vue')['default']
     ClaimsTab: typeof import('./components/ClaimsTab.vue')['default']
     DropdownInput: typeof import('./components/form/DropdownInput.vue')['default']
+    HEAD: frontend/src/components.d.ts
     Navbar: typeof import('./components/navbar/index.vue')['default']
     NavLink: typeof import('./components/navbar/NavLink.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StatusBadge: typeof import('./components/StatusBadge.vue')['default']
+    Tab: typeof import('./components/tab.vue')['default']
+    Table: typeof import('./components/Table.vue')['default']
+    TableComponent: typeof import('./components/TableComponent.vue')['default']
     TextInput: typeof import('./components/form/TextInput.vue')['default']
     UploadCard: typeof import('./components/UploadCard.vue')['default']
   }
