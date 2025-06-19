@@ -288,10 +288,7 @@ v-show="showCategoryDropdown"
 </style>
 
 <script setup>
-  // will be connecting to the database later
   import { ref, computed } from "vue";
-  import ClaimsCard from "@/components/ClaimsCard.vue";
-  import ClaimsTab from "@/components/ClaimsTab.vue";
 
   const sortKey = ref("Date");
   const sortAsc = ref(false);
