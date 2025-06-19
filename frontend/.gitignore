@@ -1,0 +1,4 @@
+public/output.css
+src/auto-imports.d.ts
+src/typed-router.d.ts
+src/components.d.ts

@@ -1,7 +1,11 @@
 <template>
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
     <!-- Cards Row -->
-    <EmployeeClaimsCard :totalCount="totalCount" :approvedCount="approvedCount" :rejectedCount="rejectedCount" />
+    <EmployeeClaimsCard
+      :totalCount="totalCount"
+      :approvedCount="approvedCount"
+      :rejectedCount="rejectedCount"
+    />
     <!-- Expenses Table -->
     <div class="mt-4 mb-2"></div>
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
@@ -22,11 +26,11 @@
                 <th class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold">
                   <div
                     @mouseenter="showCategoryDropdown = true"
-                            @mouseleave="showCategoryDropdown = false"
+                    @mouseleave="showCategoryDropdown = false"
                     class="flex items-center gap-2"
                   >
-                    <button @click="setSort('Category')"> Category </button>
-                    <div class="w-full relative inline-block text-left">
+                    <button @click="setSort('Category')">Category</button>
+                    <div class="relative inline-block w-full text-left">
                       <div>
                         <button
                           type="button"
@@ -51,41 +55,41 @@
                         </button>
                       </div>
 
-      <Transition name="dropdown-menu">
-                      <div
-v-show="showCategoryDropdown"
-                            @mouseleave="showCategoryDropdown = false"
-                        class="absolute left-0 z-20 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
-                        role="menu"
-                        aria-orientation="vertical"
-                        aria-labelledby="menu-button"
-                        tabindex="-1"
-                      >
-                        <div class="py-1" role="none">
-                          <button
-                            v-for="cat in categories"
-                            :key="cat"
-                            @click="
-                              selectedCategory = cat;
-                              showCategoryDropdown = false;
-                            "
-                            :class="{
-                              'bg-blue-50 text-theme-200 outline-hidden':
-                                selectedCategory === cat,
-                              'text-gray-700': selectedCategory !== cat,
-                            }"
-                            showCategoryDropdown="false;"
-                            href="#"
-                            class="text-left w-full block px-4 py-2 text-sm text-gray-700 focus:text-theme-200 focus:bg-blue-50 hover:text-theme-200 hover:bg-blue-50"
-                            role="menuitem"
-                            tabindex="-1"
-                            id="menu-item-2"
-                          >
-                            {{ cat }}
-                          </button>
+                      <Transition name="dropdown-menu">
+                        <div
+                          v-show="showCategoryDropdown"
+                          @mouseleave="showCategoryDropdown = false"
+                          class="absolute left-0 z-20 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
+                          role="menu"
+                          aria-orientation="vertical"
+                          aria-labelledby="menu-button"
+                          tabindex="-1"
+                        >
+                          <div class="py-1" role="none">
+                            <button
+                              v-for="cat in categories"
+                              :key="cat"
+                              @click="
+                                selectedCategory = cat;
+                                showCategoryDropdown = false;
+                              "
+                              :class="{
+                                'bg-blue-50 text-theme-200 outline-hidden':
+                                  selectedCategory === cat,
+                                'text-gray-700': selectedCategory !== cat,
+                              }"
+                              showCategoryDropdown="false;"
+                              href="#"
+                              class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-50 hover:text-theme-200 focus:bg-blue-50 focus:text-theme-200"
+                              role="menuitem"
+                              tabindex="-1"
+                              id="menu-item-2"
+                            >
+                              {{ cat }}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-      </Transition>
+                      </Transition>
                     </div>
                     <!-- <span class="flex items-center relative ml-1 cursor-pointer rounded-tl-lg text-xs" -->
                     <!--   @mouseenter="showCategoryDropdown = true"> -->
@@ -160,7 +164,7 @@ v-show="showCategoryDropdown"
                 <th
                   class="w-48 rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold"
                 >
-                Select
+                  Select
                 </th>
               </tr>
             </thead>
@@ -438,18 +442,14 @@ v-show="showCategoryDropdown"
 
   const approvedCount = computed(() => {
     const ids = new Set(
-      expenses
-        .filter((e) => e.Status === "Approved")
-        .map((e) => e.ClaimID),
+      expenses.filter((e) => e.Status === "Approved").map((e) => e.ClaimID),
     );
     return ids.size;
   });
 
   const rejectedCount = computed(() => {
     const ids = new Set(
-      expenses
-        .filter((e) => e.Status === "Rejected")
-        .map((e) => e.ClaimID),
+      expenses.filter((e) => e.Status === "Rejected").map((e) => e.ClaimID),
     );
     return ids.size;
   });

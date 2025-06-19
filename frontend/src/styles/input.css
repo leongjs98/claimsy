@@ -55,25 +55,25 @@
 }
 
 .dropdown-menu-enter-from {
-  @apply transform opacity-0 scale-95;
+  @apply scale-95 transform opacity-0;
 }
 
 .dropdown-menu-enter-active {
-  @apply transition ease-out duration-100;
+  @apply transition duration-100 ease-out;
 }
 
 .dropdown-menu-enter-to {
-  @apply transform opacity-100 scale-100;
+  @apply scale-100 transform opacity-100;
 }
 
 .dropdown-menu-leave-from {
-  @apply transform opacity-100 scale-100;
+  @apply scale-100 transform opacity-100;
 }
 
 .dropdown-menu-leave-active {
-  @apply transition ease-in duration-75;
+  @apply transition duration-75 ease-in;
 }
 
 .dropdown-menu-leave-to {
-  @apply transform opacity-0 scale-95;
+  @apply scale-95 transform opacity-0;
 }

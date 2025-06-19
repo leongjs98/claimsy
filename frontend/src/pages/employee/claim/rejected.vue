@@ -1,7 +1,11 @@
 <template>
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
     <!-- Cards Row -->
-    <EmployeeClaimsCard :totalCount="totalCount" :approvedCount="approvedCount" :rejectedCount="rejectedCount" />
+    <EmployeeClaimsCard
+      :totalCount="totalCount"
+      :approvedCount="approvedCount"
+      :rejectedCount="rejectedCount"
+    />
     <!-- Expenses Table -->
     <div class="mt-4 mb-2"></div>
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
@@ -69,8 +73,7 @@
                 </th>
                 <th
                   class="w-48 rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold"
-                >
-                </th>
+                ></th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
@@ -275,18 +278,14 @@
 
   const approvedCount = computed(() => {
     const ids = new Set(
-      expenses
-        .filter((e) => e.Status === "Approved")
-        .map((e) => e.ClaimID),
+      expenses.filter((e) => e.Status === "Approved").map((e) => e.ClaimID),
     );
     return ids.size;
   });
 
   const rejectedCount = computed(() => {
     const ids = new Set(
-      expenses
-        .filter((e) => e.Status === "Rejected")
-        .map((e) => e.ClaimID),
+      expenses.filter((e) => e.Status === "Rejected").map((e) => e.ClaimID),
     );
     return ids.size;
   });

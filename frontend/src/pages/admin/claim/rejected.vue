@@ -6,6 +6,7 @@
       :rejectedCount="rejectedCount"
     />
     <AdminClaimsTab />
+
     <div class="mt-8 flow-root">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -90,7 +91,7 @@
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
-                  v-for="(person, index) in people"
+                  v-for="(person, index) in rejectedPeople"
                   :key="person.email"
                   class="shadow-md"
                 >
@@ -167,8 +168,7 @@
     showDialog.value = true;
   };
 
-  // TODO: Replace people in admin claim all with clamis
-  const people = [
+  const people = ref([
     {
       id: "GMD2039",
       Name: "Lindsay Walton",
@@ -492,7 +492,10 @@
         },
       ],
     },
-  ];
+  ]);
+  const rejectedPeople = computed(() => {
+    return people.value.filter((person) => person.Status == "Rejected");
+  });
 
   //sort by date in descending order (default)
   function parseDate(dateStr) {
@@ -543,14 +546,14 @@
 
   const approvedCount = computed(() => {
     const ids = new Set(
-      people.filter((e) => e.Status === "Approved").map((e) => e.id),
+      people.value.filter((e) => e.Status === "Approved").map((e) => e.id),
     );
     return ids.size;
   });
 
   const rejectedCount = computed(() => {
     const ids = new Set(
-      people.filter((e) => e.Status === "Rejected").map((e) => e.id),
+      people.value.filter((e) => e.Status === "Rejected").map((e) => e.id),
     );
     return ids.size;
   });

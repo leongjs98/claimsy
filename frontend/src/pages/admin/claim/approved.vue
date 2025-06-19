@@ -90,7 +90,7 @@
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
-                  v-for="(person, index) in people"
+                  v-for="(person, index) in approvedPeople"
                   :key="person.email"
                   class="shadow-md"
                 >
@@ -161,14 +161,12 @@
   const sortAsc = ref(false);
   const showDialog = ref(false);
   const selectedPerson = ref(null);
-
   const openDetails = (person) => {
     selectedPerson.value = person;
     showDialog.value = true;
   };
 
-  // TODO: Replace people in admin claim all with clamis
-  const people = [
+  const people = ref([
     {
       id: "GMD2039",
       Name: "Lindsay Walton",
@@ -492,7 +490,11 @@
         },
       ],
     },
-  ];
+  ]);
+
+  const approvedPeople = computed(() => {
+    return people.value.filter((person) => person.Status == "Approved");
+  });
 
   //sort by date in descending order (default)
   function parseDate(dateStr) {
@@ -501,56 +503,16 @@
     return new Date(`${year}-${month}-${day}`);
   }
 
-  const claimGroups = computed(() => {
-    // Get unique ClaimIDs
-    const ids = [...new Set(expenses.map((e) => e.ClaimID))];
-    // For each ClaimID, get summary info
-    let groups = ids.map((claimId) => {
-      const group = expenses.filter((e) => e.ClaimID === claimId);
-      return {
-        ClaimID: claimId,
-        Date: group[0]?.Date,
-        Quantity: group.length,
-        Total: group
-          .reduce((sum, e) => sum + Number(e.Total.replace(/,/g, "")), 0)
-          .toLocaleString("en-MY", { minimumFractionDigits: 2 }),
-        Status: group[0]?.Status,
-        Details: group, // all items with this ClaimID
-      };
-    });
-
-    // Sorting logic
-    if (sortKey.value === "Date") {
-      groups = groups.sort((a, b) => {
-        // Parse dates for comparison
-        const dateA = parseDate(a.Date);
-        const dateB = parseDate(b.Date);
-        return sortAsc.value ? dateA - dateB : dateB - dateA;
-      });
-    }
-
-    return groups;
-  });
-
-  function setSort(key) {
-    if (sortKey.value === key) {
-      sortAsc.value = !sortAsc.value;
-    } else {
-      sortKey.value = key;
-      sortAsc.value = true;
-    }
-  }
-
   const approvedCount = computed(() => {
     const ids = new Set(
-      people.filter((e) => e.Status === "Approved").map((e) => e.id),
+      people.value.filter((e) => e.Status === "Approved").map((e) => e.id),
     );
     return ids.size;
   });
 
   const rejectedCount = computed(() => {
     const ids = new Set(
-      people.filter((e) => e.Status === "Rejected").map((e) => e.id),
+      people.value.filter((e) => e.Status === "Rejected").map((e) => e.id),
     );
     return ids.size;
   });
