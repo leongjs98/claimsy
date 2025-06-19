@@ -177,8 +177,3 @@ cython_debug/
 .vscode
 
 node_modules/
-
-frontend/public/output.css
-frontend/src/auto-imports.d.ts
-frontend/src/typed-router.d.ts
-frontend/src/components.d.ts

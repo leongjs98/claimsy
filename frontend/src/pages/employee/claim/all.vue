@@ -224,6 +224,7 @@
     },
   ];
 
+// TODO: Shorter way to do sorting
   //sort by date in descending order (default)
   function parseDate(dateStr) {
     // Converts "DD/MM/YYYY" to a Date object

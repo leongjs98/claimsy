@@ -1,22 +1,6 @@
 <template>
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
-    <div class="mb-8 flex gap-6 px-4 sm:px-8 lg:px-14">
-      <!-- Claims Card -->
-      <div class="flex flex-1 cursor-pointer flex-col items-center justify-center rounded-2xl bg-white px-6 py-8 shadow-xl transition hover:bg-blue-100">
-        <div class="text-3xl font-bold text-theme-300">{{ totalClaims }}</div>
-        <div class="mt-2 font-semibold text-theme-300">Claims</div>
-      </div>
-      <!-- Approved Card -->
-      <div class="justify-center flex-1 cursor-pointer rounded-2xl bg-white shadow-xl py-8 px-6 flex flex-col items-center hover:bg-green-100 transition">
-        <div class="text-3xl font-bold text-green-500">{{ totalApprovedClaims }}</div>
-        <div class="mt-2 font-semibold text-green-500">Approved</div>
-      </div>
-      <!-- Rejected Card -->
-      <div class="justify-center flex-1 cursor-pointer rounded-2xl bg-white shadow-xl py-8 px-6 flex flex-col items-center hover:bg-red-100 transition">
-        <div class="text-3xl font-bold text-red-500">{{ totalRejectedClaims }}</div>
-        <div class="mt-2 font-semibold text-red-500">Rejected</div>
-      </div>
-    </div>
+    <AdminClaimsCard :totalCount="11" :approvedCount="8" :rejectedCount="3" />
 
     <div class="grid grid-cols-2 gap-6 px-4 sm:px-8 lg:px-14">
       <!-- Category Type Donut Chart -->
@@ -28,7 +12,8 @@
       </div>
       <!-- Horizontal Bar Chart -->
       <div class="bg-white rounded-lg shadow-xl p-6">
-        <h2 class="text-lg font-semibold mb-4 text-center text-theme-300 bg-blue-50 rounded-lg p-1">Total Expenses vs Total Budget</h2>
+        <h2 class="text-lg font-semibold mb-4 text-center text-theme-300 bg-blue-50 rounded-lg p-1">Total Expenses vs
+          Total Budget</h2>
         <div class="flex flex-col items-center justify-center">
           <canvas id="categoryBarChart" width="450" height="250"></canvas>
         </div>
@@ -37,7 +22,8 @@
     <div class="grid mt-8 gap-6 px-4 sm:px-8 lg:px-14">
       <!-- Expense Over Years Line Chart -->
       <div class="bg-white rounded-lg shadow-xl p-6">
-        <h2 class="text-lg font-semibold mb-4 text-center text-theme-300 bg-blue-50 rounded-lg p-1">Total Expenses Over Years</h2>
+        <h2 class="text-lg font-semibold mb-4 text-center text-theme-300 bg-blue-50 rounded-lg p-1">Total Expenses Over
+          Years</h2>
         <canvas id="expenseLineChart" width="350" height="150"></canvas>
       </div>
     </div>
@@ -106,20 +92,20 @@ Chart.register({
 
 // Horizontal Bar Chart Data (Claims by Category)
 // Example: Set a budget for each category (replace with your real budget data)
-  const categoryBudgets = {
-    "Supplies &\nEquipment": 3000,
-    "Travel": 2500,
-    "Meals &\nEntertainment": 1000,
-    "Accommodation": 2000,
-    "Medical": 1000,
-  };
+const categoryBudgets = {
+  "Supplies &\nEquipment": 3000,
+  "Travel": 2500,
+  "Meals &\nEntertainment": 1000,
+  "Accommodation": 2000,
+  "Medical": 1000,
+};
 
-  // Prepare data for each category
-  const barCategories = Object.keys(categoryBudgets);
-  const claimedAmounts = barCategories.map(cat =>
-    claims.filter(c => c.category === cat).reduce((sum, c) => sum + c.amount, 0)
-  );
-  const budgetAmounts = barCategories.map(cat => categoryBudgets[cat]);
+// Prepare data for each category
+const barCategories = Object.keys(categoryBudgets);
+const claimedAmounts = barCategories.map(cat =>
+  claims.filter(c => c.category === cat).reduce((sum, c) => sum + c.amount, 0)
+);
+const budgetAmounts = barCategories.map(cat => categoryBudgets[cat]);
 
 // Line Chart (Expenses over Years)
 // Prepare data for Expense and Budget Over Years Line Chart
@@ -141,7 +127,7 @@ claims.forEach((c) => {
 });
 const yearLabels = Object.keys(yearAmounts).sort();
 const yearData = yearLabels.map((y) => yearAmounts[y]);
-const yearBudgetData = yearLabels.map((y) => yearBudgets[y]); 
+const yearBudgetData = yearLabels.map((y) => yearBudgets[y]);
 
 // Chart Styling
 onMounted(() => {
@@ -149,7 +135,7 @@ onMounted(() => {
   new Chart(document.getElementById("expenseDonutChart"), {
     type: "doughnut",
     data: {
-      labels: categoryLabels,   
+      labels: categoryLabels,
       datasets: [
         {
           data: categoryPercentData,
@@ -179,7 +165,7 @@ onMounted(() => {
         datalabels: { display: false },
         tooltip: {
           callbacks: {
-            label: function(context) {
+            label: function (context) {
               const value = context.raw || 0;
               return `  ${value}%`;
             }
@@ -190,7 +176,7 @@ onMounted(() => {
     plugins: ['centerText'],
   });
 
-  // Stacked Horizontal Bar Chart: Total Amount vs Budget 
+  // Stacked Horizontal Bar Chart: Total Amount vs Budget
   new Chart(document.getElementById("categoryBarChart"), {
     type: "bar",
     data: {
@@ -201,22 +187,23 @@ onMounted(() => {
           data: claimedAmounts,
           backgroundColor: "#0353A4",
           borderRadius: 6,
-          barPercentage: 0.9,      
-          categoryPercentage: 0.8, 
+          barPercentage: 0.9,
+          categoryPercentage: 0.8,
           datalabels: {
             anchor: 'end',
-            align: 'end', 
+            align: 'end',
             color: '#222',
-            font: { 
+            font: {
               family: 'Inter, sans-serif',
               weight: 'bold',
-              size: 11 },
-              formatter: v => `RM ${Number(v).toLocaleString('en-MY', { minimumFractionDigits: 0 })}`,
+              size: 11
+            },
+            formatter: v => `RM ${Number(v).toLocaleString('en-MY', { minimumFractionDigits: 0 })}`,
             clamp: true,
           },
           tooltip: {
             callbacks: {
-              label: function(context) {
+              label: function (context) {
                 const category = context.label;
                 const value = context.raw;
                 const budget = categoryBudgets[category] || 0;
@@ -235,27 +222,28 @@ onMounted(() => {
           data: budgetAmounts,
           backgroundColor: "#FFAD05",
           borderRadius: 6,
-          barPercentage: 0.9,      
-          categoryPercentage: 0.8, 
+          barPercentage: 0.9,
+          categoryPercentage: 0.8,
           datalabels: {
             anchor: 'end',
-            align: 'end', 
+            align: 'end',
             color: '#222',
             font: {
               family: 'Inter, sans-serif',
               weight: 'regular',
-              size: 11 },
-              formatter: v => `RM ${Number(v).toLocaleString('en-MY', { minimumFractionDigits: 0 })}`,
+              size: 11
+            },
+            formatter: v => `RM ${Number(v).toLocaleString('en-MY', { minimumFractionDigits: 0 })}`,
             clamp: true,
           }
         },
       ],
     },
     options: {
-      indexAxis:"y",
+      indexAxis: "y",
       responsive: false,
       plugins: {
-        legend: { 
+        legend: {
           position: "top",
           labels: {
             boxWidth: 14,
@@ -264,7 +252,7 @@ onMounted(() => {
           },
         },
         datalabels: { display: true },
-      } ,
+      },
       scales: {
         x: {
           beginAtZero: true,
@@ -279,7 +267,7 @@ onMounted(() => {
           grid: { display: false },
           ticks: {
             font: { family: 'Inter, sans-serif', size: 11 },
-            callback: function(value) {
+            callback: function (value) {
               const label = this.getLabelForValue ? this.getLabelForValue(value) : value;
               const maxLineLength = 13; // Set your fixed width (number of characters per line)
               if (typeof label === 'string' && label.length > maxLineLength) {
@@ -302,8 +290,8 @@ onMounted(() => {
 
   // Gradient for Total Expense (blue)
   const expenseGradient = ctx.createLinearGradient(0, 0, 0, 300);
-  expenseGradient.addColorStop(0, "rgba(3,83,164,1)");  
-  expenseGradient.addColorStop(1, "rgba(3,83,164,0.15)"); 
+  expenseGradient.addColorStop(0, "rgba(3,83,164,1)");
+  expenseGradient.addColorStop(1, "rgba(3,83,164,0.15)");
 
   // Gradient for Total Budget (yellow)
   const budgetGradient = ctx.createLinearGradient(0, 0, 0, 300);
@@ -311,7 +299,7 @@ onMounted(() => {
   budgetGradient.addColorStop(1, "rgba(251,191,36,0.15)");
 
   // Gradient for dark blue
-   
+
 
   new Chart(document.getElementById("expenseLineChart"), {
     type: "line",
@@ -332,31 +320,31 @@ onMounted(() => {
             align: 'end',
             formatter: v => `RM ${Number(v).toLocaleString('en-MY', { minimumFractionDigits: 0 })}`,
             clamp: true,
-             font:{family: 'Inter, sans-serif', weight: 'bold', size: 12},
-             color: '#000',
-            },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                      const yearIndex = context.dataIndex;
-                      const expense = yearData[yearIndex];
-                      const budget = yearBudgetData[yearIndex];
-                      let percent = expense ? ((expense / budget) * 100).toFixed(2) : "N/A";
-                      return [
-                        `Expense: RM ${Number(expense).toLocaleString('en-MY')}`,
-                        `Budget: RM ${Number(budget).toLocaleString('en-MY')}`,
-                        `Expense over Budget: ${percent}%`
-                      ];
-                }
+            font: { family: 'Inter, sans-serif', weight: 'bold', size: 12 },
+            color: '#000',
+          },
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const yearIndex = context.dataIndex;
+                const expense = yearData[yearIndex];
+                const budget = yearBudgetData[yearIndex];
+                let percent = expense ? ((expense / budget) * 100).toFixed(2) : "N/A";
+                return [
+                  `Expense: RM ${Number(expense).toLocaleString('en-MY')}`,
+                  `Budget: RM ${Number(budget).toLocaleString('en-MY')}`,
+                  `Expense over Budget: ${percent}%`
+                ];
               }
             }
+          }
         },
         {
           label: "Total Budget",
           data: yearBudgetData,
           fill: false,
           borderColor: "#FFAD05",
-          backgroundColor: budgetGradient, 
+          backgroundColor: budgetGradient,
           borderDash: [3, 3],
           borderWidth: 2,
           tension: 0.1,
@@ -366,8 +354,8 @@ onMounted(() => {
             align: 'end',
             formatter: v => `RM ${Number(v).toLocaleString('en-MY', { minimumFractionDigits: 0 })}`,
             clamp: true,
-            font:{ family: 'Inter, sans-serif', size: 12},
-            color: '#000', 
+            font: { family: 'Inter, sans-serif', size: 12 },
+            color: '#000',
           }
         },
       ],
@@ -381,7 +369,7 @@ onMounted(() => {
         }
       },
       plugins: {
-        legend: { 
+        legend: {
           position: "top",
           labels: {
             boxWidth: 14,
@@ -405,15 +393,15 @@ onMounted(() => {
           },
         },
         x: {
-          title: { 
-          display: true, text: "Year", 
-          font: {
-            family: 'Inter, sans-serif',
-            weight: 'bold',
-            size: 14
+          title: {
+            display: true, text: "Year",
+            font: {
+              family: 'Inter, sans-serif',
+              weight: 'bold',
+              size: 14
+            },
+            color: "#000",
           },
-          color: "#000",
-        },
           grid: { display: true },
           ticks: {
             font: {

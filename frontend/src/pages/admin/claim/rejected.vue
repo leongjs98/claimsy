@@ -2,6 +2,7 @@
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
     <AdminClaimsCard :totalCount="people.length" :approvedCount="approvedCount" :rejectedCount="rejectedCount" />
     <AdminClaimsTab />
+
     <div class="mt-8 flow-root">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -47,7 +48,7 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
-                <tr v-for="(person, index) in people" :key="person.email" class="shadow-md">
+                <tr v-for="(person, index) in rejectedPeople" :key="person.email" class="shadow-md">
                   <td class="py-4 pr-3 pl-4 text-right text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">
                     {{ index + 1 }}
                   </td>
@@ -94,20 +95,19 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+  import { ref, computed } from "vue";
 
-const sortKey = ref("Date");
-const sortAsc = ref(false);
-const showDialog = ref(false);
-const selectedPerson = ref(null);
+  const sortKey = ref("Date");
+  const sortAsc = ref(false);
+  const showDialog = ref(false);
+  const selectedPerson = ref(null);
 
-const openDetails = (person) => {
-  selectedPerson.value = person;
-  showDialog.value = true;
-};
+  const openDetails = (person) => {
+    selectedPerson.value = person;
+    showDialog.value = true;
+  };
 
-// TODO: Replace people in admin claim all with clamis
-const people = [
+const people = ref([
   {
     id: "GMD2039",
     Name: "Lindsay Walton",
@@ -431,58 +431,61 @@ const people = [
       },
     ],
   },
-];
+]);
+const rejectedPeople = computed(() => {
+  return people.value.filter(person => person.Status == 'Rejected')
+})
 
-//sort by date in descending order (default)
-function parseDate(dateStr) {
-  // Converts "DD/MM/YYYY" to a Date object
-  const [day, month, year] = dateStr.split("/");
-  return new Date(`${year}-${month}-${day}`);
-}
+  //sort by date in descending order (default)
+  function parseDate(dateStr) {
+    // Converts "DD/MM/YYYY" to a Date object
+    const [day, month, year] = dateStr.split("/");
+    return new Date(`${year}-${month}-${day}`);
+  }
 
-const claimGroups = computed(() => {
-  // Get unique ClaimIDs
-  const ids = [...new Set(expenses.map((e) => e.ClaimID))];
-  // For each ClaimID, get summary info
-  let groups = ids.map((claimId) => {
-    const group = expenses.filter((e) => e.ClaimID === claimId);
-    return {
-      ClaimID: claimId,
-      Date: group[0]?.Date,
-      Quantity: group.length,
-      Total: group
-        .reduce((sum, e) => sum + Number(e.Total.replace(/,/g, "")), 0)
-        .toLocaleString("en-MY", { minimumFractionDigits: 2 }),
-      Status: group[0]?.Status,
-      Details: group, // all items with this ClaimID
-    };
+  const claimGroups = computed(() => {
+    // Get unique ClaimIDs
+    const ids = [...new Set(expenses.map((e) => e.ClaimID))];
+    // For each ClaimID, get summary info
+    let groups = ids.map((claimId) => {
+      const group = expenses.filter((e) => e.ClaimID === claimId);
+      return {
+        ClaimID: claimId,
+        Date: group[0]?.Date,
+        Quantity: group.length,
+        Total: group
+          .reduce((sum, e) => sum + Number(e.Total.replace(/,/g, "")), 0)
+          .toLocaleString("en-MY", { minimumFractionDigits: 2 }),
+        Status: group[0]?.Status,
+        Details: group, // all items with this ClaimID
+      };
+    });
+
+    // Sorting logic
+    if (sortKey.value === "Date") {
+      groups = groups.sort((a, b) => {
+        // Parse dates for comparison
+        const dateA = parseDate(a.Date);
+        const dateB = parseDate(b.Date);
+        return sortAsc.value ? dateA - dateB : dateB - dateA;
+      });
+    }
+
+    return groups;
   });
 
-  // Sorting logic
-  if (sortKey.value === "Date") {
-    groups = groups.sort((a, b) => {
-      // Parse dates for comparison
-      const dateA = parseDate(a.Date);
-      const dateB = parseDate(b.Date);
-      return sortAsc.value ? dateA - dateB : dateB - dateA;
-    });
+  function setSort(key) {
+    if (sortKey.value === key) {
+      sortAsc.value = !sortAsc.value;
+    } else {
+      sortKey.value = key;
+      sortAsc.value = true;
+    }
   }
-
-  return groups;
-});
-
-function setSort(key) {
-  if (sortKey.value === key) {
-    sortAsc.value = !sortAsc.value;
-  } else {
-    sortKey.value = key;
-    sortAsc.value = true;
-  }
-}
 
 const approvedCount = computed(() => {
   const ids = new Set(
-    people
+    people.value
       .filter((e) => e.Status === "Approved")
       .map((e) => e.id),
   );
@@ -491,7 +494,7 @@ const approvedCount = computed(() => {
 
 const rejectedCount = computed(() => {
   const ids = new Set(
-    people
+    people.value
       .filter((e) => e.Status === "Rejected")
       .map((e) => e.id),
   );
