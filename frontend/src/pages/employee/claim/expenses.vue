@@ -1,14 +1,14 @@
 <template>
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
     <!-- Cards Row -->
-    <ClaimsCard :expenses="expenses" />
+    <EmployeeClaimsCard :totalCount="totalCount" :approvedCount="approvedCount" :rejectedCount="rejectedCount" />
     <!-- Expenses Table -->
     <div class="mt-4 mb-2"></div>
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <!-- Tabs Row -->
-          <ClaimsTab />
+          <EmployeeClaimsTab />
           <table
             class="min-w-full divide-y divide-gray-300 rounded-b-lg bg-gray-100 drop-shadow-md"
           >
@@ -430,4 +430,27 @@ v-show="showCategoryDropdown"
       }
     }
   }
+
+  const totalCount = computed(() => {
+    const ids = new Set(expenses.map((e) => e.ClaimID));
+    return ids.size;
+  });
+
+  const approvedCount = computed(() => {
+    const ids = new Set(
+      expenses
+        .filter((e) => e.Status === "Approved")
+        .map((e) => e.ClaimID),
+    );
+    return ids.size;
+  });
+
+  const rejectedCount = computed(() => {
+    const ids = new Set(
+      expenses
+        .filter((e) => e.Status === "Rejected")
+        .map((e) => e.ClaimID),
+    );
+    return ids.size;
+  });
 </script>
