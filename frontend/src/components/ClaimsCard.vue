@@ -11,12 +11,12 @@
     </RouterLink>
     <RouterLink
       to="/employee/claim/approved"
-      class="flex flex-1 cursor-pointer flex-col items-center rounded-2xl bg-white px-6 py-8 shadow-xl transition hover:bg-[#B0F4EC]"
+      class="flex flex-1 cursor-pointer text-emerald-800 flex-col items-center rounded-2xl bg-white px-6 py-8 shadow-xl transition hover:bg-emerald-100"
     >
-      <div class="text-3xl font-bold text-[#2A9D8F]">
+      <div class="text-3xl font-bold">
         {{ approvedCount }}
       </div>
-      <div class="mt-2 font-semibold text-[#2A9D8F]">Approved</div>
+      <div class="mt-2 font-semibold">Approved</div>
     </RouterLink>
     <RouterLink
       to="/employee/claim/rejected"

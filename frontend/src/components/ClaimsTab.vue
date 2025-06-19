@@ -1,55 +1,69 @@
 <template>
-  <div class="flex w-full flex-col items-center pt-4 pb-4">
-    <div class="relative inline-flex gap-4">
-      <RouterLink
-        to="/employee/claim/expenses"
-        class="rounded px-4 py-2 font-normal transition"
-        :class="{
-          'bg-[#FFAD05] font-semibold text-white':
-            $route.path === '/employee/claim/expenses',
-          'text-gray-900': $route.path !== '/employee/claim/expenses',
-        }"
-      >
-        My Expenses
-      </RouterLink>
-      <RouterLink
-        to="/employee/claim/all"
-        class="rounded px-4 py-2 font-normal transition"
-        :class="{
-          'bg-theme-200 font-semibold text-white':
-            $route.path === '/employee/claim/all',
-          'text-gray-900': $route.path !== '/employee/claim/all',
-        }"
-      >
-        All Claims
-      </RouterLink>
-      <RouterLink
-        to="/employee/claim/approved"
-        class="rounded px-4 py-2 font-normal transition"
-        :class="{
-          'bg-[#2A9D8F] font-semibold text-white':
-            $route.path === '/employee/claim/approved',
-          'text-gray-900': $route.path !== '/employee/claim/approved',
-        }"
-      >
-        Approved Claims
-      </RouterLink>
-      <RouterLink
-        to="/employee/claim/rejected"
-        class="rounded px-4 py-2 font-normal transition"
-        :class="{
-          'bg-red-600 font-semibold text-white':
-            $route.path === '/employee/claim/rejected',
-          'text-gray-900': $route.path !== '/employee/claim/rejected',
-        }"
-      >
-        Rejected Claims
-      </RouterLink>
-      <!-- Horizontal line under tabs -->
-      <div
-        class="pointer-events-none absolute -bottom-4 left-0 flex w-full justify-center"
-      >
-        <div class="h-0.5 w-full rounded bg-gray-300"></div>
+  <div>
+    <div class="hidden py-4 sm:block">
+      <div class="border-b border-gray-200">
+        <nav class="-mb-px flex" aria-label="Tabs">
+          <RouterLink
+            to="/employee/claim/expenses"
+            class="w-1/4 border-b-2 px-1 py-4 text-center text-sm font-medium"
+            :class="{
+              'border-theme-200 text-theme-300':
+                $route.path === '/employee/claim/expenses',
+              'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700':
+                $route.path !== '/employee/claim/expenses',
+            }"
+            :aria-current="{
+              page: $route.path === '/employee/claim/expenses',
+            }"
+          >
+            My Expenses
+          </RouterLink>
+          <RouterLink
+            to="/employee/claim/all"
+            class="w-1/4 border-b-2 px-1 py-4 text-center text-sm font-medium"
+            :class="{
+              'border-theme-200 text-theme-300':
+                $route.path === '/employee/claim/all',
+              'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700':
+                $route.path !== '/employee/claim/all',
+            }"
+            :aria-current="{
+              page: $route.path === '/employee/claim/all',
+            }"
+          >
+            All Claims
+          </RouterLink>
+          <RouterLink
+            to="/employee/claim/approved"
+            class="w-1/4 border-b-2 px-1 py-4 text-center text-sm font-medium"
+            :class="{
+              'border-theme-200 text-theme-300':
+                $route.path === '/employee/claim/approved',
+              'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700':
+                $route.path !== '/employee/claim/approved',
+            }"
+            :aria-current="{
+              page: $route.path === '/employee/claim/approved',
+            }"
+          >
+            Approved
+          </RouterLink>
+          <RouterLink
+            to="/employee/claim/rejected"
+            class="w-1/4 border-b-2 px-1 py-4 text-center text-sm font-medium"
+            :class="{
+              'border-theme-200 text-theme-300':
+                $route.path === '/employee/claim/rejected',
+              'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700':
+                $route.path !== '/employee/claim/rejected',
+            }"
+            :aria-current="{
+              page: $route.path === '/employee/claim/rejected',
+            }"
+          >
+            Rejected
+          </RouterLink>
+        </nav>
       </div>
     </div>
   </div>
