@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
 interface Expense {
   Id: string;
@@ -11,7 +11,7 @@ interface Expense {
   Status: string;
 }
 
-export const useEmployeeClaimStore = defineStore('employeeClaim', {
+export const useEmployeeClaimStore = defineStore("employeeClaim", {
   state: () => ({
     expenses: [] as Expense[],
     categories: [] as string[],
@@ -21,10 +21,10 @@ export const useEmployeeClaimStore = defineStore('employeeClaim', {
     totalCount: (state) => state.expenses.length,
 
     approvedCount: (state) =>
-      state.expenses.filter(expense => expense.Status === "Approved").length,
+      state.expenses.filter((expense) => expense.Status === "Approved").length,
 
     rejectedCount: (state) =>
-      state.expenses.filter(expense => expense.Status === "Rejected").length,
+      state.expenses.filter((expense) => expense.Status === "Rejected").length,
   },
 
   actions: {
@@ -37,7 +37,7 @@ export const useEmployeeClaimStore = defineStore('employeeClaim', {
           Date: "30/01/2025",
           Item: 6,
           Remark: "Dell 1.35GHz 8GB 256GB SSD - for new employee sasascdavadfa",
-          Total: 48285.00,
+          Total: 48285.0,
           Status: "Approved",
         },
         {
@@ -47,7 +47,7 @@ export const useEmployeeClaimStore = defineStore('employeeClaim', {
           Date: "21/02/2025",
           Item: 2,
           Remark: "for training room",
-          Total: 1200.00,
+          Total: 1200.0,
           Status: "Approved",
         },
         {
@@ -57,7 +57,7 @@ export const useEmployeeClaimStore = defineStore('employeeClaim', {
           Date: "29/03/2025",
           Item: 1,
           Remark: "Lunch with client",
-          Total: 150.00,
+          Total: 150.0,
           Status: "Rejected",
         },
         {
@@ -67,7 +67,7 @@ export const useEmployeeClaimStore = defineStore('employeeClaim', {
           Date: "29/03/2025",
           Item: 10,
           Remark: "team lunch",
-          Total: 250.00,
+          Total: 250.0,
           Status: "Rejected",
         },
         {
@@ -77,7 +77,7 @@ export const useEmployeeClaimStore = defineStore('employeeClaim', {
           Date: "18/05/2025",
           Item: 6,
           Remark: "Sales team dinner",
-          Total: 138.00,
+          Total: 138.0,
           Status: "Rejected",
         },
         {
@@ -87,7 +87,7 @@ export const useEmployeeClaimStore = defineStore('employeeClaim', {
           Date: "12/06/2025",
           Item: 15,
           Remark: "for new employee",
-          Total: 1000.00,
+          Total: 1000.0,
           Status: "Approved",
         },
         {
@@ -97,7 +97,7 @@ export const useEmployeeClaimStore = defineStore('employeeClaim', {
           Date: "29/07/2025",
           Item: 2,
           Remark: "Flight tickets for conference",
-          Total: 1200.00,
+          Total: 1200.0,
           Status: "Approved",
         },
         {
@@ -107,10 +107,10 @@ export const useEmployeeClaimStore = defineStore('employeeClaim', {
           Date: "29/08/2025",
           Item: 2,
           Remark: "Company conference",
-          Total: 2500.00,
+          Total: 2500.0,
           Status: "Pending",
         },
-      ]
+      ];
     },
 
     initializeCategories() {
@@ -125,8 +125,8 @@ export const useEmployeeClaimStore = defineStore('employeeClaim', {
     },
 
     initializeStore() {
-      this.initializeExpenses()
-      this.initializeCategories()
-    }
-  }
-})
+      this.initializeExpenses();
+      this.initializeCategories();
+    },
+  },
+});

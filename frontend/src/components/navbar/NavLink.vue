@@ -50,6 +50,14 @@
         return true;
       }
     }
+    if (props.link === "/admin/claim/all") {
+      if (
+        route.path === "/admin/claim/approved" ||
+        route.path === "/admin/claim/rejected"
+      ) {
+        return true;
+      }
+    }
     if (
       props.link === "/admin/policy/upload" &&
       route.path === "/admin/policy/edit"

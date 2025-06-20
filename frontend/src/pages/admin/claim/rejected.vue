@@ -1,6 +1,10 @@
 <template>
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
-    <AdminClaimsCard :totalCount="claims.length" :approvedCount="adminClaims.approvedCount" :rejectedCount="adminClaims.rejectedCount" />
+    <AdminClaimsCard
+      :totalCount="claims.length"
+      :approvedCount="adminClaims.approvedCount"
+      :rejectedCount="adminClaims.rejectedCount"
+    />
     <AdminClaimsTab />
 
     <div class="mt-8 flow-root">
@@ -28,9 +32,7 @@
                   >
                     Email
                   </th>
-                  <th
-                    class="w-48 px-3 py-3.5 text-left text-sm font-semibold"
-                  >
+                  <th class="w-48 px-3 py-3.5 text-left text-sm font-semibold">
                     Status
                   </th>
                   <th class="flex px-3 py-3.5 text-sm font-semibold">
@@ -114,7 +116,9 @@
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                     {{ claim.Date }}
                   </td>
-                  <td class="px-4 flex items-center gap-2 py-4 text-left text-sm font-semibold whitespace-nowrap">
+                  <td
+                    class="flex items-center gap-2 px-4 py-4 text-left text-sm font-semibold whitespace-nowrap"
+                  >
                     <StatusBadge :status="claim.Status" />
                     <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
                     <StatusBadge v-show="claim.IsFraud" status="Fraud" />
@@ -152,23 +156,23 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { storeToRefs } from "pinia";
-import { useAdminClaimStore } from "@/stores/admin-claims.ts"
+  import { ref, computed } from "vue";
+  import { storeToRefs } from "pinia";
+  import { useAdminClaimStore } from "@/stores/admin-claims.ts";
 
-const adminClaims = useAdminClaimStore()
-const { claims } = storeToRefs(adminClaims)
+  const adminClaims = useAdminClaimStore();
+  const { claims } = storeToRefs(adminClaims);
 
-onMounted(async () => {
-  await adminClaims.initStore()
-})
+  onMounted(async () => {
+    await adminClaims.initStore();
+  });
 
-const sortAsc = ref(false);
-const showDialog = ref(false);
-const selectedClaim = ref(null);
+  const sortAsc = ref(false);
+  const showDialog = ref(false);
+  const selectedClaim = ref(null);
 
-const openDetails = (claim) => {
-  selectedClaim.value = claim;
-  showDialog.value = true;
-};
+  const openDetails = (claim) => {
+    selectedClaim.value = claim;
+    showDialog.value = true;
+  };
 </script>

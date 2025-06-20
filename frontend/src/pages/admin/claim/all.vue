@@ -1,6 +1,10 @@
 <template>
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
-    <AdminClaimsCard :totalCount="claims.length" :approvedCount="adminClaims.approvedCount" :rejectedCount="adminClaims.rejectedCount" />
+    <AdminClaimsCard
+      :totalCount="claims.length"
+      :approvedCount="adminClaims.approvedCount"
+      :rejectedCount="adminClaims.rejectedCount"
+    />
     <AdminClaimsTab />
     <div class="mt-8 flow-root">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
@@ -9,46 +13,88 @@
             <table class="min-w-full divide-y divide-gray-300 bg-gray-100">
               <thead class="rounded-lg bg-blue-50 text-theme-300">
                 <tr>
-                  <th scope="col" class="rounded-tl-lg py-3 pr-3.5 pl-4 text-right text-sm font-semibold sm:pl-6">
+                  <th
+                    scope="col"
+                    class="rounded-tl-lg py-3 pr-3.5 pl-4 text-right text-sm font-semibold sm:pl-6"
+                  >
                     #
                   </th>
-                  <th scope="col" class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold">
+                  <th
+                    scope="col"
+                    class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold"
+                  >
                     Name
                   </th>
-                  <th scope="col" class="w-fit px-3 py-3.5 text-left text-sm font-semibold">
+                  <th
+                    scope="col"
+                    class="w-fit px-3 py-3.5 text-left text-sm font-semibold"
+                  >
                     Email
                   </th>
                   <th class="w-48 px-3 py-3.5 text-left text-sm font-semibold">
                     Status
                   </th>
                   <th class="flex px-3 py-3.5 text-sm font-semibold">
-                    <button class="flex justify-center items-center gap-2 hover:cursor-pointer" @click="setSort('Date')">
+                    <button
+                      class="flex items-center justify-center gap-2 hover:cursor-pointer"
+                      @click="setSort('Date')"
+                    >
                       <span> Date </span>
-                      <svg v-show="!sortAsc" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                      <svg
+                        v-show="!sortAsc"
+                        class="h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                      >
                         <!-- Icon from Material Design Icons by Pictogrammers - https://github.com/Templarian/MaterialDesign/blob/master/LICENSE -->
-                        <path fill="currentColor"
-                          d="M19 7h-3l4-4l4 4h-3v14h-2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z" />
+                        <path
+                          fill="currentColor"
+                          d="M19 7h-3l4-4l4 4h-3v14h-2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
+                        />
                       </svg>
-                      <svg v-show="sortAsc" class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                        viewBox="0 0 24 24">
+                      <svg
+                        v-show="sortAsc"
+                        class="h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 24 24"
+                      >
                         <!-- Icon from Material Design Icons by Pictogrammers - https://github.com/Templarian/MaterialDesign/blob/master/LICENSE -->
-                        <path fill="currentColor"
-                          d="M21 17h3l-4 4l-4-4h3V3h2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z" />
+                        <path
+                          fill="currentColor"
+                          d="M21 17h3l-4 4l-4-4h3V3h2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
+                        />
                       </svg>
                     </button>
                   </th>
-                  <th scope="col" class="px-3 py-3.5 text-center text-sm font-semibold">
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-center text-sm font-semibold"
+                  >
                     Item(s)
                   </th>
-                  <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold">
+                  <th
+                    scope="col"
+                    class="px-3 py-3.5 text-right text-sm font-semibold"
+                  >
                     Total (RM)
                   </th>
-                  <th scope="col" class="rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold"></th>
+                  <th
+                    scope="col"
+                    class="rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold"
+                  ></th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
-                <tr v-for="(claim, index) in claims" :key="claim.email" class="shadow-md">
-                  <td class="py-4 pr-3 pl-4 text-right text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">
+                <tr
+                  v-for="(claim, index) in claims"
+                  :key="claim.email"
+                  class="shadow-md"
+                >
+                  <td
+                    class="py-4 pr-3 pl-4 text-right text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6"
+                  >
                     {{ index + 1 }}
                   </td>
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
@@ -61,25 +107,40 @@
                       </span>
                     </div>
                   </td>
-                  <td class="w-fit px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                  <td
+                    class="w-fit px-3 py-4 text-sm whitespace-nowrap text-gray-500"
+                  >
                     {{ claim.email }}
                   </td>
-                  <td class="px-4 flex items-center gap-2 py-4 text-left text-sm font-semibold whitespace-nowrap">
+                  <td
+                    class="flex items-center gap-2 px-4 py-4 text-left text-sm font-semibold whitespace-nowrap"
+                  >
                     <StatusBadge :status="claim.Status" />
                     <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
                     <StatusBadge v-show="claim.IsFraud" status="Fraud" />
                   </td>
-                  <td class="px-3 text-center py-4 text-sm whitespace-nowrap text-gray-500">
+                  <td
+                    class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
+                  >
                     {{ claim.Date }}
                   </td>
-                  <td class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500">
+                  <td
+                    class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
+                  >
                     {{ claim.items ? claim.items.length : 0 }}
                   </td>
-                  <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500">
+                  <td
+                    class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
+                  >
                     {{ claim.Total }}
                   </td>
-                  <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-theme-300">
-                    <button class="text-theme-300 hover:underline" @click="openDetails(claim)">
+                  <td
+                    class="px-4 py-4 text-right text-sm whitespace-nowrap text-theme-300"
+                  >
+                    <button
+                      class="text-theme-300 hover:underline"
+                      @click="openDetails(claim)"
+                    >
                       Details
                     </button>
                   </td>
@@ -96,23 +157,23 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { storeToRefs } from "pinia";
-import { useAdminClaimStore } from "@/stores/admin-claims.ts"
+  import { ref, computed } from "vue";
+  import { storeToRefs } from "pinia";
+  import { useAdminClaimStore } from "@/stores/admin-claims.ts";
 
-const adminClaims = useAdminClaimStore()
-const { claims } = storeToRefs(adminClaims)
+  const adminClaims = useAdminClaimStore();
+  const { claims } = storeToRefs(adminClaims);
 
-onMounted(async () => {
-  await adminClaims.initStore()
-})
+  onMounted(async () => {
+    await adminClaims.initStore();
+  });
 
-const sortAsc = ref(false);
-const showDialog = ref(false);
-const selectedClaim = ref(null);
+  const sortAsc = ref(false);
+  const showDialog = ref(false);
+  const selectedClaim = ref(null);
 
-const openDetails = (claim) => {
-  selectedClaim.value = claim;
-  showDialog.value = true;
-};
+  const openDetails = (claim) => {
+    selectedClaim.value = claim;
+    showDialog.value = true;
+  };
 </script>

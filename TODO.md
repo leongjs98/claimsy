@@ -2,6 +2,7 @@
 ## Todo
 - [ ] Create Pinia store to prepare end-to-end
       - then replace all repeated data in different pages
+- [ ] Pending status sorting (now only Rejected and Approved)?
 
 ## Done
 - [x] Setup database and create seeder
