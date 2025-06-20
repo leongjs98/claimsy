@@ -1,10 +1,6 @@
 <template>
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
-    <AdminClaimsCard
-      :totalCount="people.length"
-      :approvedCount="approvedCount"
-      :rejectedCount="rejectedCount"
-    />
+    <AdminClaimsCard :totalCount="claims.length" :approvedCount="adminClaims.approvedCount" :rejectedCount="adminClaims.rejectedCount" />
     <AdminClaimsTab />
 
     <div class="mt-8 flow-root">
@@ -31,6 +27,11 @@
                     class="w-fit px-3 py-3.5 text-left text-sm font-semibold"
                   >
                     Email
+                  </th>
+                  <th
+                    class="w-48 px-3 py-3.5 text-left text-sm font-semibold"
+                  >
+                    Status
                   </th>
                   <th class="flex px-3 py-3.5 text-sm font-semibold">
                     <button
@@ -67,11 +68,6 @@
                     </button>
                   </th>
                   <th
-                    class="w-48 px-3 py-3.5 text-center text-sm font-semibold"
-                  >
-                    Status
-                  </th>
-                  <th
                     scope="col"
                     class="px-3 py-3.5 text-center text-sm font-semibold"
                   >
@@ -91,8 +87,8 @@
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
-                  v-for="(person, index) in rejectedPeople"
-                  :key="person.email"
+                  v-for="(claim, index) in adminClaims.getRejected"
+                  :key="claim.email"
                   class="shadow-md"
                 >
                   <td
@@ -103,42 +99,42 @@
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                     <div class="flex flex-col">
                       <span class="font-medium text-gray-900">
-                        {{ person.Name }}
+                        {{ claim.Name }}
                       </span>
                       <span class="text-xs text-gray-500">
-                        {{ person.title }}
+                        {{ claim.title }}
                       </span>
                     </div>
                   </td>
                   <td
                     class="w-fit px-3 py-4 text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{ person.email }}
+                    {{ claim.email }}
                   </td>
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                    {{ person.Date }}
+                    {{ claim.Date }}
                   </td>
-                  <td
-                    class="px-4 py-4 text-center text-sm font-semibold whitespace-nowrap"
-                  >
-                    <StatusBadge :status="person.Status" />
+                  <td class="px-4 flex items-center gap-2 py-4 text-left text-sm font-semibold whitespace-nowrap">
+                    <StatusBadge :status="claim.Status" />
+                    <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
+                    <StatusBadge v-show="claim.IsFraud" status="Fraud" />
                   </td>
                   <td
                     class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{ person.items ? person.items.length : 0 }}
+                    {{ claim.items ? claim.items.length : 0 }}
                   </td>
                   <td
                     class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{ person.Total }}
+                    {{ claim.Total }}
                   </td>
                   <td
                     class="px-4 py-4 text-right text-sm whitespace-nowrap text-theme-300"
                   >
                     <button
                       class="text-theme-300 hover:underline"
-                      @click="openDetails(person)"
+                      @click="openDetails(claim)"
                     >
                       Details
                     </button>
@@ -152,409 +148,27 @@
     </div>
   </div>
 
-  <ClaimDetailsDialog v-model="showDialog" :data="selectedPerson" />
+  <ClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
 </template>
 
 <script setup>
-  import { ref, computed } from "vue";
+import { ref, computed } from "vue";
+import { storeToRefs } from "pinia";
+import { useAdminClaimStore } from "@/stores/admin-claims.ts"
 
-  const sortKey = ref("Date");
-  const sortAsc = ref(false);
-  const showDialog = ref(false);
-  const selectedPerson = ref(null);
+const adminClaims = useAdminClaimStore()
+const { claims } = storeToRefs(adminClaims)
 
-  const openDetails = (person) => {
-    selectedPerson.value = person;
-    showDialog.value = true;
-  };
+onMounted(async () => {
+  await adminClaims.initStore()
+})
 
-  const people = ref([
-    {
-      id: "GMD2039",
-      Name: "Lindsay Walton",
-      title: "Front-End Developer",
-      email: "lindsay.walton@example.com",
-      Date: "29/05/2025",
-      Total: "85.00",
-      Status: "Approved",
-      remark: "Claim for essential software and professional development.",
-      items: [
-        {
-          category: "Software License",
-          date: "29/05/2025",
-          merchantName: "Software Central",
-          merchantAddress: "Level 2, Digital Mall, Petaling Jaya, Selangor",
-          description: "Vue.js Development Tools Subscription",
-          quantity: 1,
-          unitPrice: 50.0,
-        },
-        {
-          category: "Online Course",
-          date: "29/05/2025",
-          merchantName: "CodeAcademy Malaysia",
-          merchantAddress: "Unit 10, Jaya One, Petaling Jaya, Selangor",
-          description: "Advanced JavaScript & Vue.js Course",
-          quantity: 1,
-          unitPrice: 35.0,
-        },
-      ],
-    },
-    {
-      id: "GMD2040",
-      Name: "Alex Chen",
-      title: "UX Designer",
-      email: "alex.chen@example.com",
-      Date: "30/05/2025",
-      Total: "120.00",
-      Status: "Pending",
-      remark: "Expenses for improving design workflow and ergonomics.",
-      items: [
-        {
-          category: "Design Software Subscription",
-          date: "30/05/2025",
-          merchantName: "Creative Suite MY",
-          merchantAddress: "Menara TM, Jalan Pantai Baharu, Kuala Lumpur",
-          description: "Adobe Creative Cloud Annual Plan",
-          quantity: 1,
-          unitPrice: 70.0,
-        },
-        {
-          category: "Hardware",
-          date: "30/05/2025",
-          merchantName: "All IT Hypermarket",
-          merchantAddress: "Low Yat Plaza, Jalan Bukit Bintang, Kuala Lumpur",
-          description: "Logitech MX Master 3S Ergonomic Mouse",
-          quantity: 1,
-          unitPrice: 50.0,
-        },
-      ],
-    },
-    {
-      id: "GMD2041",
-      Name: "Sarah Johnson",
-      title: "Marketing Specialist",
-      email: "sarah.j@example.com",
-      Date: "31/05/2025",
-      Total: "65.00",
-      Status: "Rejected",
-      remark: "Funding for ongoing digital marketing initiatives.",
-      items: [
-        {
-          category: "Advertising",
-          date: "31/05/2025",
-          merchantName: "Digital Marketing Agency (Local)",
-          merchantAddress: "Level 5, The Gardens Mid Valley, Kuala Lumpur",
-          description: "Social Media Ad Campaign - Q2",
-          quantity: 1,
-          unitPrice: 65.0,
-        },
-      ],
-    },
-    {
-      id: "GMD2042",
-      Name: "Michael Brown",
-      title: "Graphic Designer",
-      email: "michael.b@example.com",
-      Date: "01/06/2025",
-      Total: "45.00",
-      Status: "Approved",
-      remark: "Essential supplies for graphic design work.",
-      items: [
-        {
-          category: "Subscription",
-          date: "01/06/2025",
-          merchantName: "Creative Stock MY",
-          merchantAddress: "Online Service (Based in Malaysia)",
-          description: "Local Stock Photo & Vector Subscription",
-          quantity: 1,
-          unitPrice: 25.0,
-        },
-        {
-          category: "Supplies",
-          date: "01/06/2025",
-          merchantName: "CzipLee",
-          merchantAddress: "1 Jalan Telawi 3, Bangsar, Kuala Lumpur",
-          description: "Wacom Pen Nibs (Pack of 5)",
-          quantity: 1,
-          unitPrice: 20.0,
-        },
-      ],
-    },
-    {
-      id: "GMD2043",
-      Name: "Emily Wilson",
-      title: "Content Writer",
-      email: "emily.w@example.com",
-      Date: "02/06/2025",
-      Total: "90.00",
-      Status: "Pending",
-      remark: "Resources for content quality and research.",
-      items: [
-        {
-          category: "Software",
-          date: "02/06/2025",
-          merchantName: "Language AI Solutions",
-          merchantAddress: "Menara Axis, Petaling Jaya, Selangor",
-          description: "Premium Grammar & Plagiarism Checker",
-          quantity: 1,
-          unitPrice: 40.0,
-        },
-        {
-          category: "Book",
-          date: "02/06/2025",
-          merchantName: "MPH Bookstores",
-          merchantAddress: "Mid Valley Megamall, Kuala Lumpur",
-          description: "Essential Guide to Content Marketing",
-          quantity: 1,
-          unitPrice: 50.0,
-        },
-      ],
-    },
-    {
-      id: "GMD2044",
-      Name: "David Lee",
-      title: "Photographer",
-      email: "david.lee@example.com",
-      Date: "03/06/2025",
-      Total: "150.00",
-      Status: "Approved",
-      remark: "Equipment and studio rental for professional shoots.",
-      items: [
-        {
-          category: "Equipment",
-          date: "03/06/2025",
-          merchantName: "Foto Shangri-La",
-          merchantAddress: "Jalan Pudu, Kuala Lumpur",
-          description: "Camera Lens Cleaning Kit",
-          quantity: 1,
-          unitPrice: 100.0,
-        },
-        {
-          category: "Rental",
-          date: "03/06/2025",
-          merchantName: "Studio Rente",
-          merchantAddress: "Sunway Damansara, Petaling Jaya, Selangor",
-          description: "Photography Studio Rental - Half Day",
-          quantity: 1,
-          unitPrice: 50.0,
-        },
-      ],
-    },
-    {
-      id: "GMD2045",
-      Name: "Jessica Tan",
-      title: "Social Media Manager",
-      email: "jessica.t@example.com",
-      Date: "04/06/2025",
-      Total: "200.00",
-      Status: "Rejected",
-      remark: "Tools and ad spend for social media campaigns.",
-      items: [
-        {
-          category: "Software",
-          date: "04/06/2025",
-          merchantName: "SocialReach MY",
-          merchantAddress: "Online Service (Kuala Lumpur Office)",
-          description: "Social Media Management Platform Subscription",
-          quantity: 1,
-          unitPrice: 120.0,
-        },
-        {
-          category: "Advertising",
-          date: "04/06/2025",
-          merchantName: "Facebook / Instagram Ads Malaysia",
-          merchantAddress: "Level 10, TRX Exchange 106, Kuala Lumpur",
-          description: "Instagram Ad Campaign Budget",
-          quantity: 1,
-          unitPrice: 80.0,
-        },
-      ],
-    },
-    {
-      id: "GMD2046",
-      Name: "Ryan Wong",
-      title: "Video Editor",
-      email: "ryan.w@example.com",
-      Date: "05/06/2025",
-      Total: "350.00",
-      Status: "Pending",
-      remark: "Claim for video production software and assets.",
-      items: [
-        {
-          category: "Software",
-          date: "05/06/2025",
-          merchantName: "ProEdit Solutions",
-          merchantAddress: "Cyberjaya City Centre, Cyberjaya, Selangor",
-          description: "Video Editing Software License (Annual)",
-          quantity: 1,
-          unitPrice: 250.0,
-        },
-        {
-          category: "Subscription",
-          date: "05/06/2025",
-          merchantName: "Malay Stock Footage",
-          merchantAddress: "Online Platform (Based in KL)",
-          description: "Premium Stock Footage Subscription",
-          quantity: 1,
-          unitPrice: 100.0,
-        },
-      ],
-    },
-    {
-      id: "GMD2047",
-      Name: "Amanda Lim",
-      title: "Event Coordinator",
-      email: "amanda.l@example.com",
-      Date: "06/06/2025",
-      Total: "500.00",
-      Status: "Approved",
-      remark: "Deposits for upcoming corporate event.",
-      items: [
-        {
-          category: "Venue",
-          date: "06/06/2025",
-          merchantName: "KL Convention Centre",
-          merchantAddress:
-            "Jalan Pinang, Kuala Lumpur City Centre, Kuala Lumpur",
-          description: "Exhibition Hall Booking Deposit",
-          quantity: 1,
-          unitPrice: 300.0,
-        },
-        {
-          category: "Catering",
-          date: "06/06/2025",
-          merchantName: "Big Plate Catering",
-          merchantAddress: "Jalan PJS 11/15, Bandar Sunway, Selangor",
-          description: "Event Catering Service Deposit",
-          quantity: 1,
-          unitPrice: 200.0,
-        },
-      ],
-    },
-    {
-      id: "GMD2048",
-      Name: "Daniel Koh",
-      title: "Print Specialist",
-      email: "daniel.k@example.com",
-      Date: "07/06/2025",
-      Total: "80.00",
-      Status: "Pending",
-      remark: "Replenishing printing supplies for the office.",
-      items: [
-        {
-          category: "Supplies",
-          date: "07/06/2025",
-          merchantName: "MR. D.I.Y.",
-          merchantAddress:
-            "Various outlets, e.g., Mid Valley Megamall, Kuala Lumpur",
-          description: "A4 Printing Paper (10 reams)",
-          quantity: 10,
-          unitPrice: 3.0,
-        },
-        {
-          category: "Supplies",
-          date: "07/06/2025",
-          merchantName: "Inkjet Refill Store",
-          merchantAddress: "Digital Mall, Petaling Jaya, Selangor",
-          description: "Compatible Ink Cartridges (Multi-pack)",
-          quantity: 2,
-          unitPrice: 25.0,
-        },
-      ],
-    },
-    {
-      id: "GMD2049",
-      Name: "Michelle Ho",
-      title: "Brand Strategist",
-      email: "michelle.h@example.com",
-      Date: "08/06/2025",
-      Total: "600.00",
-      Status: "Approved",
-      remark: "Investment in market intelligence and team development.",
-      items: [
-        {
-          category: "Research",
-          date: "08/06/2025",
-          merchantName: "Fusion Analytics MY",
-          merchantAddress: "The Vertical, Bangsar South, Kuala Lumpur",
-          description: "Malaysian Consumer Market Report Q1 2025",
-          quantity: 1,
-          unitPrice: 400.0,
-        },
-        {
-          category: "Workshop",
-          date: "08/06/2025",
-          merchantName: "Local Branding Experts",
-          merchantAddress: "Co-Labs Coworking, The Starling, Petaling Jaya",
-          description: "Effective Brand Communication Workshop",
-          quantity: 1,
-          unitPrice: 200.0,
-        },
-      ],
-    },
-  ]);
-  const rejectedPeople = computed(() => {
-    return people.value.filter((person) => person.Status == "Rejected");
-  });
+const sortAsc = ref(false);
+const showDialog = ref(false);
+const selectedClaim = ref(null);
 
-  //sort by date in descending order (default)
-  function parseDate(dateStr) {
-    // Converts "DD/MM/YYYY" to a Date object
-    const [day, month, year] = dateStr.split("/");
-    return new Date(`${year}-${month}-${day}`);
-  }
-
-  const claimGroups = computed(() => {
-    // Get unique ClaimIDs
-    const ids = [...new Set(expenses.map((e) => e.ClaimID))];
-    // For each ClaimID, get summary info
-    let groups = ids.map((claimId) => {
-      const group = expenses.filter((e) => e.ClaimID === claimId);
-      return {
-        ClaimID: claimId,
-        Date: group[0]?.Date,
-        Quantity: group.length,
-        Total: group
-          .reduce((sum, e) => sum + Number(e.Total.replace(/,/g, "")), 0)
-          .toLocaleString("en-MY", { minimumFractionDigits: 2 }),
-        Status: group[0]?.Status,
-        Details: group, // all items with this ClaimID
-      };
-    });
-
-    // Sorting logic
-    if (sortKey.value === "Date") {
-      groups = groups.sort((a, b) => {
-        // Parse dates for comparison
-        const dateA = parseDate(a.Date);
-        const dateB = parseDate(b.Date);
-        return sortAsc.value ? dateA - dateB : dateB - dateA;
-      });
-    }
-
-    return groups;
-  });
-
-  function setSort(key) {
-    if (sortKey.value === key) {
-      sortAsc.value = !sortAsc.value;
-    } else {
-      sortKey.value = key;
-      sortAsc.value = true;
-    }
-  }
-
-  const approvedCount = computed(() => {
-    const ids = new Set(
-      people.value.filter((e) => e.Status === "Approved").map((e) => e.id),
-    );
-    return ids.size;
-  });
-
-  const rejectedCount = computed(() => {
-    const ids = new Set(
-      people.value.filter((e) => e.Status === "Rejected").map((e) => e.id),
-    );
-    return ids.size;
-  });
+const openDetails = (claim) => {
+  selectedClaim.value = claim;
+  showDialog.value = true;
+};
 </script>
