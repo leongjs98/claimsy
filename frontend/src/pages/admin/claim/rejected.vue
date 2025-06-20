@@ -5,7 +5,22 @@
       :approvedCount="adminClaims.approvedCount"
       :rejectedCount="adminClaims.rejectedCount"
     />
-    <AdminClaimsTab />
+    <Tab
+      :tabs="[
+        {
+          link: '/admin/claim/all',
+          routeName: 'All Claims',
+        },
+        {
+          link: '/admin/claim/approved',
+          routeName: 'Approved',
+        },
+        {
+          link: '/admin/claim/rejected',
+          routeName: 'Rejected',
+        },
+      ]"
+    />
 
     <div class="mt-8 flow-root">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">

@@ -64,6 +64,12 @@
     ) {
       return true;
     }
+    if (
+      props.link === "/ask-claimsy" &&
+      route.path === "/ask-claimsy/smart-suggest"
+    ) {
+      return true;
+    }
     return false;
   }
 </script>
