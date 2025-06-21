@@ -12,7 +12,11 @@ import { routes } from "vue-router/auto-routes";
 const ourRoutes = [
   {
     path: "/",
-    redirect: "/login",
+    redirect: "/login/employee",
+  },
+  {
+    path: "/login",
+    redirect: "/login/employee",
   },
   {
     path: "/employee",
