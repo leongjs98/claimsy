@@ -9,10 +9,12 @@ export const useAdminClaimStore = defineStore("adminClaim", {
     totalCount: (state) => state.claims.length,
 
     approvedCount: (state) =>
-      state.claims.filter((claim) => claim.Status === "Approved").length,
+      state.claims.filter((claim) => claim.Status.toLowerCase() === "approved")
+        .length,
 
     rejectedCount: (state) =>
-      state.claims.filter((claim) => claim.Status === "Rejected").length,
+      state.claims.filter((claim) => claim.Status.toLowerCase() === "rejected")
+        .length,
 
     getApproved: (state) => {
       return state.claims.filter(
