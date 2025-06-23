@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: replace with Stats With brand icon (https://tailwindcss.com/plus/ui-blocks/application-ui/data-display/stats) -->
   <div class="mb-8 flex gap-6 px-4 sm:px-8 lg:px-14">
     <RouterLink
       to="/employee/claim/expenses"
@@ -11,12 +12,12 @@
     </RouterLink>
     <RouterLink
       to="/employee/claim/approved"
-      class="flex flex-1 cursor-pointer flex-col items-center rounded-2xl bg-white px-6 py-8 shadow-xl transition hover:bg-[#B0F4EC]"
+      class="flex flex-1 cursor-pointer flex-col items-center rounded-2xl bg-white px-6 py-8 text-emerald-800 shadow-xl transition hover:bg-emerald-100"
     >
-      <div class="text-3xl font-bold text-[#2A9D8F]">
+      <div class="text-3xl font-bold">
         {{ approvedCount }}
       </div>
-      <div class="mt-2 font-semibold text-[#2A9D8F]">Approved</div>
+      <div class="mt-2 font-semibold">Approved</div>
     </RouterLink>
     <RouterLink
       to="/employee/claim/rejected"
@@ -30,36 +31,12 @@
   </div>
 </template>
 
-<script setup>
-  import { computed } from "vue";
+<script setup lang="ts">
+  interface Props {
+    totalCount: number;
+    approvedCount: number;
+    rejectedCount: number;
+  }
 
-  const props = defineProps({
-    expenses: {
-      type: Array,
-      required: true,
-    },
-  });
-
-  const totalCount = computed(() => {
-    const ids = new Set(props.expenses.map((e) => e.ClaimID));
-    return ids.size;
-  });
-
-  const approvedCount = computed(() => {
-    const ids = new Set(
-      props.expenses
-        .filter((e) => e.Status === "Approved")
-        .map((e) => e.ClaimID),
-    );
-    return ids.size;
-  });
-
-  const rejectedCount = computed(() => {
-    const ids = new Set(
-      props.expenses
-        .filter((e) => e.Status === "Rejected")
-        .map((e) => e.ClaimID),
-    );
-    return ids.size;
-  });
+  const props = defineProps<Props>();
 </script>

@@ -1,18 +1,22 @@
 <template>
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
     <!-- Cards Row -->
-    <ClaimsCard :expenses="expenses" />
+    <EmployeeClaimsCard
+      :totalCount="totalCount"
+      :approvedCount="approvedCount"
+      :rejectedCount="rejectedCount"
+    />
     <!-- Expenses Table -->
     <div class="mt-4 mb-2"></div>
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <!-- Tabs Row -->
-          <ClaimsTab />
+          <EmployeeClaimsTab />
           <table
             class="min-w-full divide-y divide-gray-300 rounded-b-lg bg-gray-100 drop-shadow-md"
           >
-            <thead class="rounded-lg bg-theme-300 text-white">
+            <thead class="rounded-lg bg-blue-50 text-theme-300">
               <tr>
                 <th
                   class="rounded-tl-lg py-3 pr-3.5 pl-4 text-right text-sm font-semibold sm:pl-6"
@@ -20,46 +24,132 @@
                   #
                 </th>
                 <th class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold">
-                  Category
-                  <span
-                    class="relative ml-1 cursor-pointer rounded-tl-lg text-xs"
+                  <div
                     @mouseenter="showCategoryDropdown = true"
+                    @mouseleave="showCategoryDropdown = false"
+                    class="flex items-center gap-2"
                   >
-                    <button
-                      class="focus:outline-none"
-                      @click="setSort('Category')"
-                    >
-                      ⇅
-                    </button>
-                    <div
-                      v-show="showCategoryDropdown"
-                      class="absolute left-0 z-10 mt-2 w-48 rounded bg-white font-normal text-theme-300 shadow-xl"
-                      @mouseenter="showCategoryDropdown = true"
-                      @mouseleave="showCategoryDropdown = false"
-                    >
-                      <ul>
-                        <li
-                          v-for="cat in categories"
-                          :key="cat"
-                          @click="
-                            selectedCategory = cat;
-                            showCategoryDropdown = false;
-                          "
-                          class="cursor-pointer rounded px-4 py-2 hover:bg-[#FFAD05] hover:text-white"
-                          :class="{
-                            'bg-theme-200 text-white': selectedCategory === cat,
-                          }"
+                    <button @click="setSort('Category')">Category</button>
+                    <div class="relative inline-block w-full text-left">
+                      <div>
+                        <button
+                          type="button"
+                          class="hover:text--600 flex items-center justify-center rounded-full bg-gray-100 text-theme-300 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100 focus:outline-hidden"
+                          id="menu-button"
+                          aria-expanded="true"
+                          aria-haspopup="true"
                         >
-                          {{ cat }}
-                        </li>
-                      </ul>
+                          <span class="sr-only">Open options</span>
+                          <svg
+                            class="size-4"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="32"
+                            height="32"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M11 20q-.425 0-.712-.288T10 19v-6L4.2 5.6q-.375-.5-.112-1.05T5 4h14q.65 0 .913.55T19.8 5.6L14 13v6q0 .425-.288.713T13 20z"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+
+                      <Transition name="dropdown-menu">
+                        <div
+                          v-show="showCategoryDropdown"
+                          @mouseleave="showCategoryDropdown = false"
+                          class="absolute left-0 z-20 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
+                          role="menu"
+                          aria-orientation="vertical"
+                          aria-labelledby="menu-button"
+                          tabindex="-1"
+                        >
+                          <div class="py-1" role="none">
+                            <button
+                              v-for="cat in categories"
+                              :key="cat"
+                              @click="
+                                selectedCategory = cat;
+                                showCategoryDropdown = false;
+                              "
+                              :class="{
+                                'bg-blue-50 text-theme-200 outline-hidden':
+                                  selectedCategory === cat,
+                                'text-gray-700': selectedCategory !== cat,
+                              }"
+                              showCategoryDropdown="false;"
+                              href="#"
+                              class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-50 hover:text-theme-200 focus:bg-blue-50 focus:text-theme-200"
+                              role="menuitem"
+                              tabindex="-1"
+                              id="menu-item-2"
+                            >
+                              {{ cat }}
+                            </button>
+                          </div>
+                        </div>
+                      </Transition>
                     </div>
-                  </span>
+                    <!-- <span class="flex items-center relative ml-1 cursor-pointer rounded-tl-lg text-xs" -->
+                    <!--   @mouseenter="showCategoryDropdown = true"> -->
+                    <!--   <button class="focus:outline-none" @click="setSort('Category')"> -->
+                    <!--     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" -->
+                    <!--       viewBox="0 0 24 24"> -->
+                    <!--       <path fill="currentColor" -->
+                    <!--         d="M11 20q-.425 0-.712-.288T10 19v-6L4.2 5.6q-.375-.5-.112-1.05T5 4h14q.65 0 .913.55T19.8 5.6L14 13v6q0 .425-.288.713T13 20z" /> -->
+                    <!--     </svg> -->
+                    <!--   </button> -->
+                    <!--   <div v-show="showCategoryDropdown" -->
+                    <!--     class="absolute left-0 z-10 mt-2 w-48 rounded bg-white font-normal text-theme-300 shadow-xl" -->
+                    <!--     @mouseenter="showCategoryDropdown = true" @mouseleave="showCategoryDropdown = false"> -->
+                    <!--     <ul> -->
+                    <!--       <li v-for="cat in categories" :key="cat" @click=" -->
+                    <!--         selectedCategory = cat; -->
+                    <!--       showCategoryDropdown = false; -->
+                    <!-- " class="cursor-pointer rounded px-4 py-2 hover:bg-[#FFAD05] hover:text-white" -->
+                    <!-- :class="{ 'bg-theme-200 text-white': selectedCategory === cat, }"> -->
+                    <!--         {{ cat }} -->
+                    <!--       </li> -->
+                    <!--     </ul> -->
+                    <!--   </div> -->
+                    <!-- </span> -->
+                  </div>
                 </th>
-                <th class="w-fit px-3 py-3.5 text-center text-sm font-semibold">
-                  Date
-                  <button class="focus:outline-none" @click="setSort('Date')">
-                    ⇅
+                <th
+                  class="flex justify-center px-3 py-3.5 text-sm font-semibold"
+                >
+                  <button
+                    class="flex items-center justify-center gap-2 hover:cursor-pointer"
+                    @click="setSort('Date')"
+                  >
+                    <span> Date </span>
+                    <svg
+                      v-show="!sortAsc"
+                      class="h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                    >
+                      <!-- Icon from Material Design Icons by Pictogrammers - https://github.com/Templarian/MaterialDesign/blob/master/LICENSE -->
+                      <path
+                        fill="currentColor"
+                        d="M19 7h-3l4-4l4 4h-3v14h-2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
+                      />
+                    </svg>
+                    <svg
+                      v-show="sortAsc"
+                      class="h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      viewBox="0 0 24 24"
+                    >
+                      <!-- Icon from Material Design Icons by Pictogrammers - https://github.com/Templarian/MaterialDesign/blob/master/LICENSE -->
+                      <path
+                        fill="currentColor"
+                        d="M21 17h3l-4 4l-4-4h3V3h2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
+                      />
+                    </svg>
                   </button>
                 </th>
                 <th class="px-3 py-3.5 text-center text-sm font-semibold">
@@ -74,7 +164,7 @@
                 <th
                   class="w-48 rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold"
                 >
-                  Action
+                  Select
                 </th>
               </tr>
             </thead>
@@ -144,10 +234,10 @@
                     <!-- Visual representation of the checkbox -->
                     <label
                       :for="`checkbox-product-${index}`"
-                      class="checkbox-label relative flex h-6 w-6 cursor-pointer items-center justify-center overflow-hidden rounded-md border-2 border-theme-200 transition-colors ease-in-out hover:border-theme-300 focus:border-theme-300"
+                      class="checkbox-label relative flex h-6 w-6 cursor-pointer items-center justify-center overflow-hidden rounded-md border-1 border-theme-200 transition-colors ease-in-out hover:border-theme-300 focus:border-theme-300"
                     >
                       <!-- The expanding fill element -->
-                      <div class="checkbox-fill absolute bg-amber-500"></div>
+                      <div class="checkbox-fill absolute bg-theme-300"></div>
                     </label>
                   </div>
                 </td>
@@ -202,10 +292,7 @@
 </style>
 
 <script setup>
-  // will be connecting to the database later
   import { ref, computed } from "vue";
-  import ClaimsCard from "@/components/ClaimsCard.vue";
-  import ClaimsTab from "@/components/ClaimsTab.vue";
 
   const sortKey = ref("Date");
   const sortAsc = ref(false);
@@ -347,4 +434,23 @@
       }
     }
   }
+
+  const totalCount = computed(() => {
+    const ids = new Set(expenses.map((e) => e.ClaimID));
+    return ids.size;
+  });
+
+  const approvedCount = computed(() => {
+    const ids = new Set(
+      expenses.filter((e) => e.Status === "Approved").map((e) => e.ClaimID),
+    );
+    return ids.size;
+  });
+
+  const rejectedCount = computed(() => {
+    const ids = new Set(
+      expenses.filter((e) => e.Status === "Rejected").map((e) => e.ClaimID),
+    );
+    return ids.size;
+  });
 </script>

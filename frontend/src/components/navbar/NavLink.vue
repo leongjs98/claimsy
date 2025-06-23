@@ -42,9 +42,20 @@
     ) {
       return true;
     }
+    if (props.link === "/admin/claim/all") {
+      if (route.path.includes("/admin/claim")) {
+        return true;
+      }
+    }
     if (
       props.link === "/admin/policy/upload" &&
       route.path === "/admin/policy/edit"
+    ) {
+      return true;
+    }
+    if (
+      props.link === "/ask-claimsy" &&
+      route.path.includes("/ask-claimsy/smart-suggest")
     ) {
       return true;
     }

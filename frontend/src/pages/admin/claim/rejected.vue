@@ -21,6 +21,7 @@
         },
       ]"
     />
+
     <div class="mt-8 flow-root">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -51,7 +52,7 @@
                   </th>
                   <th class="flex px-3 py-3.5 text-sm font-semibold">
                     <button
-                      class="flex items-center justify-center gap-2 hover:cursor-pointer"
+                      class="flex items-center gap-2 hover:cursor-pointer"
                       @click="setSort('Date')"
                     >
                       <span> Date </span>
@@ -103,7 +104,7 @@
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
-                  v-for="(claim, index) in claims"
+                  v-for="(claim, index) in adminClaims.getRejected"
                   :key="claim.email"
                   class="shadow-md"
                 >
@@ -127,17 +128,15 @@
                   >
                     {{ claim.email }}
                   </td>
+                  <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                    {{ claim.Date }}
+                  </td>
                   <td
                     class="flex items-center gap-2 px-4 py-4 text-left text-sm font-semibold whitespace-nowrap"
                   >
                     <StatusBadge :status="claim.Status" />
                     <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
                     <StatusBadge v-show="claim.IsFraud" status="Fraud" />
-                  </td>
-                  <td
-                    class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
-                  >
-                    {{ claim.Date }}
                   </td>
                   <td
                     class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"

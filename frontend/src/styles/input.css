@@ -53,3 +53,27 @@
 .backdrop-leave-to {
   @apply opacity-0;
 }
+
+.dropdown-menu-enter-from {
+  @apply scale-95 transform opacity-0;
+}
+
+.dropdown-menu-enter-active {
+  @apply transition duration-100 ease-out;
+}
+
+.dropdown-menu-enter-to {
+  @apply scale-100 transform opacity-100;
+}
+
+.dropdown-menu-leave-from {
+  @apply scale-100 transform opacity-100;
+}
+
+.dropdown-menu-leave-active {
+  @apply transition duration-75 ease-in;
+}
+
+.dropdown-menu-leave-to {
+  @apply scale-95 transform opacity-0;
+}

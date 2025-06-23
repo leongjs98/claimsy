@@ -43,17 +43,17 @@
             </NavLink>
 
             <NavLink
-              name="Receipt Upload"
+              name="Upload Receipt"
               link="/employee/claim/upload"
               v-if="!route.path.includes('admin')"
             >
             </NavLink>
-            <NavLink
-              name="Point & Rewards"
-              link="/employee/rewards"
-              v-if="!route.path.includes('admin')"
-            >
-            </NavLink>
+            <!-- <NavLink -->
+            <!--   name="Point & Rewards" -->
+            <!--   link="/employee/rewards" -->
+            <!--   v-if="!route.path.includes('admin')" -->
+            <!-- > -->
+            <!-- </NavLink> -->
             <NavLink name="Ask Claimsy" link="/ask-claimsy"> </NavLink>
           </ul>
         </nav>
