@@ -3,7 +3,7 @@ Create PostgreSQL tables of Claimsy
 """
 
 from sqlalchemy import DECIMAL, JSON, Date, ForeignKey, Text, Column, Integer, String
-from setup import TableBase, Base, engine
+from db.setup import TableBase, Base, engine
 
 
 class Invoice(TableBase):

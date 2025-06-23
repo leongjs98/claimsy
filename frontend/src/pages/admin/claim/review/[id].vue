@@ -22,12 +22,12 @@
 
           <!-- Header -->
           <h1
-            class="mr-125 flex justify-center text-2xl font-bold text-blue-950"
+            class="mr-130 flex justify-center text-2xl font-bold text-blue-950"
           >
             <template v-if="loading">Loading...</template>
             <template v-else-if="error">{{ error }}</template>
-            <template v-else-if="staff && claim">
-              #{{ claim.id }} {{ staff.name }}
+            <template v-else-if="invoice">
+              #{{ invoice.invoice_id }} {{ dummyStaff_name }}
             </template>
             <template v-else>No data found</template>
           </h1>
@@ -36,7 +36,7 @@
         <!-- Receipt Details -->
         <!-- Category -->
         <div
-          v-if="claim"
+          v-if="invoice"
           class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
         >
           <div class="sm:col-span-3">
@@ -46,7 +46,7 @@
               name="category"
               id="category"
               :options="categories"
-              :model-value="claim.category"
+              :model-value="invoice.category"
               disabled
             />
             <TextInput
@@ -54,7 +54,7 @@
               label="Category"
               name="category"
               id="category"
-              :model-value="claim.category"
+              :model-value="invoice.category"
               disabled
             />
           </div>
@@ -66,7 +66,7 @@
               type="text"
               name="date"
               id="date"
-              :model-value="claim.date"
+              :model-value="invoice.invoice_date"
               disabled
             />
           </div>
@@ -78,7 +78,7 @@
               name="merchantName"
               id="merchant-name"
               autocomplete="name"
-              :model-value="claim.merchantName"
+              :model-value="invoice.merchant_name"
               disabled
             />
           </div>
@@ -90,7 +90,7 @@
               name="merchantAddress"
               id="merchant-address"
               autocomplete="street-address"
-              :model-value="claim.merchantAddress"
+              :model-value="invoice.merchant_address"
               disabled
             />
           </div>
@@ -101,7 +101,7 @@
               label="Remark"
               name="remark"
               id="remark"
-              :model-value="claim.remark"
+              :model-value="invoice.remark"
               disabled
             />
           </div>
@@ -110,7 +110,7 @@
 
       <!-- Items/Services -->
       <div
-        v-if="claim"
+        v-if="invoice"
         class="grid grid-cols-1 gap-x-6 gap-y-8 border-b border-gray-900/10 pb-12 sm:grid-cols-6"
       >
         <div class="sm:col-span-full">
@@ -132,15 +132,15 @@
 
             <tbody>
               <tr
-                v-for="(item, index) in claim.items"
+                v-for="(item, index) in invoice.items_services"
                 :key="index"
                 class="bg-gray-200 text-theme-300"
               >
-                <td class="rounded-l-lg px-4 py-3">{{ item.description }}</td>
-                <td class="px-4 py-3 text-right">{{ item.quantity }}</td>
-                <td class="rounded-r-lg px-4 py-3 text-right">
+                <td class="rounded-l-lg px-4 py-3 text-sm">{{ item.description }}</td>
+                <td class="px-4 py-3 text-right text-sm">{{ item.quantity }}</td>
+                <td class="rounded-r-lg px-4 py-3 text-right text-sm">
                   {{
-                    item.unitPrice.toLocaleString("en-MY", {
+                    item.unit_price.toLocaleString("en-MY", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })
@@ -151,11 +151,11 @@
               <tr class="text-right font-semibold text-theme-300">
                 <td></td>
                 <td class="rounded-l-lg bg-gray-200 px-4 py-3">Total</td>
-                <td class="rounded-r-lg bg-gray-200 px-4 py-3">
+                <td class="rounded-r-lg bg-gray-200 px-4 py-3 text-sm">
                   {{
-                    claim.items
+                    invoice.items_services
                       .reduce(
-                        (sum, item) => sum + item.quantity * item.unitPrice,
+                        (sum, item) => sum + item.quantity * item.unit_price,
                         0,
                       )
                       .toLocaleString("en-MY", {
@@ -174,13 +174,13 @@
       <div class="mt-6 flex items-center justify-end gap-x-6">
         <button
           type="button"
-          class="rounded-md bg-red-400 px-5.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
+          class="rounded-md bg-red-400 px-5.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200 relative z-50"
         >
           Reject
         </button>
         <button
           type="button"
-          class="rounded-md bg-green-400 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
+          class="rounded-md bg-green-400 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200 relative z-50"
         >
           Approve
         </button>
@@ -190,82 +190,35 @@
 </template>
 
 <script setup>
-  import { useRouter } from "vue-router";
-  import { ref, computed, onMounted } from "vue";
-  import DropdownInput from "@/components/form/DropdownInput.vue";
-  import CalendarInput from "@/components/form/CalendarInput.vue";
-  import TextInput from "@/components/form/TextInput.vue";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { ref, computed, onMounted } from "vue";
 
-  const router = useRouter();
-  const staff = ref(null);
-  const claim = ref(null);
-  const loading = ref(true);
-  const error = ref("");
-  const isStored = ref(false); // <-- This flag controls the logic
-  const categories = [
-    "Gadget",
-    "Travel Expenses",
-    "Meals and Entertainment",
-    "Accommodation",
-    "Communication",
-  ];
+import DropdownInput from "@/components/form/DropdownInput.vue";
+import CalendarInput from "@/components/form/CalendarInput.vue";
+import TextInput from "@/components/form/TextInput.vue";
 
-  // Example: Fetching from mock JSON (replace with your API endpoints)
-  onMounted(async () => {
-    loading.value = true;
-    try {
-      // Replace with your actual endpoints or logic
+import { useInvoiceStore } from "@/stores/invoice";
 
-      // const staffRes = await fetch("/api/staff/1"); Makes a network request to your backend API to get staff data.
-      // staff.value = await staffRes.json(); Parses the JSON response and assigns it to your staff ref.
+const router = useRouter();
+const invoiceStore = useInvoiceStore();
 
-      // const staffRes = await fetch("/api/staff/1");
-      // staff.value = await staffRes.json();
+const { invoice, loading, error } = storeToRefs(invoiceStore);
 
-      // const claimRes = await fetch("/api/claims/1");
-      // claim.value = await claimRes.json();
+const isStored = ref(true);
+const dummyStaff_name = ref("John Doe");
 
-      // const claimRes = await fetch("/api/claims/1");
-      // claim.value = await claimRes.json();
+onMounted(async () => {
+const invoiceId = router.currentRoute.value.params.id;
+await invoiceStore.fetchInvoice(invoiceId);
+});
 
-      // Mock data for demonstration
-      // ...fetch logic...
-      staff.value = { id: "001", name: "John Doe" };
-      claim.value = {
-        id: "001",
-        category: "Gadget",
-        date: "06/05/2025",
-        merchantName: "Samsung Store",
-        merchantAddress: "123 Main St",
-        remark: "For project use",
-        items: [
-          {
-            description: "Galaxy Tab S10 Ultra",
-            quantity: 1,
-            unitPrice: 4299.0,
-          },
-          {
-            description: '24" Essential Monitor S3',
-            quantity: 1,
-            unitPrice: 399.0,
-          },
-        ],
-      };
-      // Simulate claim is already stored (set to true after saving)
-      isStored.value = true;
-    } catch (e) {
-      error.value = "Failed to load data.";
-    } finally {
-      loading.value = false;
-    }
-  });
-
-  const totalAmount = computed(() =>
-    claim.value
-      ? claim.value.items.reduce(
-          (sum, item) => sum + item.quantity * item.unitPrice,
-          0,
-        )
-      : 0,
-  );
+const totalAmount = computed(() =>
+invoice.value 
+    ? invoice.value.items_services.reduce(
+        (sum, item) => sum + item.quantity * item.unit_price,
+        0,
+    )
+    : 0,
+);
 </script>
