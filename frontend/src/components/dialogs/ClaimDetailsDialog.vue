@@ -4,7 +4,7 @@
       <div
         class="flex items-center justify-between rounded-t-xl bg-theme-300 px-6 py-4 text-white"
       >
-        <h2 class="text-xl font-semibold">Claim Details</h2>
+        <h2 class="text-xl font-semibold">Claim ID: #{{ data.Id }}</h2>
         <button
           @click="isOpen = false"
           class="rounded-full p-1 text-white hover:bg-blue-800"
@@ -27,41 +27,42 @@
       </div>
 
       <div class="p-6">
-        <div class="mb-6">
-          <h3 class="text-lg font-bold text-gray-800">
-            Claim ID: #{{ data.id }}
-          </h3>
-        </div>
-
         <table
-          v-if="data && data.items && data.items.length"
-          class="col-span-full mb-2 w-full min-w-full table-auto divide-y divide-gray-300"
+          v-if="data && data.Items && data.Items.length"
+          class="col-span-full mt-6 mb-2 w-full min-w-full table-auto divide-y divide-gray-300"
         >
           <thead class="text-sm font-semibold text-gray-600">
             <tr class="text-left">
-              <th class="pr-4 pb-2">Category</th>
               <th class="px-4 pb-2">Date</th>
               <th class="px-4 pb-2">Merchant</th>
               <th class="px-4 pb-2">Item/Service</th>
               <th class="px-4 pb-2 text-right">Qty</th>
               <th class="pb-2 pl-4 text-right">Price (RM)</th>
+              <th class="pb-2 pl-4"></th>
             </tr>
           </thead>
           <tbody>
             <tr
-              v-for="(item, index) in data.items"
+              v-for="(item, index) in data.Items"
               :key="`${item}-${index}`"
               class="border-b border-gray-100 py-3 text-sm last:border-b-0"
             >
-              <td class="py-6 pr-4 text-gray-700">{{ item.category }}</td>
-              <td class="px-4 py-6 text-gray-700">{{ item.date }}</td>
+              <td class="px-4 py-6 text-gray-700">
+                <span class="py-6 font-medium text-gray-900">
+                  {{ item.date }}
+                </span>
+                <br />
+                <span class="text-xs text-gray-500">
+                  {{ item.category }}
+                </span>
+              </td>
               <td class="px-4 py-6 text-gray-700">
                 <span class="py-6 font-medium text-gray-900">
                   {{ item.merchantName }}
                 </span>
                 <br />
                 <span class="text-xs text-gray-500">
-                  {{ item.merchantAddress }}
+                  {{ truncateString(item.merchantAddress) }}
                 </span>
               </td>
               <td class="max-w-80 px-4 py-6 text-nowrap text-gray-700">
@@ -73,16 +74,28 @@
               <td class="py-6 text-right font-semibold text-blue-600">
                 {{ (item.quantity * item.unitPrice).toFixed(2) }}
               </td>
+              <td class="px-4 py-6 text-theme-300 hover:underline">
+                <div class="text-right">
+                  <RouterLink :to="`/admin/claim/review/420`">
+                    Details
+                  </RouterLink>
+                </div>
+              </td>
             </tr>
             <tr class="border-b border-gray-100 py-3 text-sm last:border-b-0">
-              <td class="py-6 pr-4 font-bold text-gray-800">Total</td>
+              <td class="px-4 py-6 font-bold text-gray-800">Total</td>
               <td class="px-4 py-6 text-gray-700"></td>
               <td class="px-4 py-6 text-gray-700"></td>
               <td class="px-4 py-6 text-gray-700"></td>
-              <td class="px-4 py-6 text-right text-gray-700"></td>
               <td class="py-6 text-right font-bold text-blue-600">
-                {{ totalAmount.toFixed(2) }}
+                {{
+                  totalAmount.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
               </td>
+              <td class="px-4 py-6 text-right text-gray-700"></td>
             </tr>
           </tbody>
         </table>
@@ -98,15 +111,6 @@
             <p class="text-sm text-gray-600 italic">{{ data.remark }}</p>
           </div>
           <div v-else></div>
-
-          <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-            <RouterLink
-              to="/admin/claim/review"
-              class="block rounded-md bg-theme-200 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-theme-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-100"
-            >
-              More Details
-            </RouterLink>
-          </div>
         </div>
       </div>
     </v-card>

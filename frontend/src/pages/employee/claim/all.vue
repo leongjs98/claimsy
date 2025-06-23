@@ -145,7 +145,7 @@
                 >
                   <button
                     class="text-theme-300 hover:underline"
-                    @click="console.log('open details')"
+                    @click="openDetails(expense)"
                   >
                     Details
                   </button>
@@ -157,6 +157,8 @@
       </div>
     </div>
   </div>
+
+  <ClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
 </template>
 
 <script setup>
@@ -164,6 +166,8 @@
   import { storeToRefs } from "pinia";
   import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
 
+  const showDialog = ref(false);
+  const selectedClaim = ref();
   const sortDateAsc = ref(false);
   const claimStore = useEmployeeClaimStore();
   const {
@@ -182,4 +186,9 @@
   onMounted(async () => {
     claimStore.initStore();
   });
+
+  const openDetails = (expense) => {
+    selectedClaim.value = expense;
+    showDialog.value = true;
+  };
 </script>

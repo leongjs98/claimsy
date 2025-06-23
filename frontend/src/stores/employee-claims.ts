@@ -9,6 +9,15 @@ interface Expense {
   Remark: string;
   Total: number;
   Status: string;
+  Items: {
+    category: string;
+    date: string;
+    merchantName: string;
+    merchantAddress: string;
+    description: string;
+    quantity: number;
+    unitPrice: number;
+  }[];
 }
 
 export const useEmployeeClaimStore = defineStore("employeeClaim", {
@@ -56,9 +65,20 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
           Category: "Office Supplies and Equipment",
           Date: "30/01/2025",
           Quantity: 6,
-          Remark: "Dell 1.35GHz 8GB 256GB SSD - for new employee sasascdavadfa",
+          Remark: "Dell 1.35GHz 8GB 256GB SSD - for new employee Sasha",
           Total: 48285.0,
           Status: "Approved",
+          Items: [
+            {
+              category: "Computer Hardware",
+              date: "30/01/2025",
+              merchantName: "Dell Malaysia",
+              merchantAddress: "Level 15, Menara LGB, KLCC, Kuala Lumpur",
+              description: "Dell Laptop 1.35GHz 8GB RAM 256GB SSD",
+              quantity: 6,
+              unitPrice: 8047.5,
+            },
+          ],
         },
         {
           Id: "C0002",
@@ -69,6 +89,17 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
           Remark: "for training room",
           Total: 1200.0,
           Status: "Approved",
+          Items: [
+            {
+              category: "Office Furniture",
+              date: "21/02/2025",
+              merchantName: "Office Depot Malaysia",
+              merchantAddress: "Lot 3.01, Mid Valley Megamall, Kuala Lumpur",
+              description: "Magnetic Whiteboard 4x6ft with markers",
+              quantity: 2,
+              unitPrice: 600.0,
+            },
+          ],
         },
         {
           Id: "C0003",
@@ -79,6 +110,26 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
           Remark: "Lunch with client",
           Total: 150.0,
           Status: "Rejected",
+          Items: [
+            {
+              category: "Transportation",
+              date: "29/03/2025",
+              merchantName: "Grab Malaysia",
+              merchantAddress: "Digital Service",
+              description: "Taxi fare to Damansara client meeting",
+              quantity: 1,
+              unitPrice: 45.0,
+            },
+            {
+              category: "Client Entertainment",
+              date: "29/03/2025",
+              merchantName: "The Curve Restaurant",
+              merchantAddress: "The Curve Shopping Mall, Damansara, Selangor",
+              description: "Business lunch with client",
+              quantity: 1,
+              unitPrice: 105.0,
+            },
+          ],
         },
         {
           Id: "C0004",
@@ -89,6 +140,17 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
           Remark: "team lunch",
           Total: 250.0,
           Status: "Rejected",
+          Items: [
+            {
+              category: "Team Meal",
+              date: "29/03/2025",
+              merchantName: "Nando's Malaysia",
+              merchantAddress: "Ground Floor, Pavilion KL, Bukit Bintang",
+              description: "Team lunch for 10 people",
+              quantity: 10,
+              unitPrice: 25.0,
+            },
+          ],
         },
         {
           Id: "C0005",
@@ -99,6 +161,18 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
           Remark: "Sales team dinner",
           Total: 138.0,
           Status: "Rejected",
+          Items: [
+            {
+              category: "Team Meal",
+              date: "18/05/2025",
+              merchantName: "Tony Roma's",
+              merchantAddress:
+                "Level 4, Sunway Pyramid, Bandar Sunway, Selangor",
+              description: "Sales team appreciation dinner",
+              quantity: 6,
+              unitPrice: 23.0,
+            },
+          ],
         },
         {
           Id: "C0006",
@@ -109,6 +183,18 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
           Remark: "for new employee",
           Total: 1000.0,
           Status: "Approved",
+          Items: [
+            {
+              category: "Office Supplies",
+              date: "12/06/2025",
+              merchantName: "Popular Bookstore",
+              merchantAddress:
+                "Level 3, 1 Utama Shopping Centre, Petaling Jaya",
+              description: "Complete stationery set for new employees",
+              quantity: 15,
+              unitPrice: 66.67,
+            },
+          ],
         },
         {
           Id: "C0007",
@@ -119,6 +205,17 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
           Remark: "Flight tickets for conference",
           Total: 1200.0,
           Status: "Approved",
+          Items: [
+            {
+              category: "Air Travel",
+              date: "29/07/2025",
+              merchantName: "Malaysia Airlines",
+              merchantAddress: "KLIA Terminal 1, Sepang, Selangor",
+              description: "Return flight tickets KL to Penang for conference",
+              quantity: 2,
+              unitPrice: 600.0,
+            },
+          ],
         },
         {
           Id: "C0008",
@@ -129,6 +226,17 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
           Remark: "Company conference",
           Total: 2500.0,
           Status: "Pending",
+          Items: [
+            {
+              category: "Accommodation",
+              date: "29/08/2025",
+              merchantName: "Eastern & Oriental Hotel",
+              merchantAddress: "10 Lebuh Farquhar, George Town, Penang",
+              description: "3 nights accommodation for company conference",
+              quantity: 2,
+              unitPrice: 1250.0,
+            },
+          ],
         },
       ];
 

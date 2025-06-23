@@ -33,7 +33,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
     async initClaims() {
       this.claims = [
         {
-          id: "GMD2039",
+          Id: "GMD2039",
           Name: "Lindsay Walton",
           title: "Front-End Developer",
           email: "lindsay.walton@example.com",
@@ -43,7 +43,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           remark: "Claim for essential software and professional development.",
           IsAnomaly: false,
           IsFraud: false,
-          items: [
+          Items: [
             {
               category: "Software License",
               date: "29/05/2025",
@@ -65,7 +65,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           ],
         },
         {
-          id: "GMD2040",
+          Id: "GMD2040",
           Name: "Alex Chen",
           title: "UX Designer",
           email: "alex.chen@example.com",
@@ -75,7 +75,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           remark: "Expenses for improving design workflow and ergonomics.",
           IsAnomaly: true,
           IsFraud: false,
-          items: [
+          Items: [
             {
               category: "Design Software Subscription",
               date: "30/05/2025",
@@ -98,7 +98,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           ],
         },
         {
-          id: "GMD2041",
+          Id: "GMD2041",
           Name: "Sarah Johnson",
           title: "Marketing Specialist",
           email: "sarah.j@example.com",
@@ -108,7 +108,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           remark: "Funding for ongoing digital marketing initiatives.",
           IsAnomaly: false,
           IsFraud: true,
-          items: [
+          Items: [
             {
               category: "Advertising",
               date: "31/05/2025",
@@ -121,7 +121,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           ],
         },
         {
-          id: "GMD2042",
+          Id: "GMD2042",
           Name: "Michael Brown",
           title: "Graphic Designer",
           email: "michael.b@example.com",
@@ -131,7 +131,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           remark: "Essential supplies for graphic design work.",
           IsAnomaly: false,
           IsFraud: false,
-          items: [
+          Items: [
             {
               category: "Subscription",
               date: "01/06/2025",
@@ -153,7 +153,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           ],
         },
         {
-          id: "GMD2043",
+          Id: "GMD2043",
           Name: "Emily Wilson",
           title: "Content Writer",
           email: "emily.w@example.com",
@@ -163,7 +163,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           remark: "Resources for content quality and research.",
           IsAnomaly: true,
           IsFraud: false,
-          items: [
+          Items: [
             {
               category: "Software",
               date: "02/06/2025",
@@ -185,7 +185,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           ],
         },
         {
-          id: "GMD2044",
+          Id: "GMD2044",
           Name: "David Lee",
           title: "Photographer",
           email: "david.lee@example.com",
@@ -195,7 +195,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           remark: "Equipment and studio rental for professional shoots.",
           IsAnomaly: false,
           IsFraud: false,
-          items: [
+          Items: [
             {
               category: "Equipment",
               date: "03/06/2025",
@@ -217,7 +217,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           ],
         },
         {
-          id: "GMD2045",
+          Id: "GMD2045",
           Name: "Jessica Tan",
           title: "Social Media Manager",
           email: "jessica.t@example.com",
@@ -227,7 +227,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           remark: "Tools and ad spend for social media campaigns.",
           IsAnomaly: true,
           IsFraud: true,
-          items: [
+          Items: [
             {
               category: "Software",
               date: "04/06/2025",
@@ -249,7 +249,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           ],
         },
         {
-          id: "GMD2046",
+          Id: "GMD2046",
           Name: "Ryan Wong",
           title: "Video Editor",
           email: "ryan.w@example.com",
@@ -259,7 +259,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           remark: "Claim for video production software and assets.",
           IsAnomaly: false,
           IsFraud: false,
-          items: [
+          Items: [
             {
               category: "Software",
               date: "05/06/2025",
@@ -281,7 +281,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           ],
         },
         {
-          id: "GMD2047",
+          Id: "GMD2047",
           Name: "Amanda Lim",
           title: "Event Coordinator",
           email: "amanda.l@example.com",
@@ -291,7 +291,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           remark: "Deposits for upcoming corporate event.",
           IsAnomaly: true,
           IsFraud: false,
-          items: [
+          Items: [
             {
               category: "Venue",
               date: "06/06/2025",
@@ -314,7 +314,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           ],
         },
         {
-          id: "GMD2048",
+          Id: "GMD2048",
           Name: "Daniel Koh",
           title: "Print Specialist",
           email: "daniel.k@example.com",
@@ -324,7 +324,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           remark: "Replenishing printing supplies for the office.",
           IsAnomaly: false,
           IsFraud: true,
-          items: [
+          Items: [
             {
               category: "Supplies",
               date: "07/06/2025",
@@ -347,7 +347,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           ],
         },
         {
-          id: "GMD2049",
+          Id: "GMD2049",
           Name: "Michelle Ho",
           title: "Brand Strategist",
           email: "michelle.h@example.com",
@@ -357,7 +357,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           remark: "Investment in market intelligence and team development.",
           IsAnomaly: false,
           IsFraud: false,
-          items: [
+          Items: [
             {
               category: "Research",
               date: "08/06/2025",
