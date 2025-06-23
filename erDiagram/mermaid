@@ -57,7 +57,7 @@ erDiagram
         updated_at timestamp
     }
 
-    Invoice ||--|| Claim : "has"
+    Invoice }o--|| Claim : "has"
     Employee ||--o{ Claim : "submits"
     Admin ||--o{ Claim : "manages"
     ClaimPolicy ||--o{ Claim : "applies to"
