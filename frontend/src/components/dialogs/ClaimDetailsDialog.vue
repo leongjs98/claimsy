@@ -72,7 +72,12 @@
                 {{ item.quantity }}
               </td>
               <td class="py-6 text-right font-semibold text-blue-600">
-                {{ (item.quantity * item.unitPrice).toFixed(2) }}
+                {{
+                  (item.quantity * item.unitPrice).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
               </td>
               <td class="px-4 py-6 text-theme-300 hover:underline">
                 <div class="text-right">
@@ -143,8 +148,8 @@
   });
 
   const totalAmount = computed(() => {
-    if (props.data && props.data.items) {
-      return props.data.items.reduce(
+    if (props.data && props.data.Items) {
+      return props.data.Items.reduce(
         (sum, item) => sum + item.quantity * item.unitPrice,
         0,
       );
