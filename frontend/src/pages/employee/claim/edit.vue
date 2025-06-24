@@ -27,7 +27,7 @@
             <DropdownInput
               label="Category"
               name="category"
-              id="category"
+              id="categoryID"
               :options="[
                 'Gadget',
                 'Travel Expenses',
@@ -35,31 +35,34 @@
                 'Accommodation',
                 'Communication',
               ]"
+              v-model= "formData.category"
             />
           </div>
 
           <div class="sm:col-span-3">
-            <CalendarInput label="Date" type="text" name="date" id="date" />
+            <CalendarInput label="Date" type="text" name="date" id="DateID" v-model="formData.date" />
           </div>
 
           <div class="sm:col-span-full">
             <TextInput
               label="Merchant Name"
               name="merchantName"
-              id="merchant-name"
+              id="MerchantnameID"
               autocomplete="name"
+              v-model="formData.merchantName"
             />
           </div>
           <div class="sm:col-span-full">
             <TextInput
               label="Merchant Address"
               name="merchantAddress"
-              id="merchant-address"
+              id="MerchanaddressID"
               autocomplete="street-address"
+              v-model="formData.merchantAddress"
             />
           </div>
           <div class="sm:col-span-full">
-            <TextInput label="Remark" name="remark" id="remark" />
+            <TextInput label="Remark" name="remark" id="RemarkID" v-model="formData.remark"/>
           </div>
         </div>
       </div>
@@ -129,7 +132,34 @@
 </template>
 
 <script setup>
-  import { useRouter } from "vue-router";
+  import { useRouter, useRoute } from "vue-router";
 
+  const formData = ref({
+  category: "",
+  date: "",
+  merchantName: "",
+  merchantAddress: "",
+  remark: "",
+});
   const router = useRouter();
+  const route = useRoute();
+
+  onMounted(() => {
+  // Check if query parameters exist and populate the form fields
+  if (route.query.categoryID) {
+    formData.value.category = route.query.categoryID;
+  }
+  if (route.query.DateID) {
+    formData.value.date = route.query.DateID;
+  }
+  if (route.query.MerchantnameID) {
+    formData.value.merchantName = route.query.MerchantnameID;
+  }
+  if (route.query.MerchanaddressID) {
+    formData.value.merchantAddress = route.query.MerchanaddressID;
+  }
+  if (route.query.RemarkID) {
+    formData.value.remark = route.query.RemarkID;
+  }
+});
 </script>
