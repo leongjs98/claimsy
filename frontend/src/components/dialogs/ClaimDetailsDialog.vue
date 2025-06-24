@@ -81,6 +81,8 @@
               </td>
               <td class="px-4 py-6 text-theme-300 hover:underline">
                 <div class="text-right">
+                  <!-- TODO: change to dynamic link -->
+                  <!-- TODO: admin will view admin version, employee = employee version-->
                   <RouterLink :to="`/admin/claim/review/420`">
                     Details
                   </RouterLink>

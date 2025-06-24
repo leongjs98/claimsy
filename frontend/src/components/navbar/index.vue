@@ -54,6 +54,7 @@
             <!--   v-if="!route.path.includes('admin')" -->
             <!-- > -->
             <!-- </NavLink> -->
+            <!-- TODO: make employee's and admin's version of ask claimsy separted -->
             <NavLink name="Ask Claimsy" link="/ask-claimsy"> </NavLink>
           </ul>
         </nav>
