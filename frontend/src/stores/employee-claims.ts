@@ -20,6 +20,11 @@ interface Expense {
   }[];
 }
 
+// TODO: complete these functions
+function getClaimsWithStatus(claims, status) {}
+function getClaimsWithDateSorted(claims, ascending) {}
+function getClaimsWithPriceSorted(claims, ascending) {}
+
 export const useEmployeeClaimStore = defineStore("employeeClaim", {
   state: () => ({
     expenses: [] as Expense[],
