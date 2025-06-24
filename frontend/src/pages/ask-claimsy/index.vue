@@ -56,7 +56,7 @@
               <p
                 class="w-fit max-w-lg rounded-lg p-3"
                 :class="
-                  convo.isSenderUser ? 'bg-blue-100' : 'bg-theme-200 text-white'
+                  convo.isSenderUser ? 'bg-blue-100' : 'border-2 bg-blue-50'
                 "
               >
                 {{ convo.text }}
@@ -129,14 +129,6 @@
     {
       isSenderUser: false,
       text: "Okay. In that case, it's likely claimable. You'll typically need to provide documentation like the Grab ride receipt showing the date, time, origin, destination, and cost. Check with your company's finance department or expense policy for specific requirements.",
-    },
-    {
-      isSenderUser: true,
-      text: "Great, thanks!",
-    },
-    {
-      isSenderUser: false,
-      text: "You're welcome! Is there anything else I can help you with regarding expense claims?",
     },
     {
       isSenderUser: true,

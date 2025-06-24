@@ -39,7 +39,7 @@
                   :class="
                     convo.isSenderUser
                       ? 'bg-blue-100'
-                      : 'bg-theme-200 text-white'
+                      : 'border-2 bg-blue-50'
                   "
                 >
                   {{ convo.text }}

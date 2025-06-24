@@ -47,7 +47,7 @@
               v-html="md.render(convo.text)"
               class="w-fit max-w-lg rounded-lg p-3"
               :class="
-                convo.isSenderUser ? 'bg-blue-100' : 'bg-theme-200 text-white'
+                convo.isSenderUser ? 'bg-blue-100' : 'border-2 bg-blue-50'
               "
             ></p>
           </div>
