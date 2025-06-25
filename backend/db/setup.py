@@ -38,6 +38,12 @@ class TableBase(Base):
         comment="When record was updated",
     )
 
+def get_db():
+    db = Session()
+    try:
+        yield db
+    finally:
+        db.close()
 
 Session = sessionmaker(bind=engine)
 session = Session()
