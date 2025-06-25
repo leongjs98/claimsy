@@ -294,7 +294,7 @@ Which option interests you most? I can book immediately and send confirmations t
           conversation.value.push(message);
           scrollToBottom();
         },
-        (index + 1) * 500,
+        (index + 1) * 1000,
       );
     });
   });
