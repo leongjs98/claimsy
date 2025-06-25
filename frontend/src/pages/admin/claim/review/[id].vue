@@ -136,8 +136,12 @@
                 :key="index"
                 class="bg-gray-200 text-theme-300"
               >
-                <td class="rounded-l-lg px-4 py-3 text-sm">{{ item.description }}</td>
-                <td class="px-4 py-3 text-right text-sm">{{ item.quantity }}</td>
+                <td class="rounded-l-lg px-4 py-3 text-sm">
+                  {{ item.description }}
+                </td>
+                <td class="px-4 py-3 text-right text-sm">
+                  {{ item.quantity }}
+                </td>
                 <td class="rounded-r-lg px-4 py-3 text-right text-sm">
                   {{
                     item.unit_price.toLocaleString("en-MY", {
@@ -174,13 +178,13 @@
       <div class="mt-6 flex items-center justify-end gap-x-6">
         <button
           type="button"
-          class="rounded-md bg-red-400 px-5.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200 relative z-50"
+          class="relative z-50 rounded-md bg-red-400 px-5.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
         >
           Reject
         </button>
         <button
           type="button"
-          class="rounded-md bg-green-400 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200 relative z-50"
+          class="relative z-50 rounded-md bg-green-400 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
         >
           Approve
         </button>
@@ -190,35 +194,35 @@
 </template>
 
 <script setup>
-import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
-import { ref, computed, onMounted } from "vue";
+  import { storeToRefs } from "pinia";
+  import { useRouter } from "vue-router";
+  import { ref, computed, onMounted } from "vue";
 
-import DropdownInput from "@/components/form/DropdownInput.vue";
-import CalendarInput from "@/components/form/CalendarInput.vue";
-import TextInput from "@/components/form/TextInput.vue";
+  import DropdownInput from "@/components/form/DropdownInput.vue";
+  import CalendarInput from "@/components/form/CalendarInput.vue";
+  import TextInput from "@/components/form/TextInput.vue";
 
-import { useInvoiceStore } from "@/stores/invoice";
+  import { useInvoiceStore } from "@/stores/invoice";
 
-const router = useRouter();
-const invoiceStore = useInvoiceStore();
+  const router = useRouter();
+  const invoiceStore = useInvoiceStore();
 
-const { invoice, loading, error } = storeToRefs(invoiceStore);
+  const { invoice, loading, error } = storeToRefs(invoiceStore);
 
-const isStored = ref(true);
-const dummyStaff_name = ref("John Doe");
+  const isStored = ref(true);
+  const dummyStaff_name = ref("John Doe");
 
-onMounted(async () => {
-const invoiceId = router.currentRoute.value.params.id;
-await invoiceStore.fetchInvoice(invoiceId);
-});
+  onMounted(async () => {
+    const invoiceId = router.currentRoute.value.params.id;
+    await invoiceStore.fetchInvoice(invoiceId);
+  });
 
-const totalAmount = computed(() =>
-invoice.value 
-    ? invoice.value.items_services.reduce(
-        (sum, item) => sum + item.quantity * item.unit_price,
-        0,
-    )
-    : 0,
-);
+  const totalAmount = computed(() =>
+    invoice.value
+      ? invoice.value.items_services.reduce(
+          (sum, item) => sum + item.quantity * item.unit_price,
+          0,
+        )
+      : 0,
+  );
 </script>

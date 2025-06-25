@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto my-8 w-full max-w-6xl bg-gray-100">
+  <div class="mx-auto my-8 w-full max-w-5xl bg-gray-100">
     <Tab
       :tabs="[
         {

@@ -70,10 +70,17 @@
 
             <!-- Preview section with enhanced styling -->
             <div
-              v-if="selectedFile"
+              v-if="selectedFiles.length > 0"
               class="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4"
             >
-              <div class="flex items-center justify-between">
+              <div
+                v-for="(file, index) in selectedFiles"
+                :key="file.name + file.size + index"
+                class="flex items-center justify-between py-2"
+                :class="{
+                  'border-b border-gray-200': index < selectedFiles.length - 1,
+                }"
+              >
                 <div class="flex items-center space-x-3">
                   <div class="flex-shrink-0 rounded-full bg-blue-100 p-2">
                     <svg
@@ -90,15 +97,15 @@
                   </div>
                   <div>
                     <p class="text-sm font-medium text-gray-900">
-                      {{ selectedFile.name }}
+                      {{ file.name }}
                     </p>
                     <p class="text-xs text-gray-500">
-                      {{ formatFileSize(selectedFile.size) }}
+                      {{ formatFileSize(file.size) }}
                     </p>
                   </div>
                 </div>
                 <button
-                  @click="removeFile"
+                  @click="removeFile(index)"
                   class="text-sm font-medium text-red-600 transition-colors duration-200 hover:text-red-800 focus:underline focus:outline-none"
                 >
                   Remove
@@ -109,7 +116,7 @@
 
           <!-- "Supported Format" text -->
           <p class="mt-2 pt-2 text-center text-xs text-theme-100">
-            Supported formats: PDF, JPG or PNG (max 10MB)
+            Supported formats: PDF, JPEG ,JPG or PNG (max 10MB)
           </p>
           <!-- Upload and Cancel buttons -->
           <div class="mt-6 flex justify-center space-x-10">
@@ -119,8 +126,18 @@
             >
               Cancel
             </button>
+            <!-- Hardcoded here might change to dynamic later -->
             <RouterLink
-              to="/employee/claim/edit"
+              :to="{
+                path: '/employee/claim/edit',
+                query: {
+                  categoryID: 'Gadget',
+                  DateID: '2023-10-01',
+                  MerchantnameID: 'Lin Dan',
+                  MerchanaddressID: 'No 1, Jalan 1/1, Kuala Lumpur',
+                  RemarkID: 'Gadget purchase for event academy for all',
+                },
+              }"
               class="rounded-xl bg-theme-300 px-10 py-2 text-xs font-medium text-white shadow-lg transition-all duration-200 ease-in-out hover:bg-theme-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Upload</RouterLink
@@ -171,26 +188,26 @@
   import { ref } from "vue";
 
   const isDragging = ref(false);
-  const selectedFile = ref(null);
+  const selectedFiles = ref([]);
   const isUploading = ref(false);
 
   const handleDrop = (e) => {
     isDragging.value = false;
     const files = e.dataTransfer.files;
     if (files.length) {
-      selectedFile.value = files[0];
+      selectedFiles.value.push(...Array.from(files));
     }
   };
 
   const handleFileInput = (e) => {
     const files = e.target.files;
     if (files.length) {
-      selectedFile.value = files[0];
+      selectedFiles.value.push(...Array.from(files));
     }
   };
 
-  const removeFile = () => {
-    selectedFile.value = null;
+  const removeFile = (indexToRemove) => {
+    selectedFiles.value.splice(indexToRemove, 1);
   };
 
   const formatFileSize = (bytes) => {
@@ -202,17 +219,21 @@
   };
 
   const cancelUpload = () => {
-    selectedFile.value = null;
+    selectedFiles.value = [];
   };
 
   const uploadFile = async () => {
-    if (!selectedFile.value) return;
+    if (selectedFiles.value.length === 0) return;
 
     isUploading.value = true;
 
     try {
+      //I need to append multiple files but I dont think the receiver is ready for it. Therefore, I make it append one by one for now.
+      //not ready because the receipt details will only generate data from the hardcoded one.
       const formData = new FormData();
-      formData.append("file", selectedFile.value);
+      selectedFiles.value.forEach((file) => {
+        formData.append("files", file);
+      });
 
       // Example upload implementation (uncomment and modify as needed):
       // const response = await fetch('/api/upload', {
@@ -226,7 +247,7 @@
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Clear the form after successful upload
-      selectedFile.value = null;
+      selectedFiles.value = [];
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {

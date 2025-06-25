@@ -1,11 +1,7 @@
 <template>
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
     <!-- Cards Row -->
-    <EmployeeClaimsCard
-      :totalCount="totalCount"
-      :approvedCount="approvedCount"
-      :rejectedCount="rejectedCount"
-    />
+    <EmployeeClaimsCard :totalCount="8" :approvedCount="4" :rejectedCount="3" />
     <!-- Expenses Table -->
     <div class="mt-4 mb-2"></div>
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
@@ -253,43 +249,88 @@
     </div>
     <div class="flex justify-center px-4 sm:px-8 lg:px-14">
       <button
-        class="hover:bg-theme-400 mt-4 rounded bg-theme-300 px-4 py-2 text-white"
+        class="hover:bg-theme-400 z-20 mt-4 rounded bg-theme-300 px-4 py-2 text-white"
         :disabled="selectedExpenses.length === 0"
-        @click="submitForApproval"
+        @click="openDialog = true"
       >
         Submit
       </button>
     </div>
   </div>
+  <div>
+    <div
+      v-show="openDialog"
+      class="relative z-30"
+      aria-labelledby="dialog-title"
+      role="dialog"
+      aria-modal="true"
+    >
+      <Transition name="backdrop">
+        <div
+          class="fixed inset-0 bg-gray-500/75 transition-opacity"
+          aria-hidden="true"
+        ></div>
+      </Transition>
+
+      <Transition name="pane">
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+          <div
+            class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
+          >
+            <div
+              class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
+            >
+              <div>
+                <div
+                  class="mx-auto flex size-12 items-center justify-center rounded-full bg-green-100"
+                >
+                  <svg
+                    class="size-6 text-green-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    aria-hidden="true"
+                    data-slot="icon"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m4.5 12.75 6 6 9-13.5"
+                    />
+                  </svg>
+                </div>
+                <div class="mt-3 text-center sm:mt-5">
+                  <h3
+                    class="text-base font-semibold text-gray-900"
+                    id="dialog-title"
+                  >
+                    Submission successful
+                  </h3>
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Consequatur amet labore.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 sm:mt-6">
+                <button
+                  @click="openDialog = false"
+                  type="button"
+                  class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Go back
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </div>
+  </div>
 </template>
-
-<style scoped>
-  /* The expanding fill element */
-  .checkbox-fill {
-    /* Initial state: completely collapsed at the center */
-    width: 0;
-    height: 0;
-    top: 50%;
-    /* Position at vertical center */
-    left: 50%;
-    /* Position at horizontal center */
-    transform: translate(-50%, -50%);
-    /* Adjust to truly center the element */
-    transition:
-      width 0.15s ease-out,
-      height 0.15s ease-out;
-    /* Smooth transition for width and height */
-    /* Removed rounded-md from here, as parent's overflow-hidden handles the rounding */
-  }
-
-  /* State when checkbox is checked */
-  .checkbox-input:checked + .checkbox-label .checkbox-fill {
-    width: 100%;
-    /* Expands to fill the container width */
-    height: 100%;
-    /* Expands to fill the container height */
-  }
-</style>
 
 <script setup>
   import { ref, computed } from "vue";
@@ -453,4 +494,41 @@
     );
     return ids.size;
   });
+
+  function submitForApproval() {
+    sortedExpenses.value = sortedExpenses.value.filter((expense) =>
+      selectedExpenses.value.includes(expense),
+    );
+    selectedExpenses.value = [];
+  }
+
+  const openDialog = ref(false);
 </script>
+
+<style scoped>
+  /* The expanding fill element */
+  .checkbox-fill {
+    /* Initial state: completely collapsed at the center */
+    width: 0;
+    height: 0;
+    top: 50%;
+    /* Position at vertical center */
+    left: 50%;
+    /* Position at horizontal center */
+    transform: translate(-50%, -50%);
+    /* Adjust to truly center the element */
+    transition:
+      width 0.15s ease-out,
+      height 0.15s ease-out;
+    /* Smooth transition for width and height */
+    /* Removed rounded-md from here, as parent's overflow-hidden handles the rounding */
+  }
+
+  /* State when checkbox is checked */
+  .checkbox-input:checked + .checkbox-label .checkbox-fill {
+    width: 100%;
+    /* Expands to fill the container width */
+    height: 100%;
+    /* Expands to fill the container height */
+  }
+</style>

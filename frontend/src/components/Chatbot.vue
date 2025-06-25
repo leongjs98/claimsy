@@ -37,9 +37,7 @@
                 <p
                   class="w-fit max-w-80 rounded-lg p-3"
                   :class="
-                    convo.isSenderUser
-                      ? 'bg-blue-100'
-                      : 'border-2 bg-blue-50'
+                    convo.isSenderUser ? 'bg-blue-100' : 'border-2 bg-blue-50'
                   "
                 >
                   {{ convo.text }}
