@@ -17,6 +17,7 @@
     "@fontsource/roboto": "5.2.5",
     "@mdi/font": "7.4.47",
     "@tailwindcss/vite": "^4.1.7",
+    "axios": "^1.10.0",
     "chart.js": "^4.4.9",
     "chartjs-plugin-datalabels": "^2.2.0",
     "markdown-it": "^14.1.0",
