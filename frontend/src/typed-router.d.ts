@@ -23,6 +23,7 @@ declare module 'vue-router/auto-routes' {
     '/admin/claim/review': RouteRecordInfo<'/admin/claim/review', '/admin/claim/review', Record<never, never>, Record<never, never>>,
     '/admin/dashboard': RouteRecordInfo<'/admin/dashboard', '/admin/dashboard', Record<never, never>, Record<never, never>>,
     '/admin/policy/edit': RouteRecordInfo<'/admin/policy/edit', '/admin/policy/edit', Record<never, never>, Record<never, never>>,
+    '/admin/policy/test': RouteRecordInfo<'/admin/policy/test', '/admin/policy/test', Record<never, never>, Record<never, never>>,
     '/admin/policy/upload': RouteRecordInfo<'/admin/policy/upload', '/admin/policy/upload', Record<never, never>, Record<never, never>>,
     '/ask-claimsy': RouteRecordInfo<'/ask-claimsy', '/ask-claimsy', Record<never, never>, Record<never, never>>,
     '/employee/claim/all': RouteRecordInfo<'/employee/claim/all', '/employee/claim/all', Record<never, never>, Record<never, never>>,
