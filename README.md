@@ -33,16 +33,17 @@ use `python --version` to check
 
 6. Create mock data (seeding)
 ```
-python db/setup.py
-python db/tables.py
-python db/seeder_admin.py
-python db/seeder_employee.py
-python db/seeder_invoice.py
-python db/seeder_claim.py
+python db/tables.py && \
+python db/seeder_admin.py && \
+python db/seeder_employee.py -n 15 && \
+python db/seeder_invoice.py -n 100 && \
+python db/seeder_claim.py -n 50
+
 ```
 
 7. Delete mock data using `db/cleaner.py`
 ```
+python db/cleaner.py --drop-all-tables # Delete all tables
 python db/cleaner.py --all
 python db/cleaner.py --table claims
 python db/cleaner.py --help

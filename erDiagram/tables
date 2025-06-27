@@ -1,6 +1,6 @@
 Invoice
-invoice_id	INT (Primary Key, Auto Increment)	Unique identifier
-invoice_number	VARCHAR(50)	Invoice number (e.g., "INV-001")
+invoice_id        INT (Primary Key, Auto Increment)	Unique identifier
+invoice_number    VARCHAR(50)	Invoice number (e.g., "INV-001")
 invoice_date	DATE	Date invoice was created
 created_at	TIMESTAMP	When record was created
 updated_at	TIMESTAMP	When record was updated
@@ -25,13 +25,6 @@ resolution	TEXT	How the claim was resolved
 created_at	TIMESTAMP	Record creation timestamp
 updated_at	TIMESTAMP	Last modification timestamp
 
-Claim Policy
-id	INT (Primary Key, Auto Increment)	Unique identifier
-policy_name	VARCHAR(100)	Name of the policy (e.g., "Standard Refund Policy")
-id_vector_db INT link to the MongoDB Policy
-created_at	TIMESTAMP	Record creation timestamp
-updated_at	TIMESTAMP	Last modification timestamp
-
 Employee
 id	INT (Primary Key, Auto Increment)	Unique identifier
 employee_id	VARCHAR(20)	Company employee ID (e.g., "EMP001")
@@ -51,5 +44,12 @@ id	INT (Primary Key, Auto Increment)	Unique identifier
 admin_id	VARCHAR(20)	Admin identifier (e.g., "ADM001")
 username	VARCHAR(50)	Login username
 password_hash	VARCHAR(255)	Encrypted password
+created_at	TIMESTAMP	Record creation timestamp
+updated_at	TIMESTAMP	Last modification timestamp
+
+Claim Policy
+id	INT (Primary Key, Auto Increment)	Unique identifier
+policy_name	VARCHAR(100)	Name of the policy (e.g., "Standard Refund Policy")
+id_vector_db INT link to the MongoDB Policy
 created_at	TIMESTAMP	Record creation timestamp
 updated_at	TIMESTAMP	Last modification timestamp

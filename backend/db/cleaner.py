@@ -1,7 +1,8 @@
 import sys
 
 from tables import Invoice, Claim, Employee, Admin
-from setup import session
+from setup import session, engine
+from sqlalchemy import text
 
 
 def confirm_deletion():
@@ -28,7 +29,6 @@ def get_table_counts(session):
         counts["admins"] = session.query(Admin).count()
     except Exception as e:
         print(f"Error getting table counts: {e}")
-        # If tables don't exist, set counts to 0
         counts = {"claims": 0, "invoices": 0, "employees": 0, "admins": 0}
 
     return counts
@@ -183,14 +183,40 @@ def delete_specific_table(table_name):
         session.close()
 
 
+def drop_all_tables_cascade():
+    """
+    Drop all tables with CASCADE to handle foreign key constraints.
+    """
+    with engine.connect() as connection:
+        result = connection.execute(
+            text("""
+            SELECT tablename 
+            FROM pg_tables 
+            WHERE schemaname = 'public'
+        """)
+        )
+
+        tables = [row[0] for row in result]
+
+        for table in tables:
+            connection.execute(text(f'DROP TABLE IF EXISTS "{table}" CASCADE'))
+            print(f"Dropped table: {table}")
+
+        connection.commit()
+        print("All tables dropped successfully with CASCADE.")
+
+
 def show_help():
     """Show usage instructions"""
-    print("Database Deletion Utility")
+    print("Database Cleaner (Deletion) Utility")
     print("=" * 50)
     print("Usage:")
-    print("  python delete.py --table claims     - Delete data from specific table")
-    print("  python delete.py --all              - Delete all data from every table")
-    print("  python delete.py --help             - Show this help message")
+    print("  python cleaner.py --table claims     - Delete data from specific table")
+    print("  python cleaner.py -t claims          - Shortcut for above")
+    print("  python cleaner.py --drop-all-tables  - Drop (delete) all tables")
+    print("  python cleaner.py --all              - Delete all data from every table")
+    print("  python cleaner.py --help             - Show this help message")
+    print("  python cleaner.py -h                 - Shortcut for above")
     print()
     print("Available tables: claims, invoices, employees, admins")
     print()
@@ -199,13 +225,17 @@ def show_help():
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        if sys.argv[1] == "--help":
+        if sys.argv[1] == "--help" or sys.argv[1] == "-h":
             show_help()
         if sys.argv[1] == "--all":
             delete_all_data()
-        elif sys.argv[1] == "--table" and len(sys.argv) > 2:
+        if sys.argv[1] == "--drop-all-tables":
+            drop_all_tables_cascade()
+        elif (sys.argv[1] == "--table" or sys.argv[1] == "-t") and len(sys.argv) > 2:
             delete_specific_table(sys.argv[2])
         else:
             print("❌ Invalid arguments. Use --help for usage instructions.")
     else:
-        print("Need arguments to run database cleaner. Use --help for usage instructions.")
+        print(
+            "Need arguments to run database cleaner. Use --help for usage instructions."
+        )

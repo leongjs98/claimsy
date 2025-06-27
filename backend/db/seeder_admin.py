@@ -7,17 +7,17 @@ import hashlib
 from setup import session
 from tables import Admin
 
-admin_username = "test_admin"
-admin_password = "testtest"
+ADMIN_USERNAME = "test_admin"
+ADMIN_PASSWORD = "testtest"
 
 def create_test_admin():
     try:
-        password = admin_password
+        password = ADMIN_PASSWORD
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
         existing_admin = (
             session.query(Admin)
-            .filter((Admin.username == admin_username) | (Admin.admin_id == "ADM001"))
+            .filter((Admin.username == ADMIN_USERNAME) | (Admin.admin_id == "ADM001"))
             .first()
         )
 
@@ -26,7 +26,7 @@ def create_test_admin():
         else:
             new_admin = Admin(
                 admin_id="ADM001",
-                username=admin_username,
+                username=ADMIN_USERNAME,
                 password_hash=hashed_password,
             )
             session.add(new_admin)

@@ -1,275 +1,213 @@
-"""
-Create random mock data of employees based on NUM_RECORDS
-"""
-
+import sys
 from faker import Faker
 import random
-import hashlib
+from datetime import date, timedelta
 from decimal import Decimal
-from setup import session
+import hashlib
 from tables import Employee
+from setup import session
 
-user_password="testtest"
-NUM_RECORDS = 2
+NUM_EMPLOYEES = 20
+EMPLOYEE_PASSWORD = "testtest"
 
 fake = Faker()
 
-DEPARTMENTS_JOBS = {
+DEPARTMENTS = [
+    "Engineering",
+    "Marketing",
+    "Sales",
+    "Human Resources",
+    "Finance",
+    "Operations",
+    "Customer Support",
+    "Product Management",
+    "Design",
+    "Legal",
+]
+
+JOB_TITLES = {
     "Engineering": [
         "Software Engineer",
         "Senior Software Engineer",
-        "Lead Developer",
-        "DevOps Engineer",
-        "QA Engineer",
-        "Technical Lead",
+        "Lead Engineer",
         "Engineering Manager",
+        "DevOps Engineer",
     ],
     "Marketing": [
         "Marketing Specialist",
-        "Digital Marketing Manager",
+        "Marketing Manager",
         "Content Creator",
         "SEO Specialist",
-        "Marketing Director",
         "Brand Manager",
-        "Social Media Manager",
     ],
     "Sales": [
         "Sales Representative",
         "Account Manager",
         "Sales Manager",
-        "Business Development Manager",
+        "Business Development",
         "Sales Director",
-        "Inside Sales Rep",
     ],
     "Human Resources": [
         "HR Specialist",
         "HR Manager",
         "Recruiter",
-        "HR Director",
-        "Training Coordinator",
         "HR Business Partner",
+        "Talent Acquisition",
     ],
     "Finance": [
-        "Accountant",
         "Financial Analyst",
+        "Accountant",
         "Finance Manager",
+        "Controller",
         "CFO",
-        "Accounts Payable Specialist",
-        "Financial Controller",
-        "Budget Analyst",
     ],
     "Operations": [
+        "Operations Specialist",
         "Operations Manager",
-        "Project Manager",
-        "Operations Analyst",
+        "Process Analyst",
         "Supply Chain Manager",
-        "Operations Director",
-        "Process Improvement Specialist",
     ],
     "Customer Support": [
-        "Customer Support Representative",
-        "Support Manager",
-        "Technical Support Specialist",
+        "Support Specialist",
         "Customer Success Manager",
         "Support Team Lead",
+        "Technical Support",
+    ],
+    "Product Management": [
+        "Product Manager",
+        "Senior Product Manager",
+        "Product Owner",
+        "Product Director",
     ],
     "Design": [
         "UI/UX Designer",
         "Graphic Designer",
         "Product Designer",
-        "Creative Director",
-        "Visual Designer",
         "Design Manager",
     ],
+    "Legal": ["Legal Counsel", "Paralegal", "Compliance Officer", "Legal Manager"],
+}
+
+SALARY_RANGES = {
+    "Engineering": (70000, 150000),
+    "Marketing": (45000, 120000),
+    "Sales": (40000, 130000),
+    "Human Resources": (50000, 110000),
+    "Finance": (55000, 140000),
+    "Operations": (45000, 115000),
+    "Customer Support": (35000, 80000),
+    "Product Management": (80000, 160000),
+    "Design": (50000, 120000),
+    "Legal": (70000, 180000),
 }
 
 
-def generate_employee_id():
-    """Generate a unique employee ID"""
-    prefix = "EMP"
-    number = fake.random_int(min=1000, max=9999)
-    return f"{prefix}{number:04d}"
-
-
-def generate_password_hash(password=user_password):
-    """Generate a simple password hash (use proper hashing in production)"""
+def hash_password(password: str) -> str:
+    """Hash a password using hashlib"""
     return hashlib.sha256(password.encode()).hexdigest()
 
 
-def generate_salary_by_job_title(job_title):
-    """Generate realistic salary based on job title"""
-    salary_ranges = {
-        # Engineering
-        "Software Engineer": (70000, 95000),
-        "Senior Software Engineer": (95000, 130000),
-        "Lead Developer": (120000, 160000),
-        "DevOps Engineer": (80000, 120000),
-        "QA Engineer": (60000, 85000),
-        "Technical Lead": (130000, 170000),
-        "Engineering Manager": (140000, 200000),
-        # Marketing
-        "Marketing Specialist": (45000, 65000),
-        "Digital Marketing Manager": (65000, 90000),
-        "Content Creator": (40000, 60000),
-        "SEO Specialist": (50000, 75000),
-        "Marketing Director": (100000, 150000),
-        "Brand Manager": (70000, 100000),
-        "Social Media Manager": (45000, 70000),
-        # Sales
-        "Sales Representative": (40000, 70000),
-        "Account Manager": (60000, 90000),
-        "Sales Manager": (80000, 120000),
-        "Business Development Manager": (70000, 110000),
-        "Sales Director": (120000, 180000),
-        "Inside Sales Rep": (35000, 55000),
-        # HR
-        "HR Specialist": (45000, 65000),
-        "HR Manager": (70000, 100000),
-        "Recruiter": (50000, 75000),
-        "HR Director": (100000, 150000),
-        "Training Coordinator": (45000, 65000),
-        "HR Business Partner": (80000, 120000),
-        # Finance
-        "Accountant": (45000, 70000),
-        "Financial Analyst": (60000, 85000),
-        "Finance Manager": (80000, 120000),
-        "CFO": (150000, 300000),
-        "Accounts Payable Specialist": (35000, 50000),
-        "Financial Controller": (90000, 130000),
-        "Budget Analyst": (55000, 80000),
-        # Operations
-        "Operations Manager": (70000, 110000),
-        "Project Manager": (70000, 100000),
-        "Operations Analyst": (55000, 80000),
-        "Supply Chain Manager": (75000, 110000),
-        "Operations Director": (120000, 180000),
-        "Process Improvement Specialist": (65000, 95000),
-        # Customer Support
-        "Customer Support Representative": (30000, 45000),
-        "Support Manager": (60000, 85000),
-        "Technical Support Specialist": (45000, 65000),
-        "Customer Success Manager": (65000, 95000),
-        "Support Team Lead": (55000, 80000),
-        # Design
-        "UI/UX Designer": (60000, 90000),
-        "Graphic Designer": (40000, 65000),
-        "Product Designer": (80000, 120000),
-        "Creative Director": (100000, 150000),
-        "Visual Designer": (50000, 75000),
-        "Design Manager": (90000, 130000),
-    }
-
-    min_salary, max_salary = salary_ranges.get(job_title, (40000, 80000))
-    return Decimal(str(random.randint(min_salary, max_salary)))
+def generate_employee_id(index: int) -> str:
+    """Generate employee ID in format EMP001, EMP002, etc."""
+    return f"EMP{index:03d}"
 
 
-def generate_department_and_job():
-    """Generate a department and corresponding job title"""
-    department = random.choice(list(DEPARTMENTS_JOBS.keys()))
-    job_title = random.choice(DEPARTMENTS_JOBS[department])
-    return department, job_title
+def generate_hire_date() -> date:
+    """Generate a random hire date within the last 5 years"""
+    start_date = date.today() - timedelta(days=5 * 365)
+    end_date = date.today() - timedelta(days=30)  # At least 30 days ago
+
+    time_between = end_date - start_date
+    days_between = time_between.days
+    random_days = random.randrange(days_between)
+
+    return start_date + timedelta(days=random_days)
 
 
-def generate_phone_number():
-    """Generate a realistic phone number"""
-    return fake.phone_number()
+def create_employee_data(index: int) -> dict:
+    """Create a single employee's data"""
+    department = random.choice(DEPARTMENTS)
+    job_title = random.choice(JOB_TITLES[department])
+    salary_min, salary_max = SALARY_RANGES[department]
 
-
-def create_employee_data():
-    """Create a single employee record"""
-    department, job_title = generate_department_and_job()
-    first_name = fake.first_name()
-    last_name = fake.last_name()
+    # Generate unique email
+    first_name = fake.first_name().lower()
+    last_name = fake.last_name().lower()
+    email = f"{first_name}.{last_name}@company.com"
 
     return {
-        "employee_id": generate_employee_id(),
-        "name": f"{first_name} {last_name}",
-        "email": fake.email(),
-        "password_hash": generate_password_hash(),
-        "phone": generate_phone_number(),
+        "employee_id": generate_employee_id(index + 1),
+        "name": f"{first_name.title()} {last_name.title()}",
+        "email": email,
+        "password_hash": hash_password(EMPLOYEE_PASSWORD),
+        "phone": fake.phone_number()[:20],  # Limit to 20 characters
         "department": department,
         "job_title": job_title,
-        "hire_date": fake.date_between(start_date="-5y", end_date="today"),
-        "salary": generate_salary_by_job_title(job_title),
+        "hire_date": generate_hire_date(),
+        "salary": Decimal(str(random.randint(salary_min, salary_max))),
     }
 
 
 def seed_employees():
+    """Seed the database with employee data"""
     try:
-        print(f"Starting to generate {NUM_RECORDS} employee records...")
+        print(f"Creating {NUM_EMPLOYEES} employees...")
 
         employees = []
-        used_employee_ids = set()
         used_emails = set()
+        used_employee_ids = set()
 
-        for i in range(NUM_RECORDS):
-            attempts = 0
-            while attempts < 10:
-                employee_data = create_employee_data()
+        for i in range(NUM_EMPLOYEES):
+            while True:
+                employee_data = create_employee_data(i)
 
-                if (
-                    employee_data["employee_id"] not in used_employee_ids
-                    and employee_data["email"] not in used_emails
-                ):
-                    used_employee_ids.add(employee_data["employee_id"])
+                # Ensure unique email and employee_id
+                if (employee_data["email"] not in used_emails and 
+                    employee_data["employee_id"] not in used_employee_ids):
                     used_emails.add(employee_data["email"])
+                    used_employee_ids.add(employee_data["employee_id"])
                     break
-                attempts += 1
-
-            if attempts >= 10:
-                print(f"Warning: Could not generate unique data for record {i + 1}")
-                continue
 
             employee = Employee(**employee_data)
             employees.append(employee)
 
-            # Print progress every 10 records
             if (i + 1) % 10 == 0:
-                print(f"Generated {i + 1}/{NUM_RECORDS} records...")
+                print(f"Generated {i + 1} employees...")
 
         session.add_all(employees)
         session.commit()
 
-        print(f"Successfully seeded {len(employees)} employee records!")
-
+        print(f"Successfully seeded {NUM_EMPLOYEES} employees!")
     except Exception as e:
         session.rollback()
-        print(f"Error occurred: {e}")
-
+        print(f"Error seeding employees: {e}")
     finally:
         session.close()
 
-
-def preview_sample_data():
-    """Preview sample data without inserting to database"""
-    print("Sample Employee Data:")
-    print("-" * 80)
-
-    for i in range(3):
-        data = create_employee_data()
-        print(f"Employee {i + 1}:")
-        print(f"  ID: {data['employee_id']}")
-        print(f"  Name: {data['name']}")
-        print(f"  Email: {data['email']}")
-        print(f"  Phone: {data['phone']}")
-        print(f"  Department: {data['department']}")
-        print(f"  Job Title: {data['job_title']}")
-        print(f"  Hire Date: {data['hire_date']}")
-        print(f"  Salary: ${data['salary']:,}")
-        print(f"  Password Hash: {data['password_hash'][:20]}...")
-        print("-" * 80)
-
-
-def generate_department_summary():
-    """Generate a summary of departments and job titles"""
-    print("Department and Job Title Summary:")
-    print("-" * 50)
-    for dept, jobs in DEPARTMENTS_JOBS.items():
-        print(f"{dept}:")
-        for job in jobs:
-            print(f"  - {job}")
-        print()
-
+def show_help():
+    """Show usage instructions"""
+    print("Employee Seeder")
+    print("=" * 50)
+    print("Usage:")
+    print("  python cleaner.py --number 30        - Seed 30 number of employees (DEFAULT: 20)")
+    print("  python cleaner.py --n 30             - Shorcut for above")
+    print("  python cleaner.py --help             - Show this help message")
+    print("  python cleaner.py -h                 - Shortcut for above")
+    print()
 
 if __name__ == "__main__":
-    seed_employees()
+    if len(sys.argv) == 1:
+        seed_employees()
+    elif len(sys.argv) == 2 and sys.argv[1] in ['--help', '-h']:
+        show_help()
+    elif len(sys.argv) == 3 and sys.argv[1] in ['--number', '-n']:
+        try:
+            NUM_EMPLOYEES = int(sys.argv[2])
+            seed_employees()
+        except ValueError:
+            print("Error: Please provide a valid number")
+            show_help()
+    else:
+        # Invalid arguments
+        print("Error: Invalid arguments")
+        show_help()

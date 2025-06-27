@@ -1,123 +1,122 @@
 """
-Create random mock data of invoices based on NUM_RECORDS
+Create random mock data of invoices
 """
 
+import sys
 from faker import Faker
-from datetime import datetime
-from tables import Invoice
-from setup import session
 import random
 import json
+from tables import Employee, Invoice
+from setup import session
 
-NUM_RECORDS = 50
+NUM_INVOICES = 50  # Default value
 
 fake = Faker()
 
-CATEGORIES = [
-    "Office Supplies",
-    "Software & Technology",
-    "Marketing & Advertising",
-    "Travel & Transportation",
-    "Meals & Entertainment",
-    "Professional Services",
-    "Utilities",
-    "Equipment & Hardware",
-    "Training & Education",
-    "Maintenance & Repairs",
-]
 
-
-def generate_invoice_number():
-    """Generate a realistic invoice number"""
-    prefix = random.choice(["INV", "BILL", "RCP"])
-    year = datetime.now().year
-    number = fake.random_int(min=1000, max=9999)
-    return f"{prefix}-{year}-{number:04d}"
-
-
-def generate_items_services():
-    """Generate realistic items/services JSON data"""
-    num_items = random.randint(1, 5)
-    items = []
-
-    for _ in range(num_items):
-        item = {
-            "description": fake.catch_phrase(),
-            "quantity": random.randint(1, 10),
-            "unit_price": round(random.uniform(10.0, 500.0), 2),
-            "total": 0,
-        }
-        item["total"] = round(item["quantity"] * item["unit_price"], 2)
-        items.append(item)
-
-    return items
-
-
-def generate_merchant_address():
-    """Generate a complete merchant address"""
-    return (
-        f"{fake.street_address()}, {fake.city()}, {fake.state_abbr()} {fake.zipcode()}"
-    )
-
-
-def create_invoice_data():
-    """Create a single invoice record"""
+def create_invoice_data(i, employee_ids):
+    """Create fake invoice data"""
     return {
-        "invoice_number": generate_invoice_number(),
+        "invoice_id": i + 1,
+        "invoice_number": f"INV-{fake.year()}-{fake.random_int(min=1000, max=9999)}",
+        "employee_id": random.choice(employee_ids),
         "invoice_date": fake.date_between(start_date="-2y", end_date="today"),
-        "category": random.choice(CATEGORIES),
+        "category": fake.random_element(
+            elements=(
+                "Office Supplies",
+                "Travel",
+                "Meals",
+                "Equipment",
+                "Software",
+                "Utilities",
+                "Marketing",
+                "Training",
+            )
+        ),
         "merchant_name": fake.company(),
-        "merchant_address": generate_merchant_address(),
-        "items_services": generate_items_services(),
-        "remark": fake.text(max_nb_chars=200) if random.choice([True, False]) else None,
+        "merchant_address": fake.address(),
+        "items_services": json.dumps([
+            {
+                "item": fake.catch_phrase(),
+                "quantity": fake.random_int(min=1, max=10),
+                "unit_price": float(fake.random_int(min=10, max=500)),
+                "total": float(fake.random_int(min=10, max=5000)),
+            }
+            for _ in range(fake.random_int(min=1, max=5))
+        ]),
+        "remark": fake.text(max_nb_chars=200)
+        if fake.boolean(chance_of_getting_true=70)
+        else None,
     }
 
 
 def seed_invoices():
+    """Seed the database with invoice data"""
     try:
-        print(f"Starting to generate {NUM_RECORDS} invoice records...")
+        # Get existing employee IDs from database
+        employee_ids = [emp.id for emp in session.query(Employee.id).all()]
+
+        if not employee_ids:
+            print("No employees found in database. Please seed employees first.")
+            return
+
+        print(f"Creating {NUM_INVOICES} invoices...")
 
         invoices = []
-        for i in range(NUM_RECORDS):
-            invoice_data = create_invoice_data()
+        used_invoice_numbers = set()
+
+        for i in range(NUM_INVOICES):
+            while True:
+                invoice_data = create_invoice_data(i, employee_ids)
+
+                # Ensure unique invoice number
+                if invoice_data["invoice_number"] not in used_invoice_numbers:
+                    used_invoice_numbers.add(invoice_data["invoice_number"])
+                    break
+
             invoice = Invoice(**invoice_data)
             invoices.append(invoice)
 
-            # Print progress every 10 records
             if (i + 1) % 10 == 0:
-                print(f"Generated {i + 1}/{NUM_RECORDS} records...")
+                print(f"Generated {i + 1} invoices...")
 
         session.add_all(invoices)
         session.commit()
 
-        print(f"Successfully seeded {NUM_RECORDS} invoice records!")
-
+        print(f"Successfully seeded {NUM_INVOICES} invoices!")
     except Exception as e:
         session.rollback()
-        print(f"Error occurred: {e}")
-
+        print(f"Error seeding invoices: {e}")
     finally:
         session.close()
 
 
-def preview_sample_data():
-    """Preview sample data without inserting to database"""
-    print("Sample Invoice Data:")
-    print("-" * 50)
-
-    for i in range(3):
-        data = create_invoice_data()
-        print(f"Invoice {i + 1}:")
-        print(f"  Number: {data['invoice_number']}")
-        print(f"  Date: {data['invoice_date']}")
-        print(f"  Category: {data['category']}")
-        print(f"  Merchant: {data['merchant_name']}")
-        print(f"  Address: {data['merchant_address']}")
-        print(f"  Items: {len(data['items_services'])} items")
-        print(f"  Remark: {data['remark'][:50] + '...' if data['remark'] else 'None'}")
-        print(f"  Items/Services: {json.dumps(data['items_services'], indent=2)}")
-        print("-" * 50)
+def show_help():
+    """Show usage instructions"""
+    print("Invoice Seeder")
+    print("=" * 50)
+    print("Usage:")
+    print(
+        "  python invoice_seeder.py --number 30        - Seed 30 number of invoices (DEFAULT: 20)"
+    )
+    print("  python invoice_seeder.py --n 30             - Shortcut for above")
+    print("  python invoice_seeder.py --help             - Show this help message")
+    print("  python invoice_seeder.py -h                 - Shortcut for above")
+    print()
 
 
 if __name__ == "__main__":
-    seed_invoices()
+    if len(sys.argv) == 1:
+        seed_invoices()
+    elif len(sys.argv) == 2 and sys.argv[1] in ["--help", "-h"]:
+        show_help()
+    elif len(sys.argv) == 3 and sys.argv[1] in ["--number", "-n"]:
+        try:
+            NUM_INVOICES = int(sys.argv[2])
+            seed_invoices()
+        except ValueError:
+            print("Error: Please provide a valid number")
+            show_help()
+    else:
+        print("Error: Invalid arguments")
+        show_help()
