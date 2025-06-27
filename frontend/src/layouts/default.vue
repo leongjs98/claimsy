@@ -2,9 +2,9 @@
   <div class="min-h-screen bg-gray-100">
     <Navbar />
 
-    <v-main>
+    <div class="mb-40">
       <router-view />
-    </v-main>
+    </div>
 
     <!-- <AppFooter /> -->
     <Chatbot v-if="!route.path.includes('ask-claimsy')" />
