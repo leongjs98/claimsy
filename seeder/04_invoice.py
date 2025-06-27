@@ -44,7 +44,6 @@ def create_invoice_data(i, employee_ids):
                 "item": fake.catch_phrase(),
                 "quantity": fake.random_int(min=1, max=10),
                 "unit_price": float(fake.random_int(min=10, max=500)),
-                "total": float(fake.random_int(min=10, max=5000)),
             }
             for _ in range(fake.random_int(min=1, max=5))
         ]),

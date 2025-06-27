@@ -34,11 +34,11 @@ use `python --version` to check
 6. Create mock data (seeding)
 ```
 # make sure you in the project root directory (claimsy/)
-python seeder/tables.py && \
-python seeder/admin.py && \
-python seeder/employee.py -n 15 && \
-python seeder/invoice.py -n 100 && \
-python seeder/claim.py -n 50
+python seeder/01_tables.py && \
+python seeder/02_admin.py && \
+python seeder/03_employee.py -n 15 && \
+python seeder/04_invoice.py -n 100 && \
+python seeder/05_claim.py -n 50
 
 ```
 
