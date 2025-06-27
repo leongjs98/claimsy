@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO: replace with Stats With brand icon (https://tailwindcss.com/plus/ui-blocks/application-ui/data-display/stats) -->
   <div class="mb-8 flex gap-6 px-4 sm:px-8 lg:px-14">
     <RouterLink
       to="/employee/claim/expenses"

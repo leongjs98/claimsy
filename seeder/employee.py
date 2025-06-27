@@ -1,11 +1,15 @@
+import os
 import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from faker import Faker
 import random
 from datetime import date, timedelta
 from decimal import Decimal
 import hashlib
-from tables import Employee
-from setup import session
+from backend.db.tables import Employee
+from backend.db.setup import session
 
 NUM_EMPLOYEES = 20
 EMPLOYEE_PASSWORD = "testtest"

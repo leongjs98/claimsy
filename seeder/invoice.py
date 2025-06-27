@@ -2,12 +2,16 @@
 Create random mock data of invoices
 """
 
+import os
 import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from faker import Faker
 import random
 import json
-from tables import Employee, Invoice
-from setup import session
+from backend.db.tables import Employee, Invoice
+from backend.db.setup import session
 
 NUM_INVOICES = 50  # Default value
 

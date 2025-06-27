@@ -4,12 +4,17 @@ MUST RUN AFTER seeder_employee.py and seeder_invoice.py
 Due to Foreign keys
 """
 
+
+import os
 import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from faker import Faker
 from decimal import Decimal
 import random
-from tables import Employee, Invoice, Claim
-from setup import session
+from backend.db.tables import Employee, Invoice, Claim
+from backend.db.setup import session
 
 fake = Faker()
 

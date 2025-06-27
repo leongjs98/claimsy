@@ -3,7 +3,7 @@ Create PostgreSQL tables of Claimsy
 """
 
 from sqlalchemy import DECIMAL, JSON, Date, ForeignKey, Integer, Text, Column, String
-from setup import TableBase, Base, engine
+from .setup import TableBase, Base, engine
 from sqlalchemy.orm import relationship
 
 
@@ -90,18 +90,3 @@ class Claim(TableBase, Base):
 
     def __repr__(self):
         return f"<Claim(claim_number='{self.claim_number}', status='{self.status}')>"
-
-
-def create_all_tables():
-    """
-    Creates all tables defined inheriting from Base in the database.
-    """
-    try:
-        Base.metadata.create_all(engine)
-        print("All tables created successfully!")
-    except Exception as e:
-        print(f"Error creating tables: {e}")
-
-
-if __name__ == "__main__":
-    create_all_tables()

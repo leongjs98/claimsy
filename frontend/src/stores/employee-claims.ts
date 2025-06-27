@@ -20,10 +20,12 @@ interface Expense {
   }[];
 }
 
-// TODO: complete these functions
-function getClaimsWithStatus(claims, status) {}
-function getClaimsWithDateSorted(claims, ascending) {}
-function getClaimsWithPriceSorted(claims, ascending) {}
+function getClaimsWithStatus(claims, status: string) {
+  return claims.filter(
+    (c) => c.Status.toLowerCase() === status.toLowerCase(),
+  )
+}
+function getClaimsWithPriceSorted(claims, ascending: boolean) { }
 
 export const useEmployeeClaimStore = defineStore("employeeClaim", {
   state: () => ({
@@ -35,14 +37,10 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
     totalCount: (state) => state.expenses.length,
 
     approvedCount: (state) =>
-      state.expenses.filter(
-        (expense) => expense.Status.toLowerCase() === "approved",
-      ).length,
+      getClaimsWithStatus(state.expenses, "approved").length,
 
     rejectedCount: (state) =>
-      state.expenses.filter(
-        (expense) => expense.Status.toLowerCase() === "rejected",
-      ).length,
+      getClaimsWithStatus(state.expenses, "rejected").length,
 
     getExpensesByDateAsc: (state): Expense[] => {
       return [...state.expenses].sort((a, b) => {

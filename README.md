@@ -33,20 +33,22 @@ use `python --version` to check
 
 6. Create mock data (seeding)
 ```
-python db/tables.py && \
-python db/seeder_admin.py && \
-python db/seeder_employee.py -n 15 && \
-python db/seeder_invoice.py -n 100 && \
-python db/seeder_claim.py -n 50
+# make sure you in the project root directory (claimsy/)
+python seeder/tables.py && \
+python seeder/admin.py && \
+python seeder/employee.py -n 15 && \
+python seeder/invoice.py -n 100 && \
+python seeder/claim.py -n 50
 
 ```
 
 7. Delete mock data using `db/cleaner.py`
 ```
-python db/cleaner.py --drop-all-tables # Delete all tables
-python db/cleaner.py --all
-python db/cleaner.py --table claims
-python db/cleaner.py --help
+# make sure you in the project root directory (claimsy/)
+python seeder/cleaner.py --drop-all-tables # Delete all tables
+python seeder/cleaner.py --all
+python seeder/cleaner.py --table claims
+python seeder/cleaner.py --help
 ```
 
 ### Frontend

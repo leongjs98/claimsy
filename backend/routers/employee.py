@@ -15,14 +15,28 @@ from langchain_core.documents import Document
 from pypdf import PdfReader
 from io import BytesIO
 
+
+class ClaimSchema(BaseModel):
+    id: int
+    claim_number: str
+    invoice_id: int
+    employee_id: int
+    claim_type: Optional[str] = None
+    claim_amount: float
+    reason: Optional[str] = None
+    status: Optional[str] = None
+    submitted_date: Optional[date] = None
+    reviewed_date: Optional[date] = None
+    resolution: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
 router = APIRouter()
-
 load_dotenv()
-
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
-    temperature=0,
-    api_key=os.getenv("GEMINI_API_KEY")
+    model="gemini-2.0-flash", temperature=0, api_key=os.getenv("GEMINI_API_KEY")
 )
 
 
@@ -40,7 +54,7 @@ def read_file(file_contents: BytesIO) -> str:
     return text
 
 
-@router.post("employee/claim/upload")
+@router.post("/claim/upload")
 async def employee_claim_upload(file: UploadFile = File(...)):
     allowed_extensions = ["pdf", "png", "jpg"]
     if not file.filename.lower().endswith(allowed_extensions):
@@ -81,28 +95,6 @@ async def employee_claim_upload(file: UploadFile = File(...)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
-
-
-class ClaimSchema(BaseModel):
-    id: int
-    claim_number: str
-    invoice_id: int
-    employee_id: int
-    claim_type: Optional[str] = None
-    claim_amount: float
-    reason: Optional[str] = None
-    status: Optional[str] = None
-    submitted_date: Optional[date] = None
-    reviewed_date: Optional[date] = None
-    resolution: Optional[str] = None
-
-    class Config:
-        orm_mode = True
-
-
-@router.get("/")
-def read_root():
-    return {"message": "Hello World"}
 
 
 @router.get("/claims", response_model=List[ClaimSchema])
