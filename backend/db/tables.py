@@ -1,9 +1,10 @@
 """
-Create PostgreSQL tables of Claimsy
+PostgreSQL Table Schemas of Claimsy
 """
 
+from typing import List, Dict, Any
 from sqlalchemy import DECIMAL, JSON, Date, ForeignKey, Integer, Text, Column, String
-from .setup import TableBase, Base, engine
+from .setup import TableBase, Base
 from sqlalchemy.orm import relationship
 
 
@@ -62,6 +63,14 @@ class Invoice(TableBase, Base):
 
     employee = relationship("Employee", back_populates="invoices")
     claim = relationship("Claim", back_populates="invoices")
+
+    @property
+    def items(self) -> List[Dict[str, Any]]:
+        return self.items_services or []
+    
+    @items.setter
+    def items(self, value: List[Dict[str, Any]]):
+        self.items_services = value
 
     def __repr__(self):
         return f"<Invoice(invoice_number='{self.invoice_number}', merchant_name='{self.merchant_name}')>"
