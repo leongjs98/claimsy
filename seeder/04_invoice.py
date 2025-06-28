@@ -17,6 +17,14 @@ NUM_INVOICES = 50  # Default value
 
 fake = Faker()
 
+categories = (
+    "Supplies and Equipment",
+    "Travel",
+    "Meals & Entertaiment",
+    "Accommodation",
+    "Medical",
+)
+
 
 def create_invoice_data(i, employee_ids):
     """Create fake invoice data"""
@@ -25,18 +33,7 @@ def create_invoice_data(i, employee_ids):
         "invoice_number": f"INV-{fake.year()}-{fake.random_int(min=1000, max=9999)}",
         "employee_id": random.choice(employee_ids),
         "invoice_date": fake.date_between(start_date="-2y", end_date="today"),
-        "category": fake.random_element(
-            elements=(
-                "Office Supplies",
-                "Travel",
-                "Meals",
-                "Equipment",
-                "Software",
-                "Utilities",
-                "Marketing",
-                "Training",
-            )
-        ),
+        "category": fake.random_element(elements=categories),
         "merchant_name": fake.company(),
         "merchant_address": fake.address(),
         "items_services": json.dumps([

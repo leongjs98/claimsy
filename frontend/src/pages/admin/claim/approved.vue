@@ -128,11 +128,13 @@
                     {{ claim.email }}
                   </td>
                   <td
-                    class="flex items-center gap-2 px-4 py-4 text-left text-sm font-semibold whitespace-nowrap"
+                    class="w-fit px-3 py-4 text-sm font-semibold whitespace-nowrap"
                   >
+                  <div class="flex justify-start items-center gap-2">
                     <StatusBadge :status="claim.Status" />
                     <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
                     <StatusBadge v-show="claim.IsFraud" status="Fraud" />
+                  </div>
                   </td>
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                     {{ claim.Date }}
