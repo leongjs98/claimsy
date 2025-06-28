@@ -3,6 +3,7 @@
 ### Essentials
 - [ ] add isLoading to Pinia
 - [ ] rework claim policy input fields (use AI then real admin validates)
+    - pagination for multiple invoices in 1 claim
     - temperature 0
 
 ### Nice to have

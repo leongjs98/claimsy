@@ -21,11 +21,9 @@ interface Expense {
 }
 
 function getClaimsWithStatus(claims, status: string) {
-  return claims.filter(
-    (c) => c.Status.toLowerCase() === status.toLowerCase(),
-  )
+  return claims.filter((c) => c.Status.toLowerCase() === status.toLowerCase());
 }
-function getClaimsWithPriceSorted(claims, ascending: boolean) { }
+function getClaimsWithPriceSorted(claims, ascending: boolean) {}
 
 export const useEmployeeClaimStore = defineStore("employeeClaim", {
   state: () => ({

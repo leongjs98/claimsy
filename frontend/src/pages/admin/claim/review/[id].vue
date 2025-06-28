@@ -21,24 +21,25 @@
           </button>
 
           <h1
-            class="ml-4 gap-4 flex items-center justify-center text-2xl font-bold text-blue-950"
+            class="ml-4 flex items-center justify-center gap-4 text-2xl font-bold text-blue-950"
           >
             <template v-if="loading">Loading...</template>
             <template v-else-if="error">{{ error }}</template>
             <template v-else-if="staff && claim">
               #{{ claim.id }} {{ staff.name }}
-  <span
-    class="flex items-center rounded-md px-2 py-1 font-medium"
-    :class="{
-      'bg-emerald-100 text-emerald-600': claim.status === 'Approved',
-      'bg-red-100 text-red-600': claim.status === 'Rejected',
-      'bg-yellow-100 text-yellow-600': claim.status === 'Pending',
-      'bg-orange-100 text-orange-600': claim.status === 'Fraud',
-      'bg-black text-white': claim.status === 'Anomaly',
-    }"
-  >
-    {{ claim.status }}
-  </span>
+              <span
+                class="flex items-center rounded-md px-2 py-1 font-medium"
+                :class="{
+                  'bg-emerald-100 text-emerald-600':
+                    claim.status === 'Approved',
+                  'bg-red-100 text-red-600': claim.status === 'Rejected',
+                  'bg-yellow-100 text-yellow-600': claim.status === 'Pending',
+                  'bg-orange-100 text-orange-600': claim.status === 'Fraud',
+                  'bg-black text-white': claim.status === 'Anomaly',
+                }"
+              >
+                {{ claim.status }}
+              </span>
             </template>
             <template v-else>No data found</template>
           </h1>
@@ -281,4 +282,3 @@
       : 0,
   );
 </script>
-

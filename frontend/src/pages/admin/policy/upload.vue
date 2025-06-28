@@ -166,73 +166,73 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+  import { ref } from "vue";
 
-const props = defineProps({
-  title: String,
-});
+  const props = defineProps({
+    title: String,
+  });
 
-const isDragging = ref(false);
-const selectedFile = ref(null);
-const isUploading = ref(false);
+  const isDragging = ref(false);
+  const selectedFile = ref(null);
+  const isUploading = ref(false);
 
-const handleDrop = (e) => {
-  isDragging.value = false;
-  const files = e.dataTransfer.files;
-  if (files.length) {
-    selectedFile.value = files[0];
-  }
-};
+  const handleDrop = (e) => {
+    isDragging.value = false;
+    const files = e.dataTransfer.files;
+    if (files.length) {
+      selectedFile.value = files[0];
+    }
+  };
 
-const handleFileInput = (e) => {
-  const files = e.target.files;
-  if (files.length) {
-    selectedFile.value = files[0];
-  }
-};
+  const handleFileInput = (e) => {
+    const files = e.target.files;
+    if (files.length) {
+      selectedFile.value = files[0];
+    }
+  };
 
-const removeFile = () => {
-  selectedFile.value = null;
-};
-
-const formatFileSize = (bytes) => {
-  if (bytes === 0) return "0 Bytes";
-  const k = 1024;
-  const sizes = ["Bytes", "KB", "MB", "GB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-};
-
-const cancelUpload = () => {
-  selectedFile.value = null;
-};
-
-const uploadFile = async () => {
-  if (!selectedFile.value) return;
-
-  isUploading.value = true;
-
-  try {
-    const formData = new FormData();
-    formData.append("file", selectedFile.value);
-
-    // Example upload implementation (uncomment and modify as needed):
-    // const response = await fetch('/api/upload', {
-    //   method: 'POST',
-    //   body: formData
-    // })
-    // const data = await response.json()
-    // console.log('Upload successful:', data)
-
-    // Simulate upload delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    // Clear the form after successful upload
+  const removeFile = () => {
     selectedFile.value = null;
-  } catch (error) {
-    console.error("Upload failed:", error);
-  } finally {
-    isUploading.value = false;
-  }
-};
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  };
+
+  const cancelUpload = () => {
+    selectedFile.value = null;
+  };
+
+  const uploadFile = async () => {
+    if (!selectedFile.value) return;
+
+    isUploading.value = true;
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile.value);
+
+      // Example upload implementation (uncomment and modify as needed):
+      // const response = await fetch('/api/upload', {
+      //   method: 'POST',
+      //   body: formData
+      // })
+      // const data = await response.json()
+      // console.log('Upload successful:', data)
+
+      // Simulate upload delay
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Clear the form after successful upload
+      selectedFile.value = null;
+    } catch (error) {
+      console.error("Upload failed:", error);
+    } finally {
+      isUploading.value = false;
+    }
+  };
 </script>

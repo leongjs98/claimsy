@@ -81,15 +81,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
-} from "@headlessui/vue";
-import { CheckCircleIcon } from "@heroicons/vue/24/solid";
+  import { ref } from "vue";
+  import {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+  } from "@headlessui/vue";
+  import { CheckCircleIcon } from "@heroicons/vue/24/solid";
 
-const open = ref(true);
+  const open = ref(true);
 </script>

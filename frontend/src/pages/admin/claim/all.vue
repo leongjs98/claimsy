@@ -130,15 +130,13 @@
                   <td
                     class="w-fit px-3 py-4 text-sm font-semibold whitespace-nowrap"
                   >
-                  <div class="flex justify-start items-center gap-2">
-                    <StatusBadge :status="claim.Status" />
-                    <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
-                    <StatusBadge v-show="claim.IsFraud" status="Fraud" />
-                  </div>
+                    <div class="flex items-center justify-start gap-2">
+                      <StatusBadge :status="claim.Status" />
+                      <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
+                      <StatusBadge v-show="claim.IsFraud" status="Fraud" />
+                    </div>
                   </td>
-                  <td
-                    class="px-3 py-4 text-sm whitespace-nowrap text-gray-500"
-                  >
+                  <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                     {{ claim.Date }}
                   </td>
                   <td

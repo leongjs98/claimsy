@@ -226,129 +226,131 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch, onUnmounted } from "vue";
-import { useRouter } from "vue-router";
-import { usePolicyDetails } from "@/stores/policy";
-import axios from "axios";
+  import { ref, onMounted, computed, watch, onUnmounted } from "vue";
+  import { useRouter } from "vue-router";
+  import { usePolicyDetails } from "@/stores/policy";
+  import axios from "axios";
 
-const showDialog = ref(false);
-import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
-} from "@headlessui/vue";
-import { CheckCircleIcon } from "@heroicons/vue/24/solid";
+  const showDialog = ref(false);
+  import {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+  } from "@headlessui/vue";
+  import { CheckCircleIcon } from "@heroicons/vue/24/solid";
 
-const open = ref(false);
+  const open = ref(false);
 
-const router = useRouter();
-const policyStore = usePolicyDetails();
+  const router = useRouter();
+  const policyStore = usePolicyDetails();
 
-const eligibilityCriteria = ref("");
-const approvalLimitations1 = ref("");
-const claimDenial1 = ref("");
-const approvalLimitations2 = ref("");
-const claimDenial2 = ref("");
+  const eligibilityCriteria = ref("");
+  const approvalLimitations1 = ref("");
+  const claimDenial1 = ref("");
+  const approvalLimitations2 = ref("");
+  const claimDenial2 = ref("");
 
-const originalValues = ref({});
+  const originalValues = ref({});
 
-const hasChanges = computed(() => {
-  if (!originalValues.value.eligibilityCriteria) return false;
-  return (
-    eligibilityCriteria.value !== originalValues.value.eligibilityCriteria ||
-    approvalLimitations1.value !== originalValues.value.approvalLimitations1 ||
-    claimDenial1.value !== originalValues.value.claimDenial1 ||
-    approvalLimitations2.value !== originalValues.value.approvalLimitations2 ||
-    claimDenial2.value !== originalValues.value.claimDenial2
-  );
-});
+  const hasChanges = computed(() => {
+    if (!originalValues.value.eligibilityCriteria) return false;
+    return (
+      eligibilityCriteria.value !== originalValues.value.eligibilityCriteria ||
+      approvalLimitations1.value !==
+        originalValues.value.approvalLimitations1 ||
+      claimDenial1.value !== originalValues.value.claimDenial1 ||
+      approvalLimitations2.value !==
+        originalValues.value.approvalLimitations2 ||
+      claimDenial2.value !== originalValues.value.claimDenial2
+    );
+  });
 
-onMounted(async () => {
-  try {
-    await policyStore.fetchPolicies();
+  onMounted(async () => {
+    try {
+      await policyStore.fetchPolicies();
 
-    const defaultEligibility = `- Conditions under which a claim is considered valid.
+      const defaultEligibility = `- Conditions under which a claim is considered valid.
 - Timeframe in which a claim must be filled after the incident or purchase.
 - Required documentation (e.g., receipts, proof of damage, photos, police reports).`;
 
-    const defaultApproval1 = `- Criteria for approval or rejection.
+      const defaultApproval1 = `- Criteria for approval or rejection.
 - Forms of compensation(e.g., payment, replacement, repair).
 - Settlement process (e.g., bank transfer, in-store credit`;
 
-    const defaultDenial1 = `- Grounds for denial (e.g., lack of documentation, excluded events).
+      const defaultDenial1 = `- Grounds for denial (e.g., lack of documentation, excluded events).
 - Right to appeal or request re-evaluation.
 - Rejection communication process.`;
 
-    const defaultApproval2 = `- Steps to contest a denied claim.
+      const defaultApproval2 = `- Steps to contest a denied claim.
 - Timeframe for appeals and final decisions.`;
 
-    const defaultDenial2 = `- Scenarios not covered by the policy.
+      const defaultDenial2 = `- Scenarios not covered by the policy.
 - Specific exceptions (e.g., acts of war, intentional damage, expired warranties).`;
 
-    eligibilityCriteria.value =
-      policyStore.eligibilityCriteriaText || defaultEligibility;
-    approvalLimitations1.value =
-      policyStore.approvalLimitations1Text || defaultApproval1;
-    claimDenial1.value = policyStore.claimDenial1Text || defaultDenial1;
-    approvalLimitations2.value =
-      policyStore.approvalLimitations2Text || defaultApproval2;
-    claimDenial2.value = policyStore.claimDenial2Text || defaultDenial2;
+      eligibilityCriteria.value =
+        policyStore.eligibilityCriteriaText || defaultEligibility;
+      approvalLimitations1.value =
+        policyStore.approvalLimitations1Text || defaultApproval1;
+      claimDenial1.value = policyStore.claimDenial1Text || defaultDenial1;
+      approvalLimitations2.value =
+        policyStore.approvalLimitations2Text || defaultApproval2;
+      claimDenial2.value = policyStore.claimDenial2Text || defaultDenial2;
 
-    originalValues.value = {
-      eligibilityCriteria: eligibilityCriteria.value,
-      approvalLimitations1: approvalLimitations1.value,
-      claimDenial1: claimDenial1.value,
-      approvalLimitations2: approvalLimitations2.value,
-      claimDenial2: claimDenial2.value,
-    };
-  } catch (error) {
-    console.error("Failed to load policies:", error);
-  }
-});
+      originalValues.value = {
+        eligibilityCriteria: eligibilityCriteria.value,
+        approvalLimitations1: approvalLimitations1.value,
+        claimDenial1: claimDenial1.value,
+        approvalLimitations2: approvalLimitations2.value,
+        claimDenial2: claimDenial2.value,
+      };
+    } catch (error) {
+      console.error("Failed to load policies:", error);
+    }
+  });
 
-const handleSubmit = async () => {
-  try {
+  const handleSubmit = async () => {
+    try {
+      window.removeEventListener("beforeunload", beforeUnloadHandler);
+      const response = await axios.get("http://127.0.0.1:8000/admin/policy");
+      const data = await response.data();
+
+      eligibilityCriteria.value = data.claim_eligibility_criteria.join("\n");
+      const approval =
+        data.claim_approval_limitations?.[0]?.points?.join("\n") || "";
+      const denial = data.claim_denial?.[0]?.points?.join("\n") || "";
+
+      approvalLimitations1.value = approval;
+      approvalLimitations2.value = approval;
+      claimDenial1.value = denial;
+      claimDenial2.value = denial;
+
+      alert("Policy data loaded from backend!");
+
+      showDialog.value = true;
+    } catch (error) {
+      console.error("Failed to fetch policy data:", error);
+    }
+  };
+
+  const handleCancel = () => {
+    if (hasChanges.value) {
+      const confirmLeave = confirm(
+        "You have unsaved changes. Are you sure you want to leave?",
+      );
+      if (!confirmLeave) return;
+    }
     window.removeEventListener("beforeunload", beforeUnloadHandler);
-    const response = await axios.get("http://127.0.0.1:8000/admin/policy");
-    const data = await response.data();
+    policyStore.clearError();
+    router.back();
+  };
 
-    eligibilityCriteria.value = data.claim_eligibility_criteria.join("\n");
-    const approval =
-      data.claim_approval_limitations?.[0]?.points?.join("\n") || "";
-    const denial = data.claim_denial?.[0]?.points?.join("\n") || "";
+  watch(hasChanges, (newValue) => {
+    console.log("Has changes:", newValue);
+  });
 
-    approvalLimitations1.value = approval;
-    approvalLimitations2.value = approval;
-    claimDenial1.value = denial;
-    claimDenial2.value = denial;
-
-    alert("Policy data loaded from backend!");
-
-    showDialog.value = true;
-  } catch (error) {
-    console.error("Failed to fetch policy data:", error);
-  }
-};
-
-const handleCancel = () => {
-  if (hasChanges.value) {
-    const confirmLeave = confirm(
-      "You have unsaved changes. Are you sure you want to leave?",
-    );
-    if (!confirmLeave) return;
-  }
-  window.removeEventListener("beforeunload", beforeUnloadHandler);
-  policyStore.clearError();
-  router.back();
-};
-
-watch(hasChanges, (newValue) => {
-  console.log("Has changes:", newValue);
-});
-
-onUnmounted(() => {
-  policyStore.setError("Error");
-});
+  onUnmounted(() => {
+    policyStore.setError("Error");
+  });
 </script>
