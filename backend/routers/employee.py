@@ -5,8 +5,8 @@ from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from db.setup import get_db
-from db.tables import Claim
-from db.schemas import ClaimSchema
+from db.tables import Claim as DBClaim
+from db.schemas import ClaimSchema, InvoiceSchema
 
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import PromptTemplate
@@ -24,10 +24,10 @@ llm = ChatGoogleGenerativeAI(
 )
 
 
-@router.get("/claims", response_model=List[ClaimSchema])
-def get_all_claims(db: Session = Depends(get_db)):
+@router.get("{employee_id}/claim/all", response_model=List[ClaimSchema])
+def get_all_claims(employee_id: int, db: Session = Depends(get_db)):
     try:
-        claims = db.query(Claim).all()
+        claims = db.query(DBClaim).filter(DBClaim.employee_id == employee_id).all()
         return claims
     except Exception as e:
         raise HTTPException(
@@ -50,9 +50,12 @@ def read_file(file_contents: BytesIO) -> str:
     return text
 
 
-@router.post("/claim/upload")
-async def employee_claim_upload(file: UploadFile = File(...)):
-    allowed_extensions = ["pdf", "png", "jpg"]
+# TODO: output (output_parser) JSON for the fields in /employee/claim/edit (not save first)
+# TODO: create /employee/claim/{id}/edit, (submit here = save)
+# TODO: add employee_id to know which employee upload
+@router.post("{employee_id}/invoice/upload")
+async def employee_invoice_upload(employee_id: int, file: UploadFile = File(...)):
+    allowed_extensions = ["pdf", "png", "jpg", "jpeg"]
     if not file.filename.lower().endswith(allowed_extensions):
         # might need to alter the front end putting in text saying file must be in pdf, png or jpg format
         raise HTTPException(status_code=400, detail="File must be in a correct format")
@@ -91,3 +94,23 @@ async def employee_claim_upload(file: UploadFile = File(...)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
+
+
+# TODO: complete API /employee/{employee_id}/invoice/submit-into-claim
+# input: multiple invoices.id
+# output: claim
+# page: /employee/claim/expenses
+@router.post(
+    "/employee/{employee_id}/invoice/submit-into-claim", response_model=ClaimSchema
+)
+def submit_invoices_into_claims(employee_id: int, db: Session = Depends(get_db)):
+    return {}
+
+
+# TODO: complete API {employee_id}/invoice/{invoice_id}
+# show invoice details in employee/claim/edit
+@router.get("{employee_id}/invoice/{invoice_id}", response_model=InvoiceSchema)
+def get_invoice_details(
+    employee_id: int, invoice_id: int, db: Session = Depends(get_db)
+):
+    return {}

@@ -97,6 +97,8 @@
                 </th>
               </tr>
             </thead>
+            <!-- TODO: change the table rows into label + input tags -->
+            <!-- TODO: add delete button on the side of each items -->
             <tbody>
               <tr class="bg-gray-200 text-theme-300 shadow-md">
                 <td class="rounded-l-lg px-4 py-3">Galaxy Tab S10 Ultra</td>

@@ -3,14 +3,54 @@ from typing import List
 from sqlalchemy.orm import Session
 from db.setup import get_db
 from db.tables import Invoice as DBInvoice
-from db.schemas import InvoiceSchema
+from db.tables import Claim as DBClaim
+from db.schemas import InvoiceSchema, ClaimSchema
 
 
 router = APIRouter()
 
 
-@router.get("/claim/details", response_model=List[InvoiceSchema])
+@router.get("/claim/all", response_model=List[ClaimSchema])
+def get_all_claims(db: Session = Depends(get_db)):
+    """
+    Show all claim made by every employee
+    """
+    try:
+        claims = db.query(DBClaim).all()
+        return claims
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal Server Error: Could not retrieve claims. {str(e)}",
+        )
+
+
+@router.get("/claim/{claim_id}", response_model=InvoiceSchema)
+async def get_claim_by_id(claim_id: int, db: Session = Depends(get_db)):
+    """
+    Get claim by claim_id
+    """
+    try:
+        claim = db.query(DBClaim).filter(DBClaim.id == claim_id).first()
+        if claim is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Claim with ID {claim_id} not found",
+            )
+        return claim
+    except Exception as e:
+        print(f"Error fetching invoice with ID {claim_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal Server Error: Could not retrieve invoice. {str(e)}",
+        )
+
+
+@router.get("/invoice/all", response_model=List[InvoiceSchema])
 async def list_invoices(db: Session = Depends(get_db)):
+    """
+    Show all invoices made by every employee
+    """
     try:
         invoices = db.query(DBInvoice).order_by(DBInvoice.id.desc()).all()
         return [InvoiceSchema.model_validate(invoice) for invoice in invoices]
@@ -22,8 +62,11 @@ async def list_invoices(db: Session = Depends(get_db)):
         )
 
 
-@router.get("/invoice/details/{invoice_id}", response_model=InvoiceSchema)
+@router.get("/invoice/{invoice_id}", response_model=InvoiceSchema)
 async def get_invoice_by_id(invoice_id: int, db: Session = Depends(get_db)):
+    """
+    Show the details of a invoice
+    """
     try:
         invoice = db.query(DBInvoice).filter(DBInvoice.id == invoice_id).first()
         if invoice is None:
@@ -40,8 +83,13 @@ async def get_invoice_by_id(invoice_id: int, db: Session = Depends(get_db)):
         )
 
 
+# TODO: output (output_parser) JSON for the fields in /admin/policy/edit (not save first)
+# TODO: create /admin/policy/edit, (submit here = save)
 @router.get("/policy")
 async def get_policy_details():
+    """
+    Show the details of the policy
+    """
     return {
         "claim_eligibility_criteria": [
             "Conditions under which a claim is considered valid.",
@@ -68,3 +116,24 @@ async def get_policy_details():
             }
         ],
     }
+
+
+# TODO: complete API /claim/{claim_id}/details
+# for page /admin/claim/review/{claim_id}
+# show the details to field the form
+@router.get("/claim/{claim_id}/details", response_model=InvoiceSchema)
+def get_claim_details(
+        claim_id: int, db: Session = Depends(get_db)
+):
+    return {}
+
+
+# TODO: complete API /claim/{claim_id}/resolve/{approved}
+# for page /admin/claim/review/{claim_id}
+# approved = True, set status approve
+# approved = False, set status reject
+@router.post("/claim/{claim_id}/resolve/{approved}", response_model=InvoiceSchema)
+def approve_or_reject_claim(
+        claim_id: int, approved: bool, db: Session = Depends(get_db)
+):
+    return {}

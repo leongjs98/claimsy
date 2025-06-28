@@ -87,7 +87,7 @@
                   Status
                 </th>
                 <th
-                  class="sr-only w-48 rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold"
+                  class="sr-only w-48 rounded-tr-lg px-3 py-3.5 text-left text-sm font-semibold"
                 >
                   Details
                 </th>
@@ -139,7 +139,7 @@
                 </td>
                 <td
                   :class="[
-                    'px-4 py-4 text-right text-sm whitespace-nowrap text-theme-300',
+                    'px-4 py-4 text-center text-sm whitespace-nowrap text-theme-300',
                     index === sortedExpenses.length - 1 ? 'rounded-br-lg' : '',
                   ]"
                 >

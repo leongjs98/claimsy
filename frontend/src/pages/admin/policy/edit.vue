@@ -5,6 +5,8 @@
     >
       <div class="pb-12">
         <div class="relative flex items-center justify-center">
+          <!-- TODO: change back button color -->
+          <!-- TODO: go back to upload policy -->
           <button @click="handleCancel" type="button" class="absolute left-0">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -112,6 +114,8 @@
             </div>
           </div>
           <div class="col-span-full flex justify-center gap-4">
+            <!-- TODO: cancel go back to claim center -->
+            <!-- TODO: change cancel button color -->
             <button
               class="z-10 ml-10 flex justify-center gap-4 rounded-full bg-blue-800 px-10 py-2 font-bold text-white transition hover:bg-blue-700"
             >
