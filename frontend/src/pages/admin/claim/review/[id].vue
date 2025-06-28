@@ -5,9 +5,9 @@
       class="mx-auto mt-15 max-w-4xl rounded-2xl border border-gray-200 bg-white px-15 py-10 shadow-lg"
     >
       <!-- Back Button -->
-      <div class="space-y-1 border-b border-gray-900/10 pb-12">
-        <div class="relative flex items-center justify-center">
-          <button @click="router.back()" type="button" class="absolute left-0">
+      <div class="space-x-1 border-b border-gray-900/10 pb-12">
+        <div class="relative flex items-center">
+          <button @click="router.back()" type="button" class="">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-8 w-6"
@@ -20,14 +20,25 @@
             </svg>
           </button>
 
-          <!-- Header -->
           <h1
-            class="mr-125 flex justify-center text-2xl font-bold text-blue-950"
+            class="ml-4 gap-4 flex items-center justify-center text-2xl font-bold text-blue-950"
           >
             <template v-if="loading">Loading...</template>
             <template v-else-if="error">{{ error }}</template>
             <template v-else-if="staff && claim">
               #{{ claim.id }} {{ staff.name }}
+  <span
+    class="flex items-center rounded-md px-2 py-1 font-medium"
+    :class="{
+      'bg-emerald-100 text-emerald-600': claim.status === 'Approved',
+      'bg-red-100 text-red-600': claim.status === 'Rejected',
+      'bg-yellow-100 text-yellow-600': claim.status === 'Pending',
+      'bg-orange-100 text-orange-600': claim.status === 'Fraud',
+      'bg-black text-white': claim.status === 'Anomaly',
+    }"
+  >
+    {{ claim.status }}
+  </span>
             </template>
             <template v-else>No data found</template>
           </h1>
@@ -233,6 +244,7 @@
       staff.value = { id: "001", name: "John Doe" };
       claim.value = {
         id: "001",
+        status: "Pending",
         category: "Gadget",
         date: "06/05/2025",
         merchantName: "Samsung Store",
