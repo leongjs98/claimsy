@@ -19,7 +19,7 @@ class ClaimSchema(BaseModel):
     claim_type: Optional[str] = None
     claim_amount: Optional[Decimal] = None
     reason: Optional[str] = None
-    status: str = "pending"
+    status: ClaimStatus = ClaimStatus.PENDING
     submitted_date: Optional[date] = None
     reviewed_date: Optional[date] = None
     resolution: Optional[str] = None

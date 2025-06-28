@@ -37,7 +37,7 @@ def seed_claims():
             return
         
         claim_types = ["Medical", "Travel", "Equipment", "Training", "Meal", "Transportation"]
-        statuses = ["pending", "approved", "rejected", "processing"]
+        statuses = ["pending", "approved", "rejected"]
         
         claims = []
         for i in range(NUM_CLAIMS):
