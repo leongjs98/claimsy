@@ -25,27 +25,6 @@ def get_all_claims(db: Session = Depends(get_db)):
         )
 
 
-@router.get("/claim/{claim_id}", response_model=InvoiceSchema)
-async def get_claim_by_id(claim_id: int, db: Session = Depends(get_db)):
-    """
-    Get claim by claim_id
-    """
-    try:
-        claim = db.query(DBClaim).filter(DBClaim.id == claim_id).first()
-        if claim is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Claim with ID {claim_id} not found",
-            )
-        return claim
-    except Exception as e:
-        print(f"Error fetching invoice with ID {claim_id}: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Internal Server Error: Could not retrieve invoice. {str(e)}",
-        )
-
-
 @router.get("/invoice/all", response_model=List[InvoiceSchema])
 async def list_invoices(db: Session = Depends(get_db)):
     """
@@ -120,12 +99,26 @@ async def get_policy_details():
 
 # TODO: complete API /claim/{claim_id}/details
 # for page /admin/claim/review/{claim_id}
-# show the details to field the form
-@router.get("/claim/{claim_id}/details", response_model=InvoiceSchema)
-def get_claim_details(
-        claim_id: int, db: Session = Depends(get_db)
-):
-    return {}
+# get all the invoices linkeed to the claim
+@router.get("/claim/{claim_id}/details", response_model=ClaimSchema)
+async def get_claim_by_id(claim_id: int, db: Session = Depends(get_db)):
+    """
+    Get claim by claim_id
+    """
+    try:
+        claim = db.query(DBClaim).filter(DBClaim.id == claim_id).first()
+        if claim is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Claim with ID {claim_id} not found",
+            )
+        return claim
+    except Exception as e:
+        print(f"Error fetching claim with ID {claim_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal Server Error: Could not retrieve invoice. {str(e)}",
+        )
 
 
 # TODO: complete API /claim/{claim_id}/resolve/{approved}
