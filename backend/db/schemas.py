@@ -13,7 +13,7 @@ class ClaimStatus(str, Enum):
 
 
 class ClaimSchema(BaseModel):
-    id: Optional[int] = None
+    id: int
     claim_number: str
     employee_id: int
     claim_type: Optional[str] = None

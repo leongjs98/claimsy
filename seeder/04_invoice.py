@@ -99,7 +99,7 @@ def show_help():
     print(
         "  python invoice_seeder.py --number 30        - Seed 30 number of invoices (DEFAULT: 20)"
     )
-    print("  python invoice_seeder.py --n 30             - Shortcut for above")
+    print("  python invoice_seeder.py -n 30             - Shortcut for above")
     print("  python invoice_seeder.py --help             - Show this help message")
     print("  python invoice_seeder.py -h                 - Shortcut for above")
     print()

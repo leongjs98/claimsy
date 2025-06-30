@@ -194,7 +194,7 @@ def show_help():
     print("=" * 50)
     print("Usage:")
     print("  python cleaner.py --number 30        - Seed 30 number of employees (DEFAULT: 20)")
-    print("  python cleaner.py --n 30             - Shorcut for above")
+    print("  python cleaner.py -n 30             - Shorcut for above")
     print("  python cleaner.py --help             - Show this help message")
     print("  python cleaner.py -h                 - Shortcut for above")
     print()

@@ -1,3 +1,4 @@
+# TODO: Fix one claim multiple invoices same employee_id
 """
 Create random mock data of claims based on NUM_RECORDS
 MUST RUN AFTER seeder_employee.py and seeder_invoice.py
@@ -83,7 +84,7 @@ def show_help():
     print("=" * 50)
     print("Usage:")
     print("  python claim_seeder.py --number 30        - Seed 30 number of claims (DEFAULT: 20)")
-    print("  python claim_seeder.py --n 30             - Shortcut for above")
+    print("  python claim_seeder.py -n 30             - Shortcut for above")
     print("  python claim_seeder.py --help             - Show this help message")
     print("  python claim_seeder.py -h                 - Shortcut for above")
     print()
