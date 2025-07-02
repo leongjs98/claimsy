@@ -109,6 +109,7 @@ def submit_invoices_into_claims(employee_id: int, db: Session = Depends(get_db))
 
 # TODO: complete API {employee_id}/invoice/{invoice_id}
 # show invoice details in employee/claim/edit
+#page ni dekat my claims lepastu filter by claim_id
 @router.get("{employee_id}/invoice/{invoice_id}", response_model=InvoiceSchema)
 def get_invoice_details(
     employee_id: int, invoice_id: int, db: Session = Depends(get_db)

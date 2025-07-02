@@ -125,8 +125,25 @@ async def get_claim_by_id(claim_id: int, db: Session = Depends(get_db)):
 # for page /admin/claim/review/{claim_id}
 # approved = True, set status approve
 # approved = False, set status reject
-@router.post("/claim/{claim_id}/resolve/{approved}", response_model=InvoiceSchema)
+@router.post("/claim/{claim_id}/resolve/{claim_status}", response_model=ClaimSchema)
 def approve_or_reject_claim(
-        claim_id: int, approved: bool, db: Session = Depends(get_db)
-):
-    return {}
+        claim_id: int, approved: bool, db: Session = Depends(get_db)):
+    """
+    Approve or reject a claim by claim_id
+    """
+    try:
+        claim = db.query(DBClaim).filter(DBClaim.id == claim_id).first()
+        if claim is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Internal Server Error: Claim with ID {claim_id} not found",
+            )
+        return claim
+    
+    except Exception as e:
+        print(f"Error approving or rejecting claim with ID {claim_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal Server Error: Could not approve or reject claim. {str(e)}",
+        )
+    

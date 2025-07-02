@@ -54,8 +54,8 @@
       return true;
     }
     if (
-      props.link === "/ask-claimsy" &&
-      route.path.includes("/ask-claimsy/smart-suggest")
+      props.link === "/admin/claimsy-bot" &&
+      route.path.includes("/claimsy-bot/smart-suggest")
     ) {
       return true;
     }
