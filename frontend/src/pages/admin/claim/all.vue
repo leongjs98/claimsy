@@ -5,25 +5,25 @@
       :approvedCount="adminClaims.approvedCount"
       :rejectedCount="adminClaims.rejectedCount"
     />
-    <Tab
-      :tabs="[
-        {
-          link: '/admin/claim/all',
-          routeName: 'All Claims',
-        },
-        {
-          link: '/admin/claim/approved',
-          routeName: 'Approved',
-        },
-        {
-          link: '/admin/claim/rejected',
-          routeName: 'Rejected',
-        },
-      ]"
-    />
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="max-w-6xl min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <Tab
+            :tabs="[
+              {
+                link: '/admin/claim/all',
+                routeName: 'All Claims',
+              },
+              {
+                link: '/admin/claim/approved',
+                routeName: 'Approved',
+              },
+              {
+                link: '/admin/claim/rejected',
+                routeName: 'Rejected',
+              },
+            ]"
+          />
           <div class="shadow-sm ring-1 ring-black/5 sm:rounded-lg">
             <table class="min-w-full divide-y divide-gray-300 bg-gray-100">
               <thead class="rounded-lg bg-blue-50 text-theme-300">
@@ -168,7 +168,7 @@
     </div>
   </div>
 
-  <ClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
+  <AdminClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
 </template>
 
 <script setup>

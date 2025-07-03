@@ -83,7 +83,7 @@
                 <div class="text-right">
                   <!-- TODO: change to dynamic link -->
                   <!-- TODO: admin will view admin version, employee = employee version-->
-                  <RouterLink :to="`/admin/claim/review/420`">
+                  <RouterLink :to="`/employee/invoice/edit/420`">
                     Details
                   </RouterLink>
                 </div>

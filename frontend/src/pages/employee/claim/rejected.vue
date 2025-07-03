@@ -12,7 +12,26 @@
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <!-- Tabs Row -->
-          <EmployeeClaimsTab />
+          <Tab
+            :tabs="[
+              {
+                link: '/employee/invoice/unsubmitted',
+                routeName: 'My Invoices',
+              },
+              {
+                link: '/employee/claim/all',
+                routeName: 'All Claims',
+              },
+              {
+                link: '/employee/claim/approved',
+                routeName: 'Approved',
+              },
+              {
+                link: '/employee/claim/rejected',
+                routeName: 'Rejected',
+              },
+            ]"
+          />
           <table
             class="min-w-full divide-y divide-gray-300 rounded-b-lg bg-gray-100 drop-shadow-md"
           >
@@ -143,7 +162,7 @@
     </div>
   </div>
 
-  <ClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
+  <EmployeeClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
 </template>
 
 <script setup>
