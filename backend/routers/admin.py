@@ -125,8 +125,8 @@ async def get_claim_by_id(claim_id: int, db: Session = Depends(get_db)):
 # for page /admin/claim/review/{claim_id}
 # approved = True, set status approve
 # approved = False, set status reject
-@router.post("/claim/{claim_id}/resolve/{approved}", response_model=InvoiceSchema)
+@router.post("/claim/{claim_id}/resolve/{status}", response_model=InvoiceSchema)
 def approve_or_reject_claim(
-        claim_id: int, approved: bool, db: Session = Depends(get_db)
+        claim_id: int, status: str, db: Session = Depends(get_db)
 ):
     return {}
