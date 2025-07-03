@@ -54,11 +54,10 @@ def seed_claims():
         ]
         statuses = ["pending", "approved", "rejected"]
 
-        claims = []
         for i in range(NUM_CLAIMS):
             selected_employee = Employee()
             invoices = []
-            print("invoices", invoices)
+            selected_invoices = List[Invoice]
             while not invoices:
                 selected_employee, invoices = find_invoices_of_random_employee()
 
@@ -83,12 +82,11 @@ def seed_claims():
             selected_invoices = random.sample(invoices, num_invoices_to_assign)
             claim.invoices = selected_invoices
 
-            claims.append(claim)
+            session.add(claim)
 
             if (i + 1) % 10 == 0:
                 print(f"Generated {i + 1} claims...")
 
-        session.add_all(claims)
         session.commit()
         print(
             f"Successfully seeded {NUM_CLAIMS} claims with actual employee and invoice relationships!"

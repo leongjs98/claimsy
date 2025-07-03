@@ -34,12 +34,13 @@ use `python --version` to check
 6. Create mock data (seeding)
 ```
 # make sure you in the project root directory (claimsy/)
-python seeder/01_tables.py && \
-python seeder/02_admin.py && \
-python seeder/03_employee.py -n 15 && \
-python seeder/04_invoice.py -n 100 && \
+# Reset the database
+python seeder/cleaner.py --drop-all-tables
+python seeder/01_tables.py
+python seeder/02_admin.py
+python seeder/03_employee.py -n 15
+python seeder/04_invoice.py -n 100
 python seeder/05_claim.py -n 50
-
 ```
 
 7. Delete mock data using `db/cleaner.py`

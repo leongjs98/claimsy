@@ -128,20 +128,11 @@
             </button>
             <!-- Hardcoded here might change to dynamic later -->
             <RouterLink
-              :to="{
-                path: '/employee/claim/edit',
-                query: {
-                  categoryID: 'Gadget',
-                  DateID: '2023-10-01',
-                  MerchantnameID: 'Lin Dan',
-                  MerchanaddressID: 'No 1, Jalan 1/1, Kuala Lumpur',
-                  RemarkID: 'Gadget purchase for event academy for all',
-                },
-              }"
+              to="/employee/invoice/edit"
               class="rounded-xl bg-theme-300 px-10 py-2 text-xs font-medium text-white shadow-lg transition-all duration-200 ease-in-out hover:bg-theme-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              Upload</RouterLink
-            >
+              Upload
+            </RouterLink>
             <!-- <button -->
             <!--   @click="uploadFile" -->
             <!--   :disabled="!selectedFile" -->

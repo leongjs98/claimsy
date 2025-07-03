@@ -8,11 +8,10 @@
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <!-- Tabs Row -->
-          <EmployeeClaimsTab />
           <Tab
             :tabs="[
               {
-                link: '/employee/invoices/unsubmitted',
+                link: '/employee/invoice/unsubmitted',
                 routeName: 'My Invoices',
               },
               {

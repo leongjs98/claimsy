@@ -18,6 +18,8 @@
             </svg>
           </button>
           <h1 class="flex justify-center text-4xl font-semibold text-blue-950">
+            <template v-if="loading">Loading...</template>
+            <template v-else-if="error">{{ error }}</template>
             Receipt Details
           </h1>
         </div>
@@ -35,17 +37,16 @@
                 'Accommodation',
                 'Communication',
               ]"
-              v-model="formData.category"
+              v-model="category"
             />
           </div>
 
           <div class="sm:col-span-3">
             <CalendarInput
-              label="Date"
-              type="text"
+              label="Date (YYYY-MM-DD)"
               name="date"
-              id="DateID"
-              v-model="formData.date"
+              id="date"
+              v-model="date"
             />
           </div>
 
@@ -55,7 +56,7 @@
               name="merchantName"
               id="MerchantnameID"
               autocomplete="name"
-              v-model="formData.merchantName"
+              v-model="merchantName"
             />
           </div>
           <div class="sm:col-span-full">
@@ -64,7 +65,7 @@
               name="merchantAddress"
               id="MerchanaddressID"
               autocomplete="street-address"
-              v-model="formData.merchantAddress"
+              v-model="merchantAddress"
             />
           </div>
           <div class="sm:col-span-full">
@@ -72,7 +73,7 @@
               label="Remark"
               name="remark"
               id="RemarkID"
-              v-model="formData.remark"
+              v-model="remark"
             />
           </div>
         </div>
@@ -145,34 +146,30 @@
 </template>
 
 <script setup>
-  import { useRouter, useRoute } from "vue-router";
+  import { ref, onMounted } from "vue";
+  import { useRouter } from "vue-router";
 
-  const formData = ref({
-    category: "",
-    date: "",
-    merchantName: "",
-    merchantAddress: "",
-    remark: "",
-  });
+  const category = ref("");
+  const date = ref("");
+  const merchantName = ref("");
+  const merchantAddress = ref("");
+  const remark = ref("");
   const router = useRouter();
-  const route = useRoute();
+  const loading = ref(true);
+  const error = ref("");
 
-  onMounted(() => {
-    // Check if query parameters exist and populate the form fields
-    if (route.query.categoryID) {
-      formData.value.category = route.query.categoryID;
-    }
-    if (route.query.DateID) {
-      formData.value.date = route.query.DateID;
-    }
-    if (route.query.MerchantnameID) {
-      formData.value.merchantName = route.query.MerchantnameID;
-    }
-    if (route.query.MerchanaddressID) {
-      formData.value.merchantAddress = route.query.MerchanaddressID;
-    }
-    if (route.query.RemarkID) {
-      formData.value.remark = route.query.RemarkID;
+  onMounted(async () => {
+    loading.value = true;
+    try {
+      category.value = "Gadget";
+      date.value = "2025-06-01";
+      merchantName.value = "Lin Dan";
+      merchantAddress.value = "No 1, Jalan 1/1, Kuala Lumpur";
+      remark.value = "Gadget purchase for event academy for all";
+    } catch (e) {
+      error.value = "Failed to load data.";
+    } finally {
+      loading.value = false;
     }
   });
 </script>
