@@ -98,20 +98,23 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="bg-gray-200 text-theme-300 shadow-md">
-                <td class="rounded-l-lg px-4 py-3">Galaxy Tab S10 Ultra</td>
-                <td class="px-4 py-3 text-right">1</td>
-                <td class="rounded-r-lg px-4 py-3 text-right">4,299.00</td>
-              </tr>
-              <tr class="bg-gray-200 text-theme-300 shadow-md">
-                <td class="rounded-l-lg px-4 py-3">24" Essential Monitor S3</td>
-                <td class="px-4 py-3 text-right">1</td>
-                <td class="rounded-r-lg px-4 py-3 text-right">399.00</td>
+              <tr
+                v-for="(item, index) in formData.items"
+                :key="index"
+                class="bg-gray-200 text-theme-300 shadow-md"
+              >
+                <td class="rounded-l-lg px-4 py-3">{{ item.description }}</td>
+                <td class="px-4 py-3 text-right">{{ item.quantity }}</td>
+                <td class="rounded-r-lg px-4 py-3 text-right">
+                  {{ item.unit_price.toFixed(2) }}
+                </td>
               </tr>
               <tr class="text-right font-semibold text-theme-300">
                 <td></td>
                 <td class="rounded-l-lg bg-gray-200 px-4 py-3">Total</td>
-                <td class="rounded-r-lg bg-gray-200 px-4 py-3">4,698.00</td>
+                <td class="rounded-r-lg bg-gray-200 px-4 py-3">
+                  {{ totalAmount }}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -143,34 +146,33 @@
 </template>
 
 <script setup>
-  import { useRouter, useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { computed } from "vue";
 
-  const formData = ref({
-    category: "",
-    date: "",
-    merchantName: "",
-    merchantAddress: "",
-    remark: "",
-  });
-  const router = useRouter();
-  const route = useRoute();
+const totalAmount = computed(() =>
+  formData.value.items
+    .reduce((sum, item) => sum + item.unit_price * item.quantity, 0)
+    .toFixed(2),
+);
 
-  onMounted(() => {
-    // Check if query parameters exist and populate the form fields
-    if (route.query.categoryID) {
-      formData.value.category = route.query.categoryID;
-    }
-    if (route.query.DateID) {
-      formData.value.date = route.query.DateID;
-    }
-    if (route.query.MerchantnameID) {
-      formData.value.merchantName = route.query.MerchantnameID;
-    }
-    if (route.query.MerchanaddressID) {
-      formData.value.merchantAddress = route.query.MerchanaddressID;
-    }
-    if (route.query.RemarkID) {
-      formData.value.remark = route.query.RemarkID;
-    }
-  });
+const router = useRouter();
+const route = useRoute();
+
+const formData = ref({
+  category: route.query.category || "",
+  date: route.query.date || "",
+  merchantName: route.query.merchantName || "",
+  merchantAddress: route.query.merchantAddress || "",
+  remark: route.query.remark || "",
+  items: [],
+});
+
+onMounted(() => {
+  try {
+    const parsedItems = JSON.parse(route.query.items || "[]");
+    formData.value.items = parsedItems;
+  } catch (e) {
+    console.warn("Failed to parse items", e);
+  }
+});
 </script>
