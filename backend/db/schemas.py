@@ -6,37 +6,10 @@ from decimal import Decimal
 from enum import Enum
 from datetime import datetime
 
-class ClaimStatus(str, Enum):
-    PENDING = "pending"
-    APPROVED = "approved"
-    REJECTED = "rejected"
-
-
-class ClaimSchema(BaseModel):
-    id: int
-    claim_number: str
-    employee_id: int
-    claim_type: Optional[str] = None
-    claim_amount: Optional[Decimal] = None
-    reason: Optional[str] = None
-    status: ClaimStatus = ClaimStatus.PENDING
-    submitted_date: Optional[date] = None
-    reviewed_date: Optional[date] = None
-    resolution: Optional[str] = None
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        from_attributes = True
-        json_encoders = {
-            Decimal: float
-        }
-
 class ItemService(BaseModel):
     item: str
     quantity: int
     unit_price: float
-
 
 class InvoiceSchema(BaseModel):
     id: Optional[int] = None
@@ -65,4 +38,28 @@ class InvoiceSchema(BaseModel):
         from_attributes = True
         populate_by_name = True
 
+class ClaimStatus(str, Enum):
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
 
+class ClaimSchema(BaseModel):
+    id: int
+    claim_number: str
+    employee_id: int
+    claim_type: Optional[str] = None
+    claim_amount: Optional[Decimal] = None
+    reason: Optional[str] = None
+    status: ClaimStatus = ClaimStatus.PENDING
+    submitted_date: Optional[date] = None
+    reviewed_date: Optional[date] = None
+    resolution: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+    invoices: List[InvoiceSchema] = [] 
+    
+    class Config:
+        from_attributes = True
+        json_encoders = {
+            Decimal: float
+        }
