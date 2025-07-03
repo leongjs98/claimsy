@@ -117,12 +117,12 @@
             <!-- TODO: cancel go back to claim center -->
             <!-- TODO: change cancel button color -->
             <button
-              class="z-10 ml-10 flex justify-center gap-4 rounded-full bg-blue-800 px-10 py-2 font-bold text-white transition hover:bg-blue-700"
+              class="ml-10 flex justify-center gap-4 rounded-full bg-blue-800 px-10 py-2 font-bold text-white transition hover:bg-blue-700"
             >
               Cancel
             </button>
             <button
-              class="z-10 ml-10 flex justify-center gap-4 rounded-full bg-blue-800 px-10 py-2 font-bold text-white transition hover:bg-blue-700"
+              class="ml-10 flex justify-center gap-4 rounded-full bg-blue-800 px-10 py-2 font-bold text-white transition hover:bg-blue-700"
               @click="open = true"
             >
               Submit
