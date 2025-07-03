@@ -1,10 +1,11 @@
 # Code-related Todo's
 ## Todo
 ### Essentials
-- [ ] add isLoading to Pinia
-- [ ] rework claim policy input fields (use AI then real admin validates)
+- [ ] Scan Claim Policy and save it on MongoDB
     - pagination for multiple invoices in 1 claim
     - temperature 0
+- [ ] add loading animation (isLoading in Pinia) for different page
+- [ ] rework claim policy input fields (use AI then real admin validates)
 
 ### Nice to have
 - [ ] Pagination
@@ -34,18 +35,13 @@
 ```
 
 ## To be added on Teamhub
-Fix: Date sort in admin claim fix
-Fix: Item number in admin claim fix
+Small Fix: Date sort in admin claim fix
+refer to employee claim
 
-Page to re-evaluate claim status
-go back into admin claim review again
-
-separate employee and admin's ask-claimsy
-employee/ask-claimsy
-admin/ask-claimsy
+Small Fix: Item number/quantity in admin claim fix
 
 plan API for admin dashboard
 
 plan API for ask claimsy
 
-remove every link in navbar when login
+Final remove every link in navbar when login
