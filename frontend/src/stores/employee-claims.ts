@@ -29,9 +29,11 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
   state: () => ({
     expenses: [] as Expense[],
     categories: [] as string[],
+    loadArr: [] as Array<string>,
   }),
 
   getters: {
+    isLoading: (state) => (task: string) => state.loadArr.includes(task),
     totalCount: (state) => state.expenses.length,
 
     approvedCount: (state) =>
@@ -58,6 +60,16 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
   },
 
   actions: {
+    startLoading(task: string) {
+      if (!this.loadArr.includes(task)) {
+        this.loadArr.push(task);
+      }
+    },
+
+    stopLoading(task: string) {
+      this.loadArr = this.loadArr.filter((t) => t !== task);
+    },
+
     initializeExpenses() {
       this.expenses = [
         {

@@ -133,6 +133,9 @@
               Upload
             </button>
           </div>
+          <div v-if="isLoading" class="mt-4 flex justify-center text-blue-600">
+            Uploading...Please wait
+          </div>
         </div>
       </div>
     </div>
@@ -143,12 +146,15 @@
   import axios from "axios";
   import { useRouter } from "vue-router";
   import { ref } from "vue";
+  import { useEmployeeClaimStore } from "@/stores/employee-claims";
 
   const router = useRouter();
 
   const isDragging = ref(false);
   const selectedFiles = ref([]);
   const isUploading = ref(false);
+  const claimStore = useEmployeeClaimStore();
+  const isLoading = computed(() => claimStore.isLoading("uploading"));
 
   const handleDrop = (e) => {
     isDragging.value = false;
@@ -193,6 +199,7 @@
     }
 
     try {
+      claimStore.startLoading("uploading");
       isUploading.value = true;
       const { data } = await axios.post(
         "http://127.0.0.1:8000/employee/analyze/invoice",
@@ -247,6 +254,7 @@
       console.error("Upload failed:", err);
       alert("LLM analysis unsuccessful");
     } finally {
+      claimStore.stopLoading("uploading");
       isUploading.value = false;
     }
   };

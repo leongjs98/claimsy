@@ -29,7 +29,7 @@
 
     if (props.link === "/employee/claim/all") {
       if (
-        route.path === "/employee/claim/expenses" ||
+        route.path === "/employee/invoice/unsubmitted" ||
         route.path === "/employee/claim/approved" ||
         route.path === "/employee/claim/rejected"
       ) {
