@@ -6,15 +6,14 @@
       :approvedCount="approvedCount"
       :rejectedCount="rejectedCount"
     />
-    <div class="mt-4 mb-2"></div>
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <Tab
             :tabs="[
               {
-                link: '/employee/claim/expenses',
-                routeName: 'My Expenses',
+                link: '/employee/invoice/unsubmitted',
+                routeName: 'My Invoices',
               },
               {
                 link: '/employee/claim/all',
@@ -158,7 +157,7 @@
     </div>
   </div>
 
-  <ClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
+  <EmployeeClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
 </template>
 
 <script setup>

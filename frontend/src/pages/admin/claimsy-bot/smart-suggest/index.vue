@@ -3,11 +3,11 @@
     <Tab
       :tabs="[
         {
-          link: '/ask-claimsy',
+          link: '/admin/claimsy-bot',
           routeName: 'Chat with Claimsy',
         },
         {
-          link: '/ask-claimsy/smart-suggest/',
+          link: '/admin/claimsy-bot/smart-suggest/',
           routeName: 'Smart Suggest',
         },
       ]"
@@ -45,7 +45,7 @@
         <div class="mt-8">
           <h3 class="text-base font-semibold text-gray-900">
             <RouterLink
-              to="/ask-claimsy/smart-suggest/travel-transport"
+              to="/admin/claimsy-bot/smart-suggest/travel-transport"
               class="focus:outline-hidden"
             >
               <!-- Extend touch target to entire panel -->
@@ -93,7 +93,7 @@
         <div class="mt-8">
           <h3 class="text-base font-semibold text-gray-900">
             <RouterLink
-              to="/ask-claimsy/smart-suggest/meals-entertainment"
+              to="/admin/claimsy-bot/smart-suggest/meals-entertainment"
               class="focus:outline-hidden"
             >
               <!-- Extend touch target to entire panel -->
@@ -141,7 +141,7 @@
         <div class="mt-8">
           <h3 class="text-base font-semibold text-gray-900">
             <RouterLink
-              to="/ask-claimsy/smart-suggest/health-wellness"
+              to="/admin/claimsy-bot/smart-suggest/health-wellness"
               class="focus:outline-hidden"
             >
               <!-- Extend touch target to entire panel -->
@@ -192,7 +192,7 @@
         <div class="mt-8">
           <h3 class="text-base font-semibold text-gray-900">
             <RouterLink
-              to="/ask-claimsy/smart-suggest/miscellaneous"
+              to="/admin/claimsy-bot/smart-suggest/miscellaneous"
               class="focus:outline-hidden"
             >
               <!-- Extend touch target to entire panel -->

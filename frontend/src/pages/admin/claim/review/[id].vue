@@ -5,9 +5,9 @@
       class="mx-auto mt-15 max-w-4xl rounded-2xl border border-gray-200 bg-white px-15 py-10 shadow-lg"
     >
       <!-- Back Button -->
-      <div class="space-x-1 border-b border-gray-900/10 pb-12">
-        <div class="relative flex items-center">
-          <button @click="router.back()" type="button" class="">
+      <div class="space-y-1 border-b border-gray-900/10 pb-12">
+        <div class="relative flex items-center justify-center">
+          <button @click="router.back()" type="button" class="absolute left-0">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-8 w-6"
@@ -20,15 +20,20 @@
             </svg>
           </button>
 
+          <!-- Header -->
           <h1
-            class="ml-4 flex items-center justify-center gap-4 text-2xl font-bold text-blue-950"
+            class="mr-130 flex justify-center text-2xl font-bold text-blue-950"
           >
             <template v-if="loading">Loading...</template>
             <template v-else-if="error">{{ error }}</template>
+<<<<<<< HEAD
+            <template v-else-if="invoice">
+              #{{ invoice.invoice_id }} {{ dummyStaff_name }}
+=======
             <template v-else-if="staff && claim">
               #{{ claim.id }} {{ staff.name }}
               <span
-                class="flex items-center rounded-md px-2 py-1 font-medium"
+                class="flex items-center rounded-md px-2 py-1 text-base font-medium"
                 :class="{
                   'bg-emerald-100 text-emerald-600':
                     claim.status === 'Approved',
@@ -40,25 +45,28 @@
               >
                 {{ claim.status }}
               </span>
+>>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
             </template>
             <template v-else>No data found</template>
           </h1>
         </div>
 
         <!-- Receipt Details -->
-        <!-- Category -->
+
+        <!-- Status -->
         <div
-          v-if="claim"
+          v-if="claim.status"
           class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
         >
           <div class="sm:col-span-3">
             <DropdownInput
+<<<<<<< HEAD
               v-if="!isStored"
               label="Category"
               name="category"
               id="category"
               :options="categories"
-              :model-value="claim.category"
+              :model-value="invoice.category"
               disabled
             />
             <TextInput
@@ -66,19 +74,29 @@
               label="Category"
               name="category"
               id="category"
-              :model-value="claim.category"
+              :model-value="invoice.category"
               disabled
+=======
+              label="Status"
+              name="status"
+              id="status"
+              :options="['Pending', 'Approved', 'Rejected']"
+              v-model="claim.status"
+>>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
             />
           </div>
 
           <!-- Date -->
           <div class="sm:col-span-3">
             <CalendarInput
-              label="Date"
-              type="text"
+              label="Date (YYYY-MM-DD)"
               name="date"
               id="date"
-              :model-value="claim.date"
+<<<<<<< HEAD
+              :model-value="invoice.invoice_date"
+=======
+              v-model="claim.date"
+>>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
               disabled
             />
           </div>
@@ -90,7 +108,7 @@
               name="merchantName"
               id="merchant-name"
               autocomplete="name"
-              :model-value="claim.merchantName"
+              :model-value="invoice.merchant_name"
               disabled
             />
           </div>
@@ -102,7 +120,7 @@
               name="merchantAddress"
               id="merchant-address"
               autocomplete="street-address"
-              :model-value="claim.merchantAddress"
+              :model-value="invoice.merchant_address"
               disabled
             />
           </div>
@@ -113,61 +131,72 @@
               label="Remark"
               name="remark"
               id="remark"
-              :model-value="claim.remark"
+              :model-value="invoice.remark"
               disabled
             />
           </div>
         </div>
       </div>
 
-      <!-- Items/Services -->
+      <!-- Invoices -->
       <div
-        v-if="claim"
+        v-if="invoice"
         class="grid grid-cols-1 gap-x-6 gap-y-8 border-b border-gray-900/10 pb-12 sm:grid-cols-6"
       >
         <div class="sm:col-span-full">
+<<<<<<< HEAD
           <h2 class="mt-6 text-sm font-medium text-theme-300">
-            Items / Services
+           Invoices
           </h2>
+=======
+          <h2 class="mt-6 text-sm font-medium text-theme-300">Invoices</h2>
+>>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
           <table
             class="col-span-full w-full border-separate border-spacing-y-4"
           >
             <thead class="bg-blue-950 text-white">
               <tr class="">
                 <th class="rounded-l-lg px-4 py-2 text-left">Description</th>
+                <th class="rounded-l-lg px-4 py-2 text-left">Category</th>
                 <th class="px-4 py-2 text-right">Quantity</th>
-                <th class="rounded-r-lg px-4 py-2 text-right">
-                  Unit Price (RM)
-                </th>
+                <th class="rounded-r-lg px-4 py-2 text-right">Total (RM)</th>
               </tr>
             </thead>
 
             <tbody>
               <tr
-                v-for="(item, index) in claim.items"
+                v-for="(item, index) in invoice.items_services"
                 :key="index"
                 class="bg-gray-200 text-theme-300"
               >
+<<<<<<< HEAD
+                <td class="rounded-l-lg px-4 py-3 text-sm">{{ item.description }}</td>
+                <td class="px-4 py-3 text-right text-sm">{{ item.quantity }}</td>
+                <td class="rounded-r-lg px-4 py-3 text-right text-sm">
+=======
                 <td class="rounded-l-lg px-4 py-3">{{ item.description }}</td>
+                <td class="rounded-l-lg px-4 py-3">Category name</td>
                 <td class="px-4 py-3 text-right">{{ item.quantity }}</td>
                 <td class="rounded-r-lg px-4 py-3 text-right">
+>>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
                   {{
-                    item.unitPrice.toLocaleString("en-MY", {
+                    item.unit_price.toLocaleString("en-MY", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })
                   }}
                 </td>
               </tr>
+<<<<<<< HEAD
 
               <tr class="text-right font-semibold text-theme-300">
                 <td></td>
                 <td class="rounded-l-lg bg-gray-200 px-4 py-3">Total</td>
-                <td class="rounded-r-lg bg-gray-200 px-4 py-3">
+                <td class="rounded-r-lg bg-gray-200 px-4 py-3 text-sm">
                   {{
-                    claim.items
+                    invoice.items_services
                       .reduce(
-                        (sum, item) => sum + item.quantity * item.unitPrice,
+                        (sum, item) => sum + item.quantity * item.unit_price,
                         0,
                       )
                       .toLocaleString("en-MY", {
@@ -177,6 +206,8 @@
                   }}
                 </td>
               </tr>
+=======
+>>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
             </tbody>
           </table>
         </div>
@@ -186,13 +217,13 @@
       <div class="mt-6 flex items-center justify-end gap-x-6">
         <button
           type="button"
-          class="rounded-md bg-red-400 px-5.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
+          class="rounded-md bg-red-400 px-5.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200 relative z-50"
         >
           Reject
         </button>
         <button
           type="button"
-          class="rounded-md bg-green-400 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
+          class="rounded-md bg-green-400 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200 relative z-50"
         >
           Approve
         </button>
@@ -202,44 +233,45 @@
 </template>
 
 <script setup>
+<<<<<<< HEAD
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+import { ref, computed, onMounted } from "vue";
+=======
   import { useRouter } from "vue-router";
   import { ref, computed, onMounted } from "vue";
-  import DropdownInput from "@/components/form/DropdownInput.vue";
-  import CalendarInput from "@/components/form/CalendarInput.vue";
-  import TextInput from "@/components/form/TextInput.vue";
+>>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
 
-  const router = useRouter();
-  const staff = ref(null);
-  const claim = ref(null);
-  const loading = ref(true);
-  const error = ref("");
-  const isStored = ref(false); // <-- This flag controls the logic
-  const categories = [
-    "Gadget",
-    "Travel Expenses",
-    "Meals and Entertainment",
-    "Accommodation",
-    "Communication",
-  ];
+import DropdownInput from "@/components/form/DropdownInput.vue";
+import CalendarInput from "@/components/form/CalendarInput.vue";
+import TextInput from "@/components/form/TextInput.vue";
 
-  // Example: Fetching from mock JSON (replace with your API endpoints)
-  onMounted(async () => {
-    loading.value = true;
-    try {
-      // Replace with your actual endpoints or logic
+import { useInvoiceStore } from "@/stores/invoice";
 
-      // const staffRes = await fetch("/api/staff/1"); Makes a network request to your backend API to get staff data.
-      // staff.value = await staffRes.json(); Parses the JSON response and assigns it to your staff ref.
+const router = useRouter();
+const invoiceStore = useInvoiceStore();
 
-      // const staffRes = await fetch("/api/staff/1");
-      // staff.value = await staffRes.json();
+const { invoice, loading, error } = storeToRefs(invoiceStore);
 
-      // const claimRes = await fetch("/api/claims/1");
-      // claim.value = await claimRes.json();
+const isStored = ref(true);
+const dummyStaff_name = ref("John Doe");
 
-      // const claimRes = await fetch("/api/claims/1");
-      // claim.value = await claimRes.json();
+onMounted(async () => {
+const invoiceId = router.currentRoute.value.params.id;
+await invoiceStore.fetchInvoice(invoiceId);
+});
 
+<<<<<<< HEAD
+const totalAmount = computed(() =>
+invoice.value 
+    ? invoice.value.items_services.reduce(
+        (sum, item) => sum + item.quantity * item.unit_price,
+        0,
+    )
+    : 0,
+);
+</script>
+=======
       // Mock data for demonstration
       // ...fetch logic...
       staff.value = { id: "001", name: "John Doe" };
@@ -247,7 +279,7 @@
         id: "001",
         status: "Pending",
         category: "Gadget",
-        date: "06/05/2025",
+        date: "2025-05-06",
         merchantName: "Samsung Store",
         merchantAddress: "123 Main St",
         remark: "For project use",
@@ -273,12 +305,13 @@
     }
   });
 
-  const totalAmount = computed(() =>
-    claim.value
-      ? claim.value.items.reduce(
-          (sum, item) => sum + item.quantity * item.unitPrice,
-          0,
-        )
-      : 0,
-  );
+  //  const totalAmount = computed(() =>
+  //    claim.value
+  //      ? claim.value.items.reduce(
+  //          (sum, item) => sum + item.quantity * item.unitPrice,
+  //          0,
+  //        )
+  //      : 0,
+  //  );
 </script>
+>>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2

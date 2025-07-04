@@ -44,7 +44,7 @@
 
             <NavLink
               name="Upload Receipt"
-              link="/employee/claim/upload"
+              link="/employee/invoice/upload"
               v-if="!route.path.includes('admin')"
             >
             </NavLink>
