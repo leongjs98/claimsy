@@ -126,48 +126,12 @@
             >
               Cancel
             </button>
-            <!-- Hardcoded here might change to dynamic later -->
-            <RouterLink
-              to="/employee/invoice/edit"
-              class="rounded-xl bg-theme-300 px-10 py-2 text-xs font-medium text-white shadow-lg transition-all duration-200 ease-in-out hover:bg-theme-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            <button
+              @click="uploadFile(selectedFiles)"
+              class="cursor-pointer rounded-xl bg-theme-300 px-10 py-2 text-xs font-medium text-white shadow-lg transition-all duration-200 ease-in-out hover:bg-theme-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Upload
-            </RouterLink>
-            <!-- <button -->
-            <!--   @click="uploadFile" -->
-            <!--   :disabled="!selectedFile" -->
-            <!--   class="rounded-xl px-10 py-2 text-xs font-medium text-white shadow-lg transition-all duration-200 ease-in-out" -->
-            <!--   :class="{ -->
-            <!--     'bg-theme-300 hover:bg-theme-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2': -->
-            <!--       selectedFile, -->
-            <!--     'cursor-not-allowed bg-gray-400': !selectedFile, -->
-            <!--   }" -->
-            <!-- > -->
-            <!--   <span class="flex items-center"> -->
-            <!--     <svg -->
-            <!--       v-if="isUploading" -->
-            <!--       class="mr-2 -ml-1 h-4 w-4 animate-spin text-white" -->
-            <!--       xmlns="http://www.w3.org/2000/svg" -->
-            <!--       fill="none" -->
-            <!--       viewBox="0 0 24 24" -->
-            <!--     > -->
-            <!--       <circle -->
-            <!--         class="opacity-25" -->
-            <!--         cx="12" -->
-            <!--         cy="12" -->
-            <!--         r="10" -->
-            <!--         stroke="currentColor" -->
-            <!--         stroke-width="4" -->
-            <!--       ></circle> -->
-            <!--       <path -->
-            <!--         class="opacity-75" -->
-            <!--         fill="currentColor" -->
-            <!--         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" -->
-            <!--       ></path> -->
-            <!--     </svg> -->
-            <!--     {{ isUploading ? "Uploading..." : "Upload" }} -->
-            <!--   </span> -->
-            <!-- </button> -->
+            </button>
           </div>
         </div>
       </div>
@@ -176,7 +140,11 @@
 </template>
 
 <script setup>
+  import axios from "axios";
+  import { useRouter } from "vue-router";
   import { ref } from "vue";
+
+  const router = useRouter();
 
   const isDragging = ref(false);
   const selectedFiles = ref([]);
@@ -213,34 +181,71 @@
     selectedFiles.value = [];
   };
 
-  const uploadFile = async () => {
-    if (selectedFiles.value.length === 0) return;
+  const uploadFile = async (file) => {
+    if (!selectedFiles.value || selectedFiles.value.length === 0) {
+      alert("Please upload a file");
+      return;
+    }
 
-    isUploading.value = true;
+    const formData = new FormData(); //this will give you only the first one
+    for (let i = 0; i < selectedFiles.value.length; i++) {
+      formData.append("files", selectedFiles.value[i]);
+    }
 
     try {
-      //I need to append multiple files but I dont think the receiver is ready for it. Therefore, I make it append one by one for now.
-      //not ready because the receipt details will only generate data from the hardcoded one.
-      const formData = new FormData();
-      selectedFiles.value.forEach((file) => {
-        formData.append("files", file);
+      isUploading.value = true;
+      const { data } = await axios.post(
+        "http://127.0.0.1:8000/employee/analyze/invoice",
+        formData,
+        {
+          headers: {
+            accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      console.log("Raw answers:", data.answers);
+      const itemsServices = [];
+      let firstValid = null;
+
+      let merchant_Names = [];
+      let merchant_Addresses = [];
+      let remarks = [];
+
+      for (const result of data.answers) {
+        if (!result || result.error || !result.items) continue;
+
+        if (result.merchant_name) merchant_Names.push(result.merchant_name);
+        if (result.merchant_address)
+          merchant_Addresses.push(result.merchant_address);
+        if (result.remark) remarks.push(result.remark);
+
+        if (!firstValid) {
+          firstValid = result;
+        }
+
+        itemsServices.push(...result.items);
+      }
+
+      const mergedNames = merchant_Names.join(" | ");
+      const mergedAddresses = merchant_Addresses.join(" | ");
+      const mergedremarks = remarks.join(" | ");
+
+      router.push({
+        path: "/employee/invoice/edit",
+        query: {
+          category: firstValid.category,
+          date: firstValid.date,
+          merchantName: mergedNames,
+          merchantAddress: mergedAddresses,
+          remark: mergedremarks,
+          items: JSON.stringify(itemsServices),
+        },
       });
-
-      // Example upload implementation (uncomment and modify as needed):
-      // const response = await fetch('/api/upload', {
-      //   method: 'POST',
-      //   body: formData
-      // })
-      // const data = await response.json()
-      // console.log('Upload successful:', data)
-
-      // Simulate upload delay
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Clear the form after successful upload
-      selectedFiles.value = [];
-    } catch (error) {
-      console.error("Upload failed:", error);
+    } catch (err) {
+      console.error("Upload failed:", err);
+      alert("LLM analysis unsuccessful");
     } finally {
       isUploading.value = false;
     }

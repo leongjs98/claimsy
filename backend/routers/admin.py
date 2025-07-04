@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from typing import List
 from sqlalchemy.orm import Session
-from db.setup import get_db
+from db.postgresql_setup import get_db
 from db.tables import Invoice as DBInvoice
 from db.tables import Claim as DBClaim
 from db.schemas import InvoiceSchema, ClaimSchema
@@ -126,7 +126,5 @@ async def get_claim_by_id(claim_id: int, db: Session = Depends(get_db)):
 # approved = True, set status approve
 # approved = False, set status reject
 @router.post("/claim/{claim_id}/resolve/{status}", response_model=InvoiceSchema)
-def approve_or_reject_claim(
-        claim_id: int, status: str, db: Session = Depends(get_db)
-):
+def approve_or_reject_claim(claim_id: int, status: str, db: Session = Depends(get_db)):
     return {}
