@@ -52,6 +52,13 @@ python seeder/cleaner.py --table claims
 python seeder/cleaner.py --help
 ```
 
+8. Create MongoDB Vector Store and Save Embeddings (Claim Policy)
+```
+# make sure you in the project root directory (claimsy/)
+python seeder/06_create_vector_store.py
+python seeder/07_save_embeddings.py
+```
+
 ### Frontend
 1. TailwindCSS
 
