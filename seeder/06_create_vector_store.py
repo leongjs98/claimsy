@@ -6,7 +6,7 @@ from langchain_google_genai.embeddings import GoogleGenerativeAIEmbeddings
 from dotenv import load_dotenv
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from backend.db.setup import GEMINI_API_KEY, MONGODB_ATLAS_CLUSTER_URI
+from backend.db.postgresql_setup import GEMINI_API_KEY, MONGODB_ATLAS_CLUSTER_URI
 
 load_dotenv()
 

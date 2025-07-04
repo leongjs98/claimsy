@@ -9,7 +9,7 @@ from datetime import date, timedelta
 from decimal import Decimal
 import hashlib
 from backend.db.tables import Employee
-from backend.db.setup import session
+from backend.db.postgresql_setup import session
 
 NUM_EMPLOYEES = 20
 EMPLOYEE_PASSWORD = "testtest"

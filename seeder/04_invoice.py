@@ -11,7 +11,7 @@ from faker import Faker
 import random
 import json
 from backend.db.tables import Employee, Invoice
-from backend.db.setup import session
+from backend.db.postgresql_setup import session
 
 NUM_INVOICES = 50  # Default value
 MIN_NUM_INVOICES_FOR_EMPLOYEE_ID_1 = 20

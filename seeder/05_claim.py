@@ -14,7 +14,7 @@ from faker import Faker
 from decimal import Decimal
 import random
 from backend.db.tables import Employee, Invoice, Claim
-from backend.db.setup import session
+from backend.db.postgresql_setup import session
 
 fake = Faker()
 

@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from backend.db.tables import Invoice, Claim, Employee, Admin
-from backend.db.setup import session, engine
+from backend.db.postgresql_setup import session, engine
 from sqlalchemy import text
 
 
