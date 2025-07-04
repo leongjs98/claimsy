@@ -7,23 +7,16 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from backend.db.vector_store_setup import (
-    MONGODB_ATLAS_CLUSTER_URI,
-    VECTOR_DB_NAME,
-    ATLAS_VECTOR_SEARCH_INDEX_NAME,
-    COLLECTION_NAME,
-    embeddings,
+    mongodb_collection_setup,
+    client_setup,
+    vector_store_setup,
 )
 
 CLAIM_POLICY_PDF = "./docs/claim_policy.pdf"
-client = MongoClient(MONGODB_ATLAS_CLUSTER_URI)
-MONGODB_COLLECTION = client[VECTOR_DB_NAME][COLLECTION_NAME]
 
-vector_store = MongoDBAtlasVectorSearch(
-    collection=MONGODB_COLLECTION,
-    embedding=embeddings,
-    index_name=ATLAS_VECTOR_SEARCH_INDEX_NAME,
-    relevance_score_fn="cosine",
-)
+client = client_setup()
+vector_store = vector_store_setup(client)
+MONGODB_COLLECTION = mongodb_collection_setup(client)
 
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=500,

@@ -57,6 +57,9 @@ python seeder/cleaner.py --help
 # make sure you in the project root directory (claimsy/)
 python seeder/06_create_vector_store.py
 python seeder/07_save_embeddings.py
+
+# Run this to test asking question about the claim policy
+python seeder/query.py
 ```
 
 ### Frontend
