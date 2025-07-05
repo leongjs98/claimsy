@@ -1,3 +1,4 @@
+<!-- http://localhost:3000/employee/invoice/edit?category=Supplies+and+Equipment&date=2025-05-26&merchantName=UPSENG+HARDWARE+SDN+BHD&merchantAddress=NO.+50,+JALAN+PDR+5,%0AKAWASAN+PERNIAGAAN+DESA+RIA,%0A43300+SERI+KEMBANGAN,+SELANGOR.&remark=Purchased+hardware+supplies+for+office+maintenance.&items=[{%22description%22:%22ANGLE+VALVE+SN2009+(SONO)%22,%22quantity%22:1,%22unit_price%22:15},{%22description%22:%22BIDET+SET+SR-113+(TWINS)%22,%22quantity%22:1,%22unit_price%22:25},{%22description%22:%22WHITE+SEAL+TAPE+(ESIFON)%22,%22quantity%22:1,%22unit_price%22:0.6}] -->
 <!-- assume passing in YYYY-MM-DD format, 2024-12-29 -->
 <template>
   <div>
@@ -204,12 +205,11 @@
   const model = defineModel();
 
   const dateArr = ref<Date[]>([]);
-  const date = ref<Date>(new Date(model));
+  const date = ref<Date>(new Date(model.value));
   const displayMonthDate = ref<Date>(date.value);
   calcDateArrOfMonth(displayMonthDate.value);
 
   watch(model, (newVal) => {
-    console.log(newVal);
     date.value = new Date(newVal);
     displayMonthDate.value = new Date(newVal);
   });
