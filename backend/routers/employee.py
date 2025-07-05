@@ -14,7 +14,6 @@ from langchain.chains.summarize import load_summarize_chain
 from langchain_core.documents import Document
 from pypdf import PdfReader
 
-
 router = APIRouter()
 load_dotenv()
 llm = ChatGoogleGenerativeAI(
@@ -23,8 +22,9 @@ llm = ChatGoogleGenerativeAI(
     api_key=os.getenv("GEMINI_API_KEY"),
 )
 
-
-@router.get("{employee_id}/claim/all", response_model=List[ClaimSchema])
+#TODO: link employee-claim.ts to employee/{employee_id}/claim/all
+# connect two table claims + invoice
+@router.get("/{employee_id}/claim/all", response_model=List[ClaimSchema])
 def get_all_claims(employee_id: int, db: Session = Depends(get_db)):
     try:
         claims = db.query(DBClaim).filter(DBClaim.employee_id == employee_id).all()

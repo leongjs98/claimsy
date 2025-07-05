@@ -1,11 +1,24 @@
 <!-- Employee Claim -->
 <template>
-  <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
-    <EmployeeClaimsCard
-      :totalCount="totalCount"
-      :approvedCount="approvedCount"
-      :rejectedCount="rejectedCount"
-    />
+    <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
+    <!-- Loading State -->
+    <div v-if="claimStore.loading" class="flex justify-center py-8">
+      <div class="text-lg">Loading claims...</div>
+    </div>
+
+    <!-- Error State -->
+    <div v-if="claimStore.error" class="mx-4 p-4 bg-red-100 text-red-700 rounded">
+      {{ claimStore.error }}
+    </div>
+
+    <!-- Main Content -->
+    <div v-else>
+      <EmployeeClaimsCard
+        :totalCount="totalCount"
+        :approvedCount="approvedCount"
+        :rejectedCount="rejectedCount"
+      />
+
     <div class="mt-4 mb-2"></div>
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
@@ -95,8 +108,8 @@
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
               <tr
-                v-for="(expense, index) in sortedExpenses"
-                :key="expense.Id"
+                v-for="(claim, index) in sortedExpenses"
+                :key="claim.id"
                 class="shadow-md"
               >
                 <td
@@ -109,23 +122,23 @@
                 </td>
                 <!-- <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">{{ person.Name }}</td> -->
                 <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                  {{ expense.Id }}
+                  {{ claim.claim_number }}
                 </td>
                 <td
                   class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
                 >
-                  {{ expense.Date }}
+                  {{ formatDate(claim.submitted_date) }}
                 </td>
                 <td
                   class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
                 >
-                  {{ expense.Quantity }}
+                  {{ claim.Items?.length || 0 }}
                 </td>
                 <td
                   class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
                 >
                   {{
-                    expense.Total.toLocaleString("en-US", {
+                      claim.claim_amount.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })
@@ -135,7 +148,7 @@
                 <td
                   class="px-4 py-4 text-center text-sm font-semibold whitespace-nowrap"
                 >
-                  <StatusBadge :status="expense.Status" />
+                  <StatusBadge :status="claim.status" />
                 </td>
                 <td
                   :class="[
@@ -145,7 +158,7 @@
                 >
                   <button
                     class="text-theme-300 hover:underline"
-                    @click="openDetails(expense)"
+                    @click="openDetails(claim)"
                   >
                     Details
                   </button>
@@ -157,12 +170,13 @@
       </div>
     </div>
   </div>
+</div>
 
   <ClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
 </template>
 
 <script setup>
-  import { ref } from "vue";
+  import { ref, computed, onMounted } from "vue";
   import { storeToRefs } from "pinia";
   import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
 
@@ -174,17 +188,25 @@
     totalCount,
     approvedCount,
     rejectedCount,
-    getExpensesByDateAsc,
-    getExpensesByDateDesc,
+    getClaimsByDateAsc, 
+    getClaimsByDateDesc,
   } = storeToRefs(claimStore);
 
   const sortedExpenses = computed(() => {
     return sortDateAsc.value
-      ? claimStore.getExpensesByDateAsc
-      : claimStore.getExpensesByDateDesc;
+      ? claimStore.getClaimsByDateAsc  // Updated to match store getters
+      : claimStore.getClaimsByDateDesc;
   });
+
+  // helper function
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString('en-GB'); // DD/MM/YYYY format
+  };
+
   onMounted(async () => {
-    claimStore.initStore();
+    const employeeId = 1; // Get this from your auth system
+    await claimStore.initStore(employeeId); // Pass employee ID
   });
 
   const openDetails = (expense) => {

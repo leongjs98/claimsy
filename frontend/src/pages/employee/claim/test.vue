@@ -1,24 +1,11 @@
 <template>
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
     <!-- Cards Row -->
-    <EmployeeClaimsCard 
-      :totalCount="claimStore.totalCount" 
-      :approvedCount="claimStore.approvedCount" 
-      :rejectedCount="claimStore.rejectedCount" 
+    <EmployeeClaimsCard
+      :totalCount="totalCount"
+      :approvedCount="approvedCount"
+      :rejectedCount="rejectedCount"
     />
-
-    <!-- Loading state -->
-    <div v-if="claimStore.loading" class="flex justify-center items-center py-8">
-      <div class="text-lg text-gray-600">Loading claims...</div>
-    </div>
-    <!-- Error handling -->
-    <div v-if="claimStore.error" class="mx-4 my-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-      <p>{{ claimStore.error }}</p>
-      <button @click="claimStore.clearError()" class="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-        Clear Error
-      </button>
-    </div>
-
     <!-- Expenses Table -->
     <div class="mt-4 mb-2"></div>
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
@@ -80,7 +67,7 @@
                         >
                           <div class="py-1" role="none">
                             <button
-                              v-for="cat in claimStore.categories"
+                              v-for="cat in categories"
                               :key="cat"
                               @click="
                                 selectedCategory = cat;
@@ -183,8 +170,8 @@
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
               <tr
-                v-for="(product, index) in sortedClaims"
-                :key="claim.id"
+                v-for="(product, index) in sortedExpenses"
+                :key="product.Name"
                 class="shadow-md"
               >
                 <td
@@ -199,35 +186,35 @@
                 <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                   <div class="flex flex-col">
                     <span class="font-medium text-gray-900">{{
-                      claim.claim_type
+                      product.Name
                     }}</span>
                     <span class="text-xs text-gray-500">{{
-                      claim.claim_type
+                      product.Category
                     }}</span>
                   </div>
                 </td>
                 <td
                   class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
                 >
-                  {{ claim.submitted_date }}
+                  {{ product.Date }}
                 </td>
                 <td
                   class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
                 >
-                  {{ claim.Items?.length || 0 }}
+                  {{ product.Item }}
                 </td>
                 <td class="w-32 px-3 py-4 text-sm text-gray-500">
                   <span
                     class="block w-48 truncate overflow-hidden text-ellipsis"
                   >
-                    {{ claim.reason }}
+                    {{ product.Remark }}
                   </span>
                 </td>
 
                 <td
                   class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
                 >
-                  {{ formatCurrency(claim.claim_amount) }}
+                  {{ product.Total }}
                 </td>
                 <td
                   :class="[
@@ -238,8 +225,8 @@
                   <div class="flex items-center justify-center">
                     <input
                       type="checkbox"
-                      :value="claim"
-                      v-model="selectedClaims"
+                      :value="product"
+                      v-model="selectedExpenses"
                       :id="`checkbox-product-${index}`"
                       class="checkbox-input sr-only"
                     />
@@ -264,202 +251,51 @@
         </div>
       </div>
     </div>
+    <!-- Submit Button -->
     <div class="flex justify-center px-4 sm:px-8 lg:px-14">
       <button
-        class="hover:bg-theme-400 z-20 mt-4 rounded bg-theme-300 px-4 py-2 text-white"
-        :disabled="selectedClaims.length === 0"
-        Submit ({{ selectedClaims.length }})
-        @click="openDialog = true"
+        class="hover:bg-theme-400 mt-4 rounded bg-theme-300 px-4 py-2 text-white"
+        :disabled="selectedExpenses.length === 0"
+        @click="submitForApproval"
       >
         Submit
       </button>
     </div>
   </div>
-  <div>
-    <div
-      v-show="openDialog"
-      class="relative z-30"
-      aria-labelledby="dialog-title"
-      role="dialog"
-      aria-modal="true"
-    >
-      <Transition name="backdrop">
-        <div
-          class="fixed inset-0 bg-gray-500/75 transition-opacity"
-          aria-hidden="true"
-        ></div>
-      </Transition>
+      <!-- Success Dialog -->
+    <div v-if="showDialog" class="relative z-10" aria-labelledby="dialog-title" role="dialog" aria-modal="true">
+      <!-- Background backdrop -->
+      <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
 
-      <Transition name="pane">
-        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div
-            class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
-          >
-            <div
-              class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
-            >
-              <div>
-                <div
-                  class="mx-auto flex size-12 items-center justify-center rounded-full bg-green-100"
-                >
-                  <svg
-                    class="size-6 text-green-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    aria-hidden="true"
-                    data-slot="icon"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="m4.5 12.75 6 6 9-13.5"
-                    />
-                  </svg>
-                </div>
-                <div class="mt-3 text-center sm:mt-5">
-                  <h3
-                    class="text-base font-semibold text-gray-900"
-                    id="dialog-title"
-                  >
-                    Submission successful
-                  </h3>
-                  <div class="mt-2">
-                    <p class="text-sm text-gray-500">
-                      Successfully submitted {{ selectedClaims.length }} claims for approval.
-                    </p>
-                  </div>
-                </div>
+      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <!-- Dialog panel -->
+          <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
+            <div>
+              <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-green-100">
+                <svg class="size-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
               </div>
-              <div class="mt-5 sm:mt-6">
-                <button
-                  @click="openDialog = false"
-                  type="button"
-                  class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Go back
-                </button>
+              <div class="mt-3 text-center sm:mt-5">
+                <h3 class="text-base font-semibold text-gray-900" id="dialog-title">Submission Successful</h3>
+                <p class="mt-2 text-sm text-gray-500">Your submission is pending for approval.</p>
               </div>
+            </div>
+            <div class="mt-5 sm:mt-6">
+              <button
+                @click="showDialog = false"
+                type="button"
+                class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>
-      </Transition>
+      </div>
     </div>
-  </div>
 </template>
-
-<script setup>
-import { ref, computed, onMounted } from "vue";
-import { useEmployeeClaimStore } from "@/stores/employee-claim.ts";
-
-// Pinia store
-const claimStore = useEmployeeClaimStore();
-
-// Reactive data
-const sortKey = ref("Date");
-const sortAsc = ref(false);
-const showCategoryDropdown = ref(false);
-const selectedCategory = ref("All");
-const selectedClaims = ref([]);
-const openDialog = ref(false);
-
-// Initialize store when component mounts
-onMounted(async () => {
-  const employeeId = 1; // Get this from your auth system, route params, or props
-  await claimStore.initStore(employeeId);
-});
-
-// Helper functions
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-GB'); // DD/MM/YYYY format
-}
-
-function formatCurrency(amount) {
-  return new Intl.NumberFormat('en-MY', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(amount);
-}
-
-function getCategoryFromType(claimType) {
-  // Map claim types to categories
-  const categoryMap = {
-    'Travel': 'Travel Expenses',
-    'Accommodation': 'Accommodation', 
-    'Meals': 'Meals and Entertainment',
-    'Office': 'Office Supplies and Equipment',
-    'Medical': 'Medical Claim'
-  };
-  return categoryMap[claimType] || 'Other';
-}
-
-// Computed properties
-const filteredClaims = computed(() => {
-  if (selectedCategory.value === "All") {
-    return claimStore.claims;
-  }
-  
-  return claimStore.claims.filter(claim => {
-    const category = getCategoryFromType(claim.claim_type);
-    return category.toLowerCase() === selectedCategory.value.toLowerCase();
-  });
-});
-
-const sortedClaims = computed(() => {
-  if (sortKey.value === "Date") {
-    return filteredClaims.value.slice().sort((a, b) => {
-      const dateA = new Date(a.submitted_date);
-      const dateB = new Date(b.submitted_date);
-      return sortAsc.value ? dateA - dateB : dateB - dateA;
-    });
-  }
-  return filteredClaims.value;
-});
-
-// Methods
-function setSort(key) {
-  if (key === "Date") {
-    if (sortKey.value === key) {
-      sortAsc.value = !sortAsc.value;
-    } else {
-      sortKey.value = key;
-      sortAsc.value = true;
-    }
-  }
-}
-
-function handleDialogClose() {
-  openDialog.value = false;
-  selectedClaims.value = []; // Clear selections after submission
-}
-
-// Optional: Refresh data function
-async function refreshClaims() {
-  await claimStore.refreshClaims();
-}
-
-// Optional: Submit selected claims function
-async function submitSelectedClaims() {
-  try {
-    // Here you can add logic to update claim status or create submissions
-    console.log('Submitting claims:', selectedClaims.value);
-    
-    // Example: Update each selected claim status to 'submitted'
-    for (const claim of selectedClaims.value) {
-      await claimStore.updateClaim(claim.id, { 
-        status: 'submitted',
-        reviewed_date: new Date()
-      });
-    }
-    
-    openDialog.value = true;
-  } catch (error) {
-    console.error('Failed to submit claims:', error);
-  }
-}
-</script>
 
 <style scoped>
   /* The expanding fill element */
@@ -487,4 +323,178 @@ async function submitSelectedClaims() {
     height: 100%;
     /* Expands to fill the container height */
   }
+
 </style>
+
+<script setup>
+  import { ref, computed } from "vue";
+
+  const sortKey = ref("Date");
+  const sortAsc = ref(false);
+  const showCategoryDropdown = ref(false);
+  const showDialog = ref(false);
+
+  function submitForApproval() {
+    if (selectedExpenses.value.length > 0) {
+      showDialog.value = true
+      console.log('Dialog should show now:', 
+      showDialog.value);
+    }
+  }
+
+  const expenses = [
+    {
+      ClaimID: "C0001",
+      Name: "Laptop",
+      Category: "Office Supplies and Equipment",
+      Date: "30/01/2025",
+      Item: "6",
+      Remark: "Dell 1.35GHz 8GB 256GB SSD - for new employee sasascdavadfa",
+      Total: "48,285.00",
+      Status: "Approved",
+    },
+    {
+      ClaimID: "C0002",
+      Name: "Whiteboard 4x6ft",
+      Category: "Office Supplies and Equipment",
+      Date: "21/02/2025",
+      Item: "2",
+      Remark: "for training room",
+      Total: "1,200.00",
+      Status: "Approved",
+    },
+    {
+      ClaimID: "C0003",
+      Name: "Meeting at Damansara",
+      Category: "Travel Expenses",
+      Date: "29/03/2025",
+      Item: "1",
+      Remark: "Lunch with client",
+      Total: "150.00",
+      Status: "Rejected",
+    },
+    {
+      ClaimID: "C0004",
+      Name: "Lunch",
+      Category: "Meals and Entertainment",
+      Date: "29/03/2025",
+      Item: "10",
+      Remark: "team lunch",
+      Total: "250.00",
+      Status: "Rejected",
+    },
+    {
+      ClaimID: "C0005",
+      Name: "Dinner",
+      Category: "Meals and Entertainment",
+      Date: "18/05/2025",
+      Item: "6",
+      Remark: "Sales team dinner",
+      Total: "138.00",
+      Status: "Rejected",
+    },
+    {
+      ClaimID: "C0006",
+      Name: "Stationery",
+      Category: "Office Supplies and Equipment",
+      Date: "12/06/2025",
+      Item: "15",
+      Remark: "for new employee",
+      Total: "1,000.00",
+      Status: "Approved",
+    },
+    {
+      ClaimID: "C0007",
+      Name: "Flight to Penang",
+      Category: "Travel Expenses",
+      Date: "29/07/2025",
+      Item: "2",
+      Remark: "Flight tickets for conference",
+      Total: "1,200.00",
+      Status: "Approved",
+    },
+
+    {
+      ClaimID: "C0008",
+      Name: "Hotel at Penang",
+      Category: "Accomodation",
+      Date: "29/08/2025",
+      Item: "2",
+      Remark: "Company conference",
+      Total: "2,500.00",
+      Status: "Pending",
+    },
+  ];
+
+  const categories = [
+    "All",
+    "Travel Expenses",
+    "Accomodation",
+    "Meals and Entertainment",
+    "Office Supplies and Equipment",
+    "Medical Claim",
+  ];
+
+  const selectedCategory = ref("All");
+
+  const selectedExpenses = ref([]); // store selected expense indexes or IDs
+
+  //sort by date in descending order (default)
+  function parseDate(dateStr) {
+    // Converts "DD/MM/YYYY" to a Date object
+    const [day, month, year] = dateStr.split("/");
+    return new Date(`${year}-${month}-${day}`);
+  }
+
+  const filteredExpenses = computed(() =>
+    selectedCategory.value === "All"
+      ? expenses
+      : expenses.filter(
+          (e) =>
+            e.Category &&
+            e.Category.toLowerCase() === selectedCategory.value.toLowerCase(),
+        ),
+  );
+
+  const sortedExpenses = computed(() => {
+    // Only sort by Date, otherwise keep original order
+    if (sortKey.value === "Date") {
+      return filteredExpenses.value.slice().sort((a, b) => {
+        const dateA = parseDate(a.Date);
+        const dateB = parseDate(b.Date);
+        return sortAsc.value ? dateA - dateB : dateB - dateA;
+      });
+    }
+    return filteredExpenses.value;
+  });
+
+  function setSort(key) {
+    if (key === "Date") {
+      if (sortKey.value === key) {
+        sortAsc.value = !sortAsc.value;
+      } else {
+        sortKey.value = key;
+        sortAsc.value = true;
+      }
+    }
+  }
+
+  const totalCount = computed(() => {
+    const ids = new Set(expenses.map((e) => e.ClaimID));
+    return ids.size;
+  });
+
+  const approvedCount = computed(() => {
+    const ids = new Set(
+      expenses.filter((e) => e.Status === "Approved").map((e) => e.ClaimID),
+    );
+    return ids.size;
+  });
+
+  const rejectedCount = computed(() => {
+    const ids = new Set(
+      expenses.filter((e) => e.Status === "Rejected").map((e) => e.ClaimID),
+    );
+    return ids.size;
+  });
+</script>
