@@ -12,20 +12,12 @@ import random
 import json
 from backend.db.tables import Employee, Invoice
 from backend.db.postgresql_setup import session
+from backend.db.values import categories
 
 NUM_INVOICES = 50  # Default value
 MIN_NUM_INVOICES_FOR_EMPLOYEE_ID_1 = 20
 
 fake = Faker()
-
-categories = (
-    "Supplies and Equipment",
-    "Travel",
-    "Meals & Entertaiment",
-    "Accommodation",
-    "Medical",
-)
-
 
 def create_invoice_data(i, employee_ids):
     """Create fake invoice data"""

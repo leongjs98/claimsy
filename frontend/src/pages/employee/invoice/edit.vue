@@ -24,16 +24,17 @@
 
         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div class="sm:col-span-3">
+            <!-- Make sure category matches with categories in /backend/db/values.py -->
             <DropdownInput
               label="Category"
               name="category"
               id="categoryID"
               :options="[
-                'Gadget',
+                'Supplies and Equipment',
                 'Travel Expenses',
-                'Meals and Entertainment',
+                'Medical Expenses',
+                'Meals & Entertaiment',
                 'Accommodation',
-                'Communication',
               ]"
               v-model="formData.category"
             />

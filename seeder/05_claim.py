@@ -15,6 +15,7 @@ from decimal import Decimal
 import random
 from backend.db.tables import Employee, Invoice, Claim
 from backend.db.postgresql_setup import session
+from backend.db.values import categories
 
 fake = Faker()
 
@@ -44,14 +45,8 @@ def seed_claims():
     """Seed the database with fake claims"""
 
     try:
-        claim_types = [
-            "Medical",
-            "Travel",
-            "Equipment",
-            "Training",
-            "Meal",
-            "Transportation",
-        ]
+        claim_types = list(categories)
+        claim_types.append("Mixed")
         statuses = ["pending", "approved", "rejected"]
 
         for i in range(NUM_CLAIMS):
