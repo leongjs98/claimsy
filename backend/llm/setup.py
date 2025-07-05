@@ -6,6 +6,7 @@ from typing import Literal
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import ChatPromptTemplate
+from db.values import categories
 
 
 load_dotenv()
@@ -23,13 +24,7 @@ class ItemRow(BaseModel):
 
 
 class InvoiceInfo(BaseModel):
-    category: Literal[
-        "Gadget",
-        "Travel Expenses",
-        "Meals and Entertainment",
-        "Accomodation",
-        "Communication",
-    ] = Field(description="Type of invoice")
+    category: Literal[*categories] = Field(description="Type of invoice")
     date: str = Field(description="Date of the invoice in YYYY-MM-DD format")
     merchant_name: str = Field(description="Name of the shop or service provider")
     merchant_address: str = Field(description="Address of the merchant")
@@ -47,7 +42,7 @@ prompt_extract_invoice_info = ChatPromptTemplate.from_messages([
 
             Always return the result in the following JSON format:
 
-            - category: ONLY output in any of these 5 categories: Gadget, Travel Expenses, Meals and Entertainment, Accomodation, Communication
+            - category: ONLY output in any of these 5 categories: Supplies and Equipment, Travel Expenses, Medical Expenses, Meals & Entertaiment, Accommodation
             - date: In the format of YYYY-MM-DD, e.g. 2023-02-09, 2024-06-29
             - merchant_name
             - merchant_address
