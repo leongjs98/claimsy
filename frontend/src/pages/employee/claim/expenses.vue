@@ -166,13 +166,13 @@
                   </button>
                 </th>
                 <th class="px-3 py-3.5 text-center text-sm font-semibold">
-                  Quantity
+                  Merchant
                 </th>
                 <th class="w-48 px-3 py-3.5 text-left text-sm font-semibold">
                   Remark
                 </th>
                 <th class="px-3 py-3.5 text-right text-sm font-semibold">
-                  Total (RM)
+                  Invoice #
                 </th>
                 <th
                   class="w-48 rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold"
@@ -183,14 +183,14 @@
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
               <tr
-                v-for="(product, index) in sortedClaims"
-                :key="claim.id"
+                v-for="(invoice, index) in sortedInvoices"
+                :key="invoice.id"
                 class="shadow-md"
               >
                 <td
                   :class="[
                     'py-4 pr-3 pl-4 text-right text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6',
-                    index === sortedExpenses.length - 1 ? 'rounded-bl-lg' : '',
+                    index === sortedInvoices.length - 1 ? 'rounded-bl-lg' : '',
                   ]"
                 >
                   {{ index + 1 }}
@@ -199,54 +199,52 @@
                 <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                   <div class="flex flex-col">
                     <span class="font-medium text-gray-900">{{
-                      claim.claim_type
+                      invoice.category
+                    }}</span>
+                    <span class="text-xs text-gray-500">
+                      Claim #{{ getClaimNumber(invoice.claim_id) }}
+                    </span>
+                  </div>
+                </td>
+                <td class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500">
+                  {{ formatDate(invoice.invoice_date) }}
+                </td>
+                <td class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500">
+                  <div class="flex flex-col">
+                    <span class="font-medium text-gray-900">{{
+                      invoice.merchant_name
                     }}</span>
                     <span class="text-xs text-gray-500">{{
-                      claim.claim_type
+                      truncateString(invoice.merchant_address, 25)
                     }}</span>
                   </div>
                 </td>
-                <td
-                  class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
-                >
-                  {{ claim.submitted_date }}
-                </td>
-                <td
-                  class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
-                >
-                  {{ claim.Items?.length || 0 }}
-                </td>
                 <td class="w-32 px-3 py-4 text-sm text-gray-500">
-                  <span
-                    class="block w-48 truncate overflow-hidden text-ellipsis"
-                  >
-                    {{ claim.reason }}
+                  <span class="block w-48 truncate overflow-hidden text-ellipsis" :title="invoice.remark">
+                    {{ invoice.remark || 'No remark' }}
                   </span>
                 </td>
-
-                <td
-                  class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
-                >
-                  {{ formatCurrency(claim.claim_amount) }}
+                <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500">
+                  {{ invoice.invoice_number }}
                 </td>
                 <td
                   :class="[
                     'min-h-[69px] px-4 py-4 text-center text-sm whitespace-nowrap text-amber-500',
-                    index === sortedExpenses.length - 1 ? 'rounded-br-lg' : '',
+                    index === sortedInvoices.length - 1 ? 'rounded-br-lg' : '',
                   ]"
                 >
                   <div class="flex items-center justify-center">
                     <input
                       type="checkbox"
-                      :value="claim"
-                      v-model="selectedClaims"
-                      :id="`checkbox-product-${index}`"
+                      :value="invoice"
+                      v-model="selectedInvoices"
+                      :id="`checkbox-invoice-${index}`"
                       class="checkbox-input sr-only"
                     />
 
                     <!-- Visual representation of the checkbox -->
                     <label
-                      :for="`checkbox-product-${index}`"
+                      :for="`checkbox-invoice-${index}`"
                       class="checkbox-label relative flex h-6 w-6 cursor-pointer items-center justify-center overflow-hidden rounded-md border-1 border-theme-200 transition-colors ease-in-out hover:border-theme-300 focus:border-theme-300"
                     >
                       <!-- The expanding fill element -->
@@ -267,11 +265,10 @@
     <div class="flex justify-center px-4 sm:px-8 lg:px-14">
       <button
         class="hover:bg-theme-400 z-20 mt-4 rounded bg-theme-300 px-4 py-2 text-white"
-        :disabled="selectedClaims.length === 0"
-        Submit ({{ selectedClaims.length }})
+        :disabled="selectedInvoices.length === 0"
         @click="openDialog = true"
       >
-        Submit
+        Submit ({{ selectedInvoices.length }})
       </button>
     </div>
   </div>
@@ -327,7 +324,7 @@
                   </h3>
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
-                      Successfully submitted {{ selectedClaims.length }} claims for approval.
+                      Successfully submitted {{ selectedInvoices.length }} invoices for approval.
                     </p>
                   </div>
                 </div>
@@ -351,7 +348,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { useEmployeeClaimStore } from "@/stores/employee-claim.ts";
+import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
 
 // Pinia store
 const claimStore = useEmployeeClaimStore();
@@ -361,7 +358,7 @@ const sortKey = ref("Date");
 const sortAsc = ref(false);
 const showCategoryDropdown = ref(false);
 const selectedCategory = ref("All");
-const selectedClaims = ref([]);
+const selectedInvoices = ref([]);
 const openDialog = ref(false);
 
 // Initialize store when component mounts
@@ -395,28 +392,57 @@ function getCategoryFromType(claimType) {
   return categoryMap[claimType] || 'Other';
 }
 
+//Get all invoices from all claims
+const allInvoices = computed(() => {
+  const invoices = [];
+  claimStore.claims.forEach(claim => {
+    if (claim.Items && claim.Items.length > 0) {
+      claim.Items.forEach(invoice => {
+        invoices.push({
+          ...invoice,
+          claim_number: claim.claim_number // Add claim reference
+        });
+      });
+    }
+  });
+  return invoices;
+});
+
 // Computed properties
-const filteredClaims = computed(() => {
+const filteredInvoices = computed(() => {
   if (selectedCategory.value === "All") {
-    return claimStore.claims;
+    return allInvoices.value;
   }
   
-  return claimStore.claims.filter(claim => {
-    const category = getCategoryFromType(claim.claim_type);
-    return category.toLowerCase() === selectedCategory.value.toLowerCase();
+  return allInvoices.value.filter(invoice => {
+    return invoice.category.toLowerCase() === selectedCategory.value.toLowerCase();
   });
 });
 
-const sortedClaims = computed(() => {
+const sortedInvoices = computed(() => {
   if (sortKey.value === "Date") {
-    return filteredClaims.value.slice().sort((a, b) => {
-      const dateA = new Date(a.submitted_date);
-      const dateB = new Date(b.submitted_date);
+    return filteredInvoices.value.slice().sort((a, b) => {
+      const dateA = new Date(a.invoice_date);
+      const dateB = new Date(b.invoice_date);
       return sortAsc.value ? dateA - dateB : dateB - dateA;
     });
   }
-  return filteredClaims.value;
+  return filteredInvoices.value;
 });
+//Helper function to get claim number
+function getClaimNumber(claimId) {
+  const claim = claimStore.claims.find(c => c.id === claimId);
+  return claim ? claim.claim_number : 'Unknown';
+}
+
+//Helper function to truncate strings
+function truncateString(str, maxLength = 30) {
+  if (!str) return '';
+  if (str.length > maxLength) {
+    return str.substring(0, maxLength - 3) + "...";
+  }
+  return str;
+}
 
 // Methods
 function setSort(key) {
@@ -432,7 +458,7 @@ function setSort(key) {
 
 function handleDialogClose() {
   openDialog.value = false;
-  selectedClaims.value = []; // Clear selections after submission
+  selectedInvoices.value = []; // Clear selections after submission
 }
 
 // Optional: Refresh data function
@@ -441,13 +467,13 @@ async function refreshClaims() {
 }
 
 // Optional: Submit selected claims function
-async function submitSelectedClaims() {
+async function submitSelectedInvoices() {
   try {
     // Here you can add logic to update claim status or create submissions
-    console.log('Submitting claims:', selectedClaims.value);
+    console.log('Submitting invoice:', selectedInvoices.value);
     
-    // Example: Update each selected claim status to 'submitted'
-    for (const claim of selectedClaims.value) {
+    // Example: Update each selected invoice status to 'submitted'
+    for (const invoice of selectedInvoices.value) {
       await claimStore.updateClaim(claim.id, { 
         status: 'submitted',
         reviewed_date: new Date()

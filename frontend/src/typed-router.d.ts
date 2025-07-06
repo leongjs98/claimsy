@@ -35,7 +35,6 @@ declare module 'vue-router/auto-routes' {
     '/ask-claimsy/smart-suggest/travel-transport': RouteRecordInfo<'/ask-claimsy/smart-suggest/travel-transport', '/ask-claimsy/smart-suggest/travel-transport', Record<never, never>, Record<never, never>>,
     '/employee/claim/all': RouteRecordInfo<'/employee/claim/all', '/employee/claim/all', Record<never, never>, Record<never, never>>,
     '/employee/claim/approved': RouteRecordInfo<'/employee/claim/approved', '/employee/claim/approved', Record<never, never>, Record<never, never>>,
-    '/employee/claim/dialogtest': RouteRecordInfo<'/employee/claim/dialogtest', '/employee/claim/dialogtest', Record<never, never>, Record<never, never>>,
     '/employee/claim/edit': RouteRecordInfo<'/employee/claim/edit', '/employee/claim/edit', Record<never, never>, Record<never, never>>,
     '/employee/claim/expenses': RouteRecordInfo<'/employee/claim/expenses', '/employee/claim/expenses', Record<never, never>, Record<never, never>>,
     '/employee/claim/rejected': RouteRecordInfo<'/employee/claim/rejected', '/employee/claim/rejected', Record<never, never>, Record<never, never>>,

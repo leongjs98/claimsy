@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from db.setup import get_db
 from db.tables import Claim as DBClaim
+from db.tables import Invoice as DBInvoice
 from db.schemas import ClaimSchema, InvoiceSchema
 
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -28,6 +29,10 @@ llm = ChatGoogleGenerativeAI(
 def get_all_claims(employee_id: int, db: Session = Depends(get_db)):
     try:
         claims = db.query(DBClaim).filter(DBClaim.employee_id == employee_id).all()
+
+        for claim in claims:
+            claim.Items = db.query(DBInvoice).filter(DBInvoice.claim_id == claim.id).all()
+
         return claims
     except Exception as e:
         raise HTTPException(
@@ -109,8 +114,26 @@ def submit_invoices_into_claims(employee_id: int, db: Session = Depends(get_db))
 
 # TODO: complete API {employee_id}/invoice/{invoice_id}
 # show invoice details in employee/claim/edit
-@router.get("{employee_id}/invoice/{invoice_id}", response_model=InvoiceSchema)
+@router.get("/{employee_id}/invoice/{invoice_id}", response_model=InvoiceSchema)
 def get_invoice_details(
     employee_id: int, invoice_id: int, db: Session = Depends(get_db)
 ):
     return {}
+
+@router.get("/{employee_id}/invoice/all", response_model=List[InvoiceSchema])
+def get_all_invoices_for_employee(
+    employee_id: int, db: Session = Depends(get_db)
+):
+    try:
+        # Query all invoices for the employee
+        invoices = db.query(DBInvoice).filter(
+            DBInvoice.employee_id == employee_id
+        ).order_by(DBInvoice.invoice_date.desc()).all()
+        
+        return invoices
+        
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal Server Error: Could not retrieve invoices. {str(e)}",
+        )

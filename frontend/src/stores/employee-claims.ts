@@ -196,7 +196,7 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
 
     // Initialize store with employee ID
     // Initialize store with employee ID
-    async initStore(employeeId: number = 1) { // Add default value
+    async initStore(employeeId: number = 2) { // Add default value
       this.initializeCategories();
       await this.fetchClaimsByEmployee(employeeId);
     },
