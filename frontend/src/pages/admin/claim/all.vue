@@ -104,7 +104,7 @@
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
                   v-for="(claim, index) in claims"
-                  :key="claim.email"
+                  :key="claim.claim_number "
                   class="shadow-md"
                 >
                   <td
@@ -115,39 +115,39 @@
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                     <div class="flex flex-col">
                       <span class="font-medium text-gray-900">
-                        {{ claim.Name }}
+                        {{ claim.employee?.name }}
                       </span>
                       <span class="text-xs text-gray-500">
-                        {{ claim.title }}
+                        {{ claim.claim_type }}
                       </span>
                     </div>
                   </td>
                   <td
                     class="w-fit px-3 py-4 text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{ claim.email }}
+                    {{ claim.employee?.email }}
                   </td>
                   <td
                     class="w-fit px-3 py-4 text-sm font-semibold whitespace-nowrap"
                   >
                     <div class="flex items-center justify-start gap-2">
-                      <StatusBadge :status="claim.Status" />
-                      <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
-                      <StatusBadge v-show="claim.IsFraud" status="Fraud" />
+                      <StatusBadge :status="claim.status" />
+                      <!-- <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
+                      <StatusBadge v-show="claim.IsFraud" status="Fraud" /> -->
                     </div>
                   </td>
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                    {{ claim.Date }}
+                    {{ formatDate(claim.submitted_date) }}
                   </td>
                   <td
                     class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{ claim.items ? claim.items.length : 0 }}
+                    {{ countItems(claim) }}
                   </td>
                   <td
                     class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{ claim.Total }}
+                    {{ formatCurrency(claim.claim_amount)  }}
                   </td>
                   <td
                     class="px-4 py-4 text-right text-sm whitespace-nowrap text-theme-300"
@@ -172,7 +172,7 @@
 </template>
 
 <script setup>
-  import { ref, computed } from "vue";
+  import { ref, computed, onMounted  } from "vue";
   import { storeToRefs } from "pinia";
   import { useAdminClaimStore } from "@/stores/admin-claims.ts";
 
@@ -180,12 +180,30 @@
   const { claims } = storeToRefs(adminClaims);
 
   onMounted(async () => {
-    await adminClaims.initStore();
+    await adminClaims.initializeAdminClaimStore();
   });
 
   const sortAsc = ref(false);
   const showDialog = ref(false);
   const selectedClaim = ref(null);
+
+  const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const countItems = (claim) => {
+  if (!claim.invoices) return 0;
+  return claim.invoices.reduce((total, invoice) => {
+    return total + (invoice.itemsServices?.length || 0);
+  }, 0);
+  };
+
+  const formatCurrency = (amount) => {
+  if (amount === null || amount === undefined) return 'RM 0.00';
+  return `RM ${amount.toFixed(2)}`;
+  };
 
   const openDetails = (claim) => {
     selectedClaim.value = claim;

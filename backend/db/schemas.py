@@ -43,6 +43,11 @@ class ClaimStatus(str, Enum):
     APPROVED = "approved"
     REJECTED = "rejected"
 
+class EmployeeScheme (BaseModel):
+    employee_id: Optional[str] = None
+    name: Optional[str] = None
+    email: Optional[str] = None  
+
 class ClaimSchema(BaseModel):
     id: int
     claim_number: str
@@ -57,6 +62,7 @@ class ClaimSchema(BaseModel):
     created_at: datetime
     updated_at: datetime
     invoices: List[InvoiceSchema] = [] 
+    employee: Optional[EmployeeScheme] = None
     
     class Config:
         from_attributes = True

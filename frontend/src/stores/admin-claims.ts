@@ -26,6 +26,12 @@ interface InvoiceResponseSchema {
 type ClaimStatusType = "pending" | "approved" | "rejected";
 
 
+interface EmployeeScheme {
+  employee_id?: string
+  name?: string;
+  email?: string;
+}
+
 interface ClaimResponseSchema { 
   id: number;
   claim_number: string; 
@@ -40,9 +46,10 @@ interface ClaimResponseSchema {
   created_at: string;         
   updated_at: string;         
   invoices: InvoiceResponseSchema[]; 
+  employee?: EmployeeScheme
   // is_anomaly?: boolean; // Uncomment if added to backend ClaimSchema
   // is_fraud?: boolean;   // Uncomment if added to backend ClaimSchema
-}
+} 
 
 
 function filterClaimsByStatus(claims: ClaimResponseSchema[], status: string): ClaimResponseSchema[] {

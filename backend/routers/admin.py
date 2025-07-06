@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session, joinedload
 from db.setup import get_db
 from db.tables import Invoice as DBInvoice
 from db.tables import Claim as DBClaim
-from db.schemas import InvoiceSchema, ClaimSchema
+from db.schemas import InvoiceSchema, ClaimSchema, EmployeeScheme
 
 
 router = APIRouter()
@@ -16,7 +16,7 @@ def get_all_claims(db: Session = Depends(get_db)):
     Show all claim made by every employee
     """
     try:
-        claims = db.query(DBClaim).all()
+        claims = db.query(DBClaim).options(joinedload(DBClaim.employee)).all()
         return claims
     except Exception as e:
         raise HTTPException(
