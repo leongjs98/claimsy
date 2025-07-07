@@ -40,7 +40,6 @@ class ItemService(BaseModel):
 
 class InvoiceSchema(BaseModel):
     id: Optional[int] = None
-    invoice_id: int = Field(alias="invoiceId")
     invoice_number: str = Field(alias="invoiceNumber")
     claim_id: Optional[int] = Field(alias="claimId", default=None)
     employee_id: int = Field(alias="employeeId")

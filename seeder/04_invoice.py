@@ -15,14 +15,13 @@ from backend.db.postgresql_setup import session
 from backend.db.values import categories
 
 NUM_INVOICES = 50  # Default value
-MIN_NUM_INVOICES_FOR_EMPLOYEE_ID_1 = 20
+MIN_NUM_INVOICES_FOR_EMPLOYEE_ID_1 = 50
 
 fake = Faker()
 
 def create_invoice_data(i, employee_ids):
     """Create fake invoice data"""
     return {
-        "invoice_id": i + 1,
         "invoice_number": f"INV-{fake.year()}-{fake.random_int(min=1000, max=9999)}",
         "employee_id": random.choice(employee_ids),
         "invoice_date": fake.date_between(start_date="-2y", end_date="today"),

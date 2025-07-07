@@ -22,7 +22,6 @@ class Admin(TableBase):
 class Employee(TableBase, Base):
     __tablename__ = "employees"
 
-    employee_id = Column(String(20), unique=True, nullable=False, index=True)
     name = Column(String(50), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
@@ -50,7 +49,6 @@ class Employee(TableBase, Base):
 class Invoice(TableBase, Base):
     __tablename__ = "invoices"
 
-    invoice_id = Column(Integer, nullable=False)
     invoice_number = Column(String(50), unique=True, nullable=False)
     claim_id = Column(Integer, ForeignKey("claims.id"), nullable=True)
     employee_id = Column(Integer, ForeignKey("employees.id"), nullable=False)

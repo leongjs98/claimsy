@@ -111,11 +111,6 @@ def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
 
 
-def generate_employee_id(index: int) -> str:
-    """Generate employee ID in format EMP001, EMP002, etc."""
-    return f"EMP{index:03d}"
-
-
 def generate_hire_date() -> date:
     """Generate a random hire date within the last 5 years"""
     start_date = date.today() - timedelta(days=5 * 365)
@@ -140,7 +135,6 @@ def create_employee_data(index: int) -> dict:
     email = f"{first_name}.{last_name}@company.com"
 
     return {
-        "employee_id": generate_employee_id(index + 1),
         "name": f"{first_name.title()} {last_name.title()}",
         "email": email,
         "password_hash": hash_password(EMPLOYEE_PASSWORD),
@@ -159,17 +153,14 @@ def seed_employees():
 
         employees = []
         used_emails = set()
-        used_employee_ids = set()
 
         for i in range(NUM_EMPLOYEES):
             while True:
                 employee_data = create_employee_data(i)
 
-                # Ensure unique email and employee_id
-                if (employee_data["email"] not in used_emails and 
-                    employee_data["employee_id"] not in used_employee_ids):
+                # Ensure unique email
+                if (employee_data["email"] not in used_emails):
                     used_emails.add(employee_data["email"])
-                    used_employee_ids.add(employee_data["employee_id"])
                     break
 
             employee = Employee(**employee_data)
