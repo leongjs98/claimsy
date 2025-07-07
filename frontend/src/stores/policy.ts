@@ -1,18 +1,13 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 
-// Claim-related interfaces (matching your Python backend)
-interface ClaimEligibilityCriteria {
-  criteria: string[];
-}
-
 interface PolicySection {
   title: string;
   points: string[];
 }
 
 interface ClaimPolicyDetails {
-  claim_eligibility_criteria: string[]; // Direct array to match backend response
+  validCriteria: string[]; // Direct array to match backend response
   claim_approval_limitations: PolicySection[];
   claim_denial: PolicySection[];
 }
@@ -34,9 +29,9 @@ export const usePolicyDetails = defineStore("get_policy_details", {
 
   getters: {
     // Get claim eligibility criteria as formatted string for textarea
-    eligibilityCriteriaText: (state) => {
-      if (!state.claimPolicies?.claim_eligibility_criteria) return "";
-      return state.claimPolicies.claim_eligibility_criteria
+    validClaimCriteriaText: (state) => {
+      if (!state.claimPolicies?.validCriteria) return "";
+      return state.claimPolicies.validCriteria
         .map((criteria) => `- ${criteria}`)
         .join("\n");
     },
@@ -86,8 +81,7 @@ export const usePolicyDetails = defineStore("get_policy_details", {
 
         // Store the exact response structure from your Python backend
         this.claimPolicies = {
-          claim_eligibility_criteria:
-            response.data.claim_eligibility_criteria || [],
+          validCriteria: response.data.validClaimCriteria || [],
           claim_approval_limitations:
             response.data.claim_approval_limitations || [],
           claim_denial: response.data.claim_denial || [],
@@ -103,7 +97,7 @@ export const usePolicyDetails = defineStore("get_policy_details", {
 
     // Update policies (for when user submits the form)
     async updatePolicies(updatedData: {
-      eligibilityCriteria: string;
+      validClaimCriteria: string;
       approvalLimitations1: string;
       claimDenial1: string;
       approvalLimitations2?: string;
@@ -115,7 +109,7 @@ export const usePolicyDetails = defineStore("get_policy_details", {
       try {
         // Convert textarea strings back to arrays
         const payload = {
-          claim_eligibility_criteria: updatedData.eligibilityCriteria
+          validClaimCriteria: updatedData.validClaimCriteria
             .split("\n")
             .map((line) => line.replace(/^-\s*/, "").trim())
             .filter((line) => line.length > 0),
@@ -202,4 +196,4 @@ export const usePolicyDetails = defineStore("get_policy_details", {
 });
 
 // Export types for use in components
-export type { ClaimPolicyDetails, PolicySection, ClaimEligibilityCriteria };
+export type { ClaimPolicyDetails, PolicySection };

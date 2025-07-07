@@ -70,10 +70,24 @@ async def get_policy_details():
     Show the details of the policy
     """
     return {
-        "claim_eligibility_criteria": [
-            "Conditions under which a claim is considered valid.",
-            "Timeframe has changed",
+        "validClaimCriteria": [
+            "Must fall under eligible categories",
+            "Medical, Supplies/Equipment, Travel, Meals/Entertainment, Accommodation",
+            "Submitted within required timeframes (30 days general, 60 days medical)",
+            "Include original receipts and completed expense forms",
+            "Have proper business justification and manager approval",
+            "Stay within spending limits (Medical: RM500, Meals: RM50/day travel, RM25/person business)",
+            "Medical claims require medical certificates",
         ],
+        "fraudulentClaimsIndicators": [
+            "False or altered receipts and signatures",
+            "Double claiming same expense",
+            "Personal expenses claimed as business",
+            "Deliberately inflated amounts",
+            "Claims for non-existent expenses",
+            "Fake medical certificates",
+        ],
+
         "claim_approval_limitations": [
             {
                 "title": "Claim Approval & Limitations",
