@@ -10,6 +10,11 @@ class ItemService(BaseModel):
     item: str
     quantity: int
     unit_price: float
+    
+class EmployeeScheme (BaseModel):
+    employee_id: Optional[str] = None
+    name: Optional[str] = None
+    email: Optional[str] = None  
 
 class InvoiceSchema(BaseModel):
     id: Optional[int] = None
@@ -23,6 +28,8 @@ class InvoiceSchema(BaseModel):
     merchant_address: Optional[str] = Field(alias="merchantAddress", default=None)
     items_services: List[ItemService] = Field(alias="itemsServices")
     remark: Optional[str] = None
+    employee: Optional[EmployeeScheme] = None
+
 
     @field_validator('items_services', mode='before')
     @classmethod
@@ -43,10 +50,6 @@ class ClaimStatus(str, Enum):
     APPROVED = "approved"
     REJECTED = "rejected"
 
-class EmployeeScheme (BaseModel):
-    employee_id: Optional[str] = None
-    name: Optional[str] = None
-    email: Optional[str] = None  
 
 class ClaimSchema(BaseModel):
     id: int

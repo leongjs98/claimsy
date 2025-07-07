@@ -2,8 +2,8 @@
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
     <AdminClaimsCard
       :totalCount="claims.length"
-      :approvedCount="adminClaims.approvedCount"
-      :rejectedCount="adminClaims.rejectedCount"
+      :approvedCount="adminClaims.approvedClaimsCount"
+      :rejectedCount="adminClaims.rejectedClaimsCount"
     />
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
@@ -131,9 +131,9 @@
                     class="w-fit px-3 py-4 text-sm font-semibold whitespace-nowrap"
                   >
                     <div class="flex items-center justify-start gap-2">
-                      <StatusBadge :status="claim.status" />
-                      <!-- <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
-                      <StatusBadge v-show="claim.IsFraud" status="Fraud" /> -->
+                      <StatusBadge :status="capitalizeStatus(claim.status)" />
+                      <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
+                      <StatusBadge v-show="claim.IsFraud" status="Fraud" />
                     </div>
                   </td>
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
@@ -193,6 +193,11 @@
   return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  const capitalizeStatus = (status) => {
+  if (!status) return '';
+  return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+};
+
   const countItems = (claim) => {
   if (!claim.invoices) return 0;
   return claim.invoices.reduce((total, invoice) => {
@@ -201,8 +206,8 @@
   };
 
   const formatCurrency = (amount) => {
-  if (amount === null || amount === undefined) return 'RM 0.00';
-  return `RM ${amount.toFixed(2)}`;
+  if (amount === null || amount === undefined) return '0.00';
+  return `${amount.toFixed(2)}`;
   };
 
   const openDetails = (claim) => {

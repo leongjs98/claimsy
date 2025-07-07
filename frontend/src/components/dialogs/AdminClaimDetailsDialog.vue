@@ -207,8 +207,8 @@ const formatDate = (dateString: string) => {
 
 // Format currency (RM)
 const formatCurrency = (amount?: number) => {
-  if (amount === null || amount === undefined) return 'RM 0.00';
-  return `RM ${amount.toFixed(2)}`;
+  if (amount === null || amount === undefined) return '0.00';
+  return `${amount.toFixed(2)}`;
 };
 
 // Truncate long strings
