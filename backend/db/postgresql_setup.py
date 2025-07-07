@@ -4,6 +4,8 @@ from sqlalchemy import DateTime, create_engine, Column, Integer, func
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_HOST = os.getenv("DB_HOST")

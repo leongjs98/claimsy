@@ -3,7 +3,7 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from backend.db.tables import Base
-from backend.db.setup import engine
+from backend.db.postgresql_setup import engine
 
 
 def create_all_tables():

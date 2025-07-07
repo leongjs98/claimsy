@@ -24,16 +24,17 @@
 
         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div class="sm:col-span-3">
+            <!-- Make sure category matches with categories in /backend/db/values.py -->
             <DropdownInput
               label="Category"
               name="category"
               id="categoryID"
               :options="[
-                'Gadget',
+                'Supplies and Equipment',
                 'Travel Expenses',
-                'Meals and Entertainment',
+                'Medical Expenses',
+                'Meals & Entertaiment',
                 'Accommodation',
-                'Communication',
               ]"
               v-model="formData.category"
             />
@@ -41,10 +42,9 @@
 
           <div class="sm:col-span-3">
             <CalendarInput
-              label="Date"
-              type="text"
+              label="Date (YYYY-MM-DD)"
               name="date"
-              id="DateID"
+              id="date"
               v-model="formData.date"
             />
           </div>
@@ -100,20 +100,23 @@
             <!-- TODO: change the table rows into label + input tags -->
             <!-- TODO: add delete button on the side of each items -->
             <tbody>
-              <tr class="bg-gray-200 text-theme-300 shadow-md">
-                <td class="rounded-l-lg px-4 py-3">Galaxy Tab S10 Ultra</td>
-                <td class="px-4 py-3 text-right">1</td>
-                <td class="rounded-r-lg px-4 py-3 text-right">4,299.00</td>
-              </tr>
-              <tr class="bg-gray-200 text-theme-300 shadow-md">
-                <td class="rounded-l-lg px-4 py-3">24" Essential Monitor S3</td>
-                <td class="px-4 py-3 text-right">1</td>
-                <td class="rounded-r-lg px-4 py-3 text-right">399.00</td>
+              <tr
+                v-for="(item, index) in formData.items"
+                :key="index"
+                class="bg-gray-200 text-theme-300 shadow-md"
+              >
+                <td class="rounded-l-lg px-4 py-3">{{ item.description }}</td>
+                <td class="px-4 py-3 text-right">{{ item.quantity }}</td>
+                <td class="rounded-r-lg px-4 py-3 text-right">
+                  {{ item.unit_price.toFixed(2) }}
+                </td>
               </tr>
               <tr class="text-right font-semibold text-theme-300">
                 <td></td>
                 <td class="rounded-l-lg bg-gray-200 px-4 py-3">Total</td>
-                <td class="rounded-r-lg bg-gray-200 px-4 py-3">4,698.00</td>
+                <td class="rounded-r-lg bg-gray-200 px-4 py-3">
+                  {{ totalAmount }}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -146,33 +149,32 @@
 
 <script setup>
   import { useRouter, useRoute } from "vue-router";
+  import { computed } from "vue";
 
-  const formData = ref({
-    category: "",
-    date: "",
-    merchantName: "",
-    merchantAddress: "",
-    remark: "",
-  });
+  const totalAmount = computed(() =>
+    formData.value.items
+      .reduce((sum, item) => sum + item.unit_price * item.quantity, 0)
+      .toFixed(2),
+  );
+
   const router = useRouter();
   const route = useRoute();
 
+  const formData = ref({
+    category: route.query.category || "",
+    date: route.query.date || "",
+    merchantName: route.query.merchantName || "",
+    merchantAddress: route.query.merchantAddress || "",
+    remark: route.query.remark || "",
+    items: [],
+  });
+
   onMounted(() => {
-    // Check if query parameters exist and populate the form fields
-    if (route.query.categoryID) {
-      formData.value.category = route.query.categoryID;
-    }
-    if (route.query.DateID) {
-      formData.value.date = route.query.DateID;
-    }
-    if (route.query.MerchantnameID) {
-      formData.value.merchantName = route.query.MerchantnameID;
-    }
-    if (route.query.MerchanaddressID) {
-      formData.value.merchantAddress = route.query.MerchanaddressID;
-    }
-    if (route.query.RemarkID) {
-      formData.value.remark = route.query.RemarkID;
+    try {
+      const parsedItems = JSON.parse(route.query.items || "[]");
+      formData.value.items = parsedItems;
+    } catch (e) {
+      console.warn("Failed to parse items", e);
     }
   });
 </script>

@@ -9,7 +9,7 @@ from datetime import date, timedelta
 from decimal import Decimal
 import hashlib
 from backend.db.tables import Employee
-from backend.db.setup import session
+from backend.db.postgresql_setup import session
 
 NUM_EMPLOYEES = 20
 EMPLOYEE_PASSWORD = "testtest"
@@ -194,7 +194,7 @@ def show_help():
     print("=" * 50)
     print("Usage:")
     print("  python cleaner.py --number 30        - Seed 30 number of employees (DEFAULT: 20)")
-    print("  python cleaner.py --n 30             - Shorcut for above")
+    print("  python cleaner.py -n 30             - Shorcut for above")
     print("  python cleaner.py --help             - Show this help message")
     print("  python cleaner.py -h                 - Shortcut for above")
     print()

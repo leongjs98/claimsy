@@ -3,10 +3,12 @@ Create a single admin for testing
 credentials at admin_username, admin_password
 """
 
-import hashlib, os, sys
+import hashlib
+import os
+import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from backend.db.setup import session
+from backend.db.postgresql_setup import session
 from backend.db.tables import Admin
 
 

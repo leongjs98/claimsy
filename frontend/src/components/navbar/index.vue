@@ -1,5 +1,5 @@
 <template>
-  <div class="z-50 mx-auto mt-8 w-full max-w-6xl">
+  <div class="mx-auto mt-8 w-full max-w-6xl">
     <header
       class="rounded-2xl bg-theme-300 px-4 text-white shadow-xl/30 shadow-blue-900"
     >
@@ -12,7 +12,7 @@
         </nav>
 
         <nav
-          class="navbar__menu absolute top-16 right-0 left-0 z-40 origin-top border-b-8 border-b-yellow-300 pt-14 pb-8 font-semibold transition-transform delay-200 ease-in-out md:static md:flex md:h-16 md:items-end md:justify-end md:border-none md:p-0"
+          class="navbar__menu absolute top-16 right-0 left-0 origin-top border-b-8 border-b-yellow-300 pt-14 pb-8 font-semibold transition-transform delay-200 ease-in-out md:static md:flex md:h-16 md:items-end md:justify-end md:border-none md:p-0"
         >
           <ul
             class="flex flex-col items-center justify-end gap-4 md:flex-row md:gap-5"
@@ -44,7 +44,7 @@
 
             <NavLink
               name="Upload Receipt"
-              link="/employee/claim/upload"
+              link="/employee/invoice/upload"
               v-if="!route.path.includes('admin')"
             >
             </NavLink>
@@ -59,7 +59,7 @@
           </ul>
         </nav>
         <nav class="flex items-center gap-2">
-          <button>
+          <!-- <button>
             <svg
               class="size-7"
               xmlns="http://www.w3.org/2000/svg"
@@ -67,13 +67,12 @@
               height="32"
               viewBox="0 0 24 24"
             >
-              <!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE -->
               <path
                 fill="currentColor"
                 d="M4 19v-2h2v-7q0-2.075 1.25-3.687T10.5 4.2v-.7q0-.625.438-1.062T12 2t1.063.438T13.5 3.5v.7q2 .5 3.25 2.113T18 10v7h2v2zm8 3q-.825 0-1.412-.587T10 20h4q0 .825-.587 1.413T12 22m-4-5h8v-7q0-1.65-1.175-2.825T12 6T9.175 7.175T8 10z"
               />
             </svg>
-          </button>
+          </button> -->
           <RouterLink to="/login">
             <svg
               class="size-7"

@@ -34,12 +34,13 @@ use `python --version` to check
 6. Create mock data (seeding)
 ```
 # make sure you in the project root directory (claimsy/)
-python seeder/01_tables.py && \
-python seeder/02_admin.py && \
-python seeder/03_employee.py -n 15 && \
-python seeder/04_invoice.py -n 100 && \
+# Reset the database
+python seeder/cleaner.py --drop-all-tables
+python seeder/01_tables.py
+python seeder/02_admin.py
+python seeder/03_employee.py -n 15
+python seeder/04_invoice.py -n 100
 python seeder/05_claim.py -n 50
-
 ```
 
 7. Delete mock data using `db/cleaner.py`
@@ -49,6 +50,16 @@ python seeder/cleaner.py --drop-all-tables # Delete all tables
 python seeder/cleaner.py --all
 python seeder/cleaner.py --table claims
 python seeder/cleaner.py --help
+```
+
+8. Create MongoDB Vector Store and Save Embeddings (Claim Policy)
+```
+# make sure you in the project root directory (claimsy/)
+python seeder/06_create_vector_store.py
+python seeder/07_save_embeddings.py
+
+# Run this to test asking question about the claim policy
+python seeder/query.py
 ```
 
 ### Frontend

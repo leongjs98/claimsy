@@ -175,7 +175,7 @@
     </div>
   </div>
 
-  <ClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
+  <EmployeeClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
 </template>
 
 <script setup>

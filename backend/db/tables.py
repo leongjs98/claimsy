@@ -4,7 +4,7 @@ PostgreSQL Table Schemas of Claimsy
 
 from typing import List, Dict, Any
 from sqlalchemy import DECIMAL, JSON, Date, ForeignKey, Integer, Text, Column, String
-from .setup import TableBase, Base
+from .postgresql_setup import TableBase, Base
 from sqlalchemy.orm import relationship
 
 

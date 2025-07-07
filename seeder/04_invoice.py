@@ -11,20 +11,13 @@ from faker import Faker
 import random
 import json
 from backend.db.tables import Employee, Invoice
-from backend.db.setup import session
+from backend.db.postgresql_setup import session
+from backend.db.values import categories
 
 NUM_INVOICES = 50  # Default value
+MIN_NUM_INVOICES_FOR_EMPLOYEE_ID_1 = 20
 
 fake = Faker()
-
-categories = (
-    "Supplies and Equipment",
-    "Travel",
-    "Meals & Entertaiment",
-    "Accommodation",
-    "Medical",
-)
-
 
 def create_invoice_data(i, employee_ids):
     """Create fake invoice data"""
@@ -49,6 +42,36 @@ def create_invoice_data(i, employee_ids):
         else None,
     }
 
+def seed_invoices_for_employee_id_1():
+    """Seed the database with invoice data"""
+    try:
+        invoices = []
+        used_invoice_numbers = set()
+
+        for i in range(MIN_NUM_INVOICES_FOR_EMPLOYEE_ID_1):
+            while True:
+                invoice_data = create_invoice_data(i, [1])
+
+                # Ensure unique invoice number
+                if invoice_data["invoice_number"] not in used_invoice_numbers:
+                    used_invoice_numbers.add(invoice_data["invoice_number"])
+                    break
+
+            invoice = Invoice(**invoice_data)
+            invoices.append(invoice)
+
+            if (i + 1) % 10 == 0:
+                print(f"Generated {i + 1} invoices for employee id 1...")
+
+        session.add_all(invoices)
+        session.commit()
+
+        print(f"Successfully seeded {MIN_NUM_INVOICES_FOR_EMPLOYEE_ID_1} invoices for employee id 1!")
+    except Exception as e:
+        session.rollback()
+        print(f"Error seeding invoices: {e}")
+    finally:
+        session.close()
 
 def seed_invoices():
     """Seed the database with invoice data"""
@@ -97,9 +120,12 @@ def show_help():
     print("=" * 50)
     print("Usage:")
     print(
+        "will seed at least 20 invoices for employee 1"
+    )
+    print(
         "  python invoice_seeder.py --number 30        - Seed 30 number of invoices (DEFAULT: 20)"
     )
-    print("  python invoice_seeder.py --n 30             - Shortcut for above")
+    print("  python invoice_seeder.py -n 30             - Shortcut for above")
     print("  python invoice_seeder.py --help             - Show this help message")
     print("  python invoice_seeder.py -h                 - Shortcut for above")
     print()
@@ -114,6 +140,7 @@ if __name__ == "__main__":
         try:
             NUM_INVOICES = int(sys.argv[2])
             seed_invoices()
+            seed_invoices_for_employee_id_1()
         except ValueError:
             print("Error: Please provide a valid number")
             show_help()

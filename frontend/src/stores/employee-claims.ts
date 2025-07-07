@@ -78,6 +78,7 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
     // Set current employee
     setCurrentEmployee(employeeId: number) {
       this.currentEmployeeId = employeeId;
+
     },
 
     // Fetch claims by employee ID

@@ -26,20 +26,7 @@
             <template v-if="loading">Loading...</template>
             <template v-else-if="error">{{ error }}</template>
             <template v-else-if="staff && claim">
-              #{{ claim.id }} {{ staff.name }}
-              <span
-                class="flex items-center rounded-md px-2 py-1 text-base font-medium"
-                :class="{
-                  'bg-emerald-100 text-emerald-600':
-                    claim.status === 'Approved',
-                  'bg-red-100 text-red-600': claim.status === 'Rejected',
-                  'bg-yellow-100 text-yellow-600': claim.status === 'Pending',
-                  'bg-orange-100 text-orange-600': claim.status === 'Fraud',
-                  'bg-black text-white': claim.status === 'Anomaly',
-                }"
-              >
-                {{ claim.status }}
-              </span>
+              Invoice #{{ claim.id }} {{ staff.name }}
             </template>
             <template v-else>No data found</template>
           </h1>
@@ -51,16 +38,6 @@
           v-if="claim"
           class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
         >
-          <div class="sm:col-span-3">
-            <DropdownInput
-              label="Status"
-              name="status"
-              id="status"
-              :options="['Pending', 'Approved', 'Rejected']"
-              v-model="claim.status"
-            />
-          </div>
-
           <!-- Date -->
           <div class="sm:col-span-3">
             <CalendarInput
@@ -112,7 +89,7 @@
       <!-- Items/Services -->
       <div
         v-if="claim"
-        class="grid grid-cols-1 gap-x-6 gap-y-8 border-b border-gray-900/10 pb-12 sm:grid-cols-6"
+        class="grid grid-cols-1 gap-x-6 gap-y-8 pb-12 sm:grid-cols-6"
       >
         <div class="sm:col-span-full">
           <h2 class="mt-6 text-sm font-medium text-theme-300">Invoices</h2>
@@ -149,22 +126,6 @@
             </tbody>
           </table>
         </div>
-      </div>
-
-      <!-- Button -->
-      <div class="mt-6 flex items-center justify-end gap-x-6">
-        <button
-          type="button"
-          class="rounded-md bg-red-400 px-5.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-red-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
-        >
-          Reject
-        </button>
-        <button
-          type="button"
-          class="rounded-md bg-green-400 px-3.5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
-        >
-          Approve
-        </button>
       </div>
     </div>
   </form>
