@@ -1,14 +1,21 @@
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status, Form, Request
 from sqlalchemy.orm import Session
-from typing import List
+from sqlalchemy import create_engine, Column, Integer, String, Float
+from typing import List, Optional
 from db.postgresql_setup import get_db
 from db.tables import Claim as DBClaim
 from db.schemas import ClaimSchema, InvoiceSchema
 from llm.reader import encode_image_file
 from llm.setup import chain_extract_invoice_info, output_parser_invoice_json
+from datetime import date
+from db.tables import Invoice
+from pydantic import BaseModel
+
+
 
 
 router = APIRouter()
+
 
 
 @router.get("{employee_id}/claim/all", response_model=List[ClaimSchema])
@@ -44,8 +51,48 @@ async def analyze_invoice(
     return {"answers": results}
 
 
-# TODO: create router for /employee/claim/{id}/edit, (submit here = save)
 
+@router.post("/employee/invoice/save", response_model=InvoiceSchema)
+async def save_invoice(
+    invoice: InvoiceSchema,
+    db: Session = Depends(get_db)
+):
+    try:
+        data = invoice.model_dump(by_alias=True)
+        print("💡 Received data:", data)
+
+        existing_invoice = db.query(Invoice).filter_by(invoice_number=data["invoiceNumber"]).first()
+        if existing_invoice:
+            return {"error": f"Invoice number {data['invoiceNumber']} already exists."}
+
+        new_invoice = Invoice(
+            invoice_id=data["invoiceId"],
+            invoice_number=data["invoiceNumber"],
+            claim_id=data["claimId"],
+            employee_id=data["employeeId"],
+            invoice_date=data["invoiceDate"],
+            category=data["category"],
+            merchant_name=data["merchantName"],
+            merchant_address=data["merchantAddress"],
+            items_services=data["itemsServices"],  # already list of dicts
+            remark=data["remark"]
+        )
+
+        db.add(new_invoice)
+        db.commit()
+        db.refresh(new_invoice)
+
+        return invoice  # returning Pydantic object
+
+    except Exception as e:
+        db.rollback()
+        import traceback
+        traceback.print_exc()
+        return {"error": str(e)}
+
+
+
+# TODO: create router for /employee/claim/{id}/edit, (submit here = save)
 
 # TODO: complete API /employee/{employee_id}/invoice/submit-into-claim
 # input: multiple invoices.id
