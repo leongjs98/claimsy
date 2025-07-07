@@ -44,7 +44,7 @@
                 name="validClaimCriteria"
                 rows="8"
                 :disabled="policyStore.loading"
-                class="block w-full rounded-md bg-gray-100 p-4 text-theme-300 text-base shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
+                class="block w-full rounded-md bg-gray-100 p-4 text-base text-theme-300 shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
               ></textarea>
             </div>
           </div>
@@ -63,7 +63,7 @@
                 id="fraudulentClaimsIndicators"
                 rows="8"
                 :disabled="policyStore.loading"
-                class="block w-full rounded-md bg-gray-100 p-4 text-theme-300 text-base shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
+                class="block w-full rounded-md bg-gray-100 p-4 text-base text-theme-300 shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
               ></textarea>
             </div>
           </div>
@@ -82,7 +82,7 @@
                 id="inappropriateClaimsCharacteristics"
                 rows="8"
                 :disabled="policyStore.loading"
-                class="block w-full rounded-md bg-gray-100 p-4 text-theme-300 text-base shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
+                class="block w-full rounded-md bg-gray-100 p-4 text-base text-theme-300 shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
               ></textarea>
             </div>
           </div>
@@ -101,7 +101,7 @@
                 id="documentationRequirements"
                 rows="8"
                 :disabled="policyStore.loading"
-                class="block w-full rounded-md bg-gray-100 p-4 text-theme-300 text-base shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
+                class="block w-full rounded-md bg-gray-100 p-4 text-base text-theme-300 shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
               ></textarea>
             </div>
           </div>
@@ -120,7 +120,7 @@
                 id="spendingLimitViolations"
                 rows="8"
                 :disabled="policyStore.loading"
-                class="block w-full rounded-md bg-gray-100 p-4 text-theme-300 text-base shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
+                class="block w-full rounded-md bg-gray-100 p-4 text-base text-theme-300 shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
               ></textarea>
             </div>
           </div>
@@ -139,7 +139,7 @@
                 id="nonReimbursableExpenses"
                 rows="8"
                 :disabled="policyStore.loading"
-                class="block w-full rounded-md bg-gray-100 p-4 text-theme-300 text-base shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
+                class="block w-full rounded-md bg-gray-100 p-4 text-base text-theme-300 shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
               ></textarea>
             </div>
           </div>
@@ -158,7 +158,7 @@
                 id="approvalProcessViolations"
                 rows="8"
                 :disabled="policyStore.loading"
-                class="block w-full rounded-md bg-gray-100 p-4 text-theme-300 text-base shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
+                class="block w-full rounded-md bg-gray-100 p-4 text-base text-theme-300 shadow-sm outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 disabled:opacity-50"
               ></textarea>
             </div>
           </div>

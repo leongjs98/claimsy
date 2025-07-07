@@ -120,9 +120,7 @@
           </p>
           <!-- Upload and Cancel buttons -->
           <div class="mt-6 flex items-center justify-center gap-10">
-            <SecondaryButton @click="cancelUpload">
-              Cancel
-            </SecondaryButton>
+            <SecondaryButton @click="cancelUpload"> Cancel </SecondaryButton>
             <span class="flex items-center justify-center gap-2">
               <PrimaryButton @click="uploadFile(selectedFiles)">
                 <span v-if="isLoading"> Processing... </span>
