@@ -13,12 +13,12 @@
       ]"
     />
     <div
-      class="relative col-span-4 transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:w-full sm:min-w-lg md:min-w-xl"
+      class="relative col-span-4 transform overflow-hidden rounded-xl bg-white text-left shadow-sm transition-all sm:w-full sm:min-w-lg md:min-w-xl"
     >
       <div
-        class="relative bg-blue-50 py-5 text-center text-xl font-semibold text-theme-300 shadow-sm"
+        class="flex items-center justify-between bg-blue-50 px-4 py-5 text-center text-xl font-semibold text-theme-300 shadow-sm"
       >
-        <button @click="router.back()" type="button" class="absolute left-4">
+        <button @click="router.back()" type="button" class="">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"
@@ -31,70 +31,233 @@
           </svg>
         </button>
         <h1>Travel & Transportation</h1>
+        <button @click="showChat = !showChat" class="hover:cursor-pointer">
+          <svg
+            v-if="showChat"
+            class="h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+          >
+            <!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE -->
+            <path fill="currentColor" d="m7 14l5-5l5 5z" />
+          </svg>
+          <svg
+            v-else
+            class="h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+          >
+            <!-- Icon from Google Material Icons by Material Design Authors - https://github.com/material-icons/material-icons/blob/master/LICENSE -->
+            <path fill="currentColor" d="m7 10l5 5l5-5z" />
+          </svg>
+        </button>
       </div>
-      <div class="flex flex-col items-center justify-between px-4 sm:px-6">
+      <Transition name="dropdown-smart-suggest">
         <div
-          id="chatbox"
-          class="mt-8 h-[40rem] w-full space-y-6 overflow-y-auto rounded-xl px-4 py-6 inset-shadow-sm inset-shadow-indigo-500/20"
+          v-show="showChat"
+          class="flex flex-col items-center justify-between px-4 sm:px-6"
         >
           <div
-            v-for="(convo, index) in conversation"
-            :key="`convo-${index}`"
-            class="flex"
-            :class="convo.isSenderUser ? 'justify-end' : ''"
+            id="chatbox"
+            class="mt-8 h-[40rem] w-full space-y-6 overflow-y-auto rounded-xl px-4 py-6 inset-shadow-sm inset-shadow-indigo-500/20"
           >
-            <p
-              v-html="md.render(convo.text)"
-              class="w-fit max-w-lg rounded-lg p-3"
-              :class="
-                convo.isSenderUser ? 'bg-blue-100' : 'border-2 bg-blue-50'
-              "
-            ></p>
+            <div
+              v-for="(convo, index) in conversation"
+              :key="`convo-${index}`"
+              class="flex"
+              :class="convo.isSenderUser ? 'justify-end' : ''"
+            >
+              <p
+                v-html="md.render(convo.text)"
+                class="w-fit max-w-lg rounded-lg p-3"
+                :class="
+                  convo.isSenderUser ? 'bg-blue-100' : 'bg-theme-200 text-white'
+                "
+              ></p>
+            </div>
+          </div>
+          <form @submit.prevent="" class="grid w-full grid-cols-1 py-8">
+            <label for="chat-input" class="hidden"> Chat Input </label>
+            <input
+              type="text"
+              id="chat-input"
+              name="chatInput"
+              class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-gray-200 py-2 pr-9 pl-4 text-base text-theme-300 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-theme-200 sm:text-sm/6"
+            />
+            <button
+              type="button"
+              class="col-start-1 row-start-1 mr-2 size-7 self-center justify-self-end text-theme-300 transition hover:text-theme-200 sm:size-6"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  fill="currentColor"
+                  fill-opacity="0"
+                  stroke="currentColor"
+                  stroke-dasharray="40"
+                  stroke-dashoffset="40"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 6l10 6l-10 6Z"
+                >
+                  <animate
+                    fill="freeze"
+                    attributeName="fill-opacity"
+                    begin="0.5s"
+                    dur="0.5s"
+                    values="0;1"
+                  />
+                  <animate
+                    fill="freeze"
+                    attributeName="stroke-dashoffset"
+                    dur="0.5s"
+                    values="40;0"
+                  />
+                </path>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </Transition>
+    </div>
+
+    <div class="mt-8 overflow-hidden bg-white shadow-sm sm:rounded-lg">
+      <div
+        class="flex items-center justify-between bg-blue-50 px-4 py-6 text-xl font-semibold text-theme-300 sm:px-6"
+      >
+        <h3 class="text-lg font-semibold text-theme-300">
+          Conversation Details
+        </h3>
+        <button
+          @click="showDetails = !showDetails"
+          class="hover:cursor-pointer"
+        >
+          <svg
+            v-if="showDetails"
+            class="h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+          >
+            <!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE -->
+            <path fill="currentColor" d="m7 14l5-5l5 5z" />
+          </svg>
+          <svg
+            v-else
+            class="h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+          >
+            <!-- Icon from Google Material Icons by Material Design Authors - https://github.com/material-icons/material-icons/blob/master/LICENSE -->
+            <path fill="currentColor" d="m7 10l5 5l5-5z" />
+          </svg>
+        </button>
+      </div>
+      <Transition name="dropdown-smart-suggest">
+        <div v-show="showDetails" class="border-t border-gray-100">
+          <dl class="divide-y divide-gray-100">
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">Trip Purpose</dt>
+              <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                - Client meetings and product demo March 16th
+                <br />
+                - First meeting: 10 AM March 16th
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">Departure</dt>
+              <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                - March 15th (evening preferred)
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">Return</dt>
+              <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                - March 18th (flexible: 17th or 19th for savings)
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">Route</dt>
+              <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                - From: New York JFK
+                <br />
+                - To: London Heathrow
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">Budget</dt>
+              <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                - $4,000 total (flights + hotel)
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">Accommodation</dt>
+              <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                - Central London, financial district
+                <br />
+                - 4-star minimum
+                <br />
+                - Marriott preferred
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">Transport</dt>
+              <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                - Airport Transfers
+                <br />
+                - Taxis for meetings
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">
+                Loyalty Programs
+              </dt>
+              <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                - British Airways Gold status
+                <br />
+                - Marriott hotels
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">Travel Policies</dt>
+              <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                - Approved vendors only
+                <br />
+                - 4-star hotel minimum
+              </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-900">Flexibility</dt>
+              <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
+                - Departure date: Fixed
+                <br />
+                - Return date: Flexible for savings
+              </dd>
+            </div>
+          </dl>
+          <hr class="m-4 text-blue-100" />
+          <div
+            class="flex items-center justify-end gap-4 px-4 py-6 text-xl font-semibold sm:px-6"
+          >
+            <SecondaryButton>Regenerate</SecondaryButton>
+            <PrimaryButton @click="getAnswer">Confirm</PrimaryButton>
           </div>
         </div>
-        <form @submit.prevent="" class="grid w-full grid-cols-1 py-8">
-          <label for="chat-input" class="hidden"> Chat Input </label>
-          <input
-            type="text"
-            id="chat-input"
-            name="chatInput"
-            class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-gray-200 py-2 pr-9 pl-4 text-base text-theme-300 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-theme-200 sm:text-sm/6"
-          />
-          <button
-            type="button"
-            class="col-start-1 row-start-1 mr-2 size-7 self-center justify-self-end text-theme-300 transition hover:text-theme-200 sm:size-6"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path
-                fill="currentColor"
-                fill-opacity="0"
-                stroke="currentColor"
-                stroke-dasharray="40"
-                stroke-dashoffset="40"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 6l10 6l-10 6Z"
-              >
-                <animate
-                  fill="freeze"
-                  attributeName="fill-opacity"
-                  begin="0.5s"
-                  dur="0.5s"
-                  values="0;1"
-                />
-                <animate
-                  fill="freeze"
-                  attributeName="stroke-dashoffset"
-                  dur="0.5s"
-                  values="40;0"
-                />
-              </path>
-            </svg>
-          </button>
-        </form>
-      </div>
+      </Transition>
     </div>
+
+    <p
+      v-show="showAnswer"
+      v-html="md.render(answer)"
+      class="markdown-it mt-8 w-full rounded-lg bg-white px-4 py-6 shadow-sm lg:px-6"
+    ></p>
   </div>
 </template>
 
@@ -106,9 +269,87 @@
 
   const md = new MarkdownIt();
 
+  const showChat = ref(true);
+  const showDetails = ref(true);
+  const showAnswer = ref(false);
   const router = useRouter();
   const isOpen = ref(false);
   const conversation = ref([]);
+  const answer = ref(
+    `
+## **Travel Options Found**
+
+**AI:** Great news! I've found several excellent options that meet your requirements. Here are my top recommendations:
+
+---
+
+### **✈️ FLIGHT OPTIONS**
+
+**Option 1 (Recommended):**
+- **British Airways BA117** - JFK to LHR
+- **Departure:** March 15, 9:45 PM → **Arrival:** March 16, 8:20 AM +1
+- **Return:** BA112 - March 18, 2:15 PM → 5:45 PM same day
+- **Class:** World Traveller Plus (Premium Economy)
+- **Price:** RM 7,757 roundtrip ($1,847)
+- **Benefits:** Extra legroom, priority boarding, arrives well before your 10 AM meeting
+
+**Option 2 (Budget-friendly):**
+- **British Airways BA179** - JFK to LHR
+- **Departure:** March 15, 7:50 PM → **Arrival:** March 16, 6:35 AM +1
+- **Return:** BA178 - March 17, 8:25 PM → 11:55 PM same day
+- **Class:** World Traveller (Economy)
+- **Price:** RM 5,414 roundtrip ($1,289)
+- **Benefits:** Earlier return saves hotel night, still meets your schedule
+
+---
+
+### **🏨 HOTEL OPTIONS**
+
+**Option 1 (Prime Location):**
+- **London Marriott Hotel County Hall**
+- **Location:** South Bank, 12 mins to Bank/Financial District
+- **Dates:** March 15-18 (3 nights)
+- **Room:** Executive King with Thames view
+- **Price:** RM 7,938 total (RM 2,646/night) [$1,890 total]
+- **Amenities:** Executive lounge, 24hr business center, gym
+
+**Option 2 (Business District):**
+- **Marriott London City**
+- **Location:** Heart of Financial District
+- **Dates:** March 15-18 (3 nights)
+- **Room:** Superior King
+- **Price:** RM 6,930 total (RM 2,310/night) [$1,650 total]
+- **Amenities:** Walking distance to meetings, business facilities
+
+---
+
+### **🚗 GROUND TRANSPORTATION**
+
+**Airport Transfers:**
+- **Heathrow Express + Taxi:** £45 each way (~RM 470 total) [$112 total]
+- **Private car service:** £85 each way (~RM 890 total) [$212 total]
+- **Recommendation:** Heathrow Express (15 mins) + short taxi
+
+---
+
+### **💰 TOTAL PACKAGE COSTS**
+
+**Recommended Package:**
+- Flight Option 1: RM 7,757 ($1,847)
+- Hotel Option 2: RM 6,930 ($1,650)
+- Transfers: RM 470 ($112)
+- **Total: RM 15,157** (**$3,609**) (under your RM 16,800 budget!)
+
+**Budget Package:**
+- Flight Option 2: RM 5,414 ($1,289)
+- Hotel Option 2: RM 6,930 ($1,650)
+- Transfers: RM 470 ($112)
+- **Total: RM 12,814** (**$3,051**) (saves RM 3,986!)
+
+Which option interests you most? I can book immediately and send confirmations to your email.
+    `,
+  );
+
   const savedConvo = [
     {
       isSenderUser: false,
@@ -202,83 +443,11 @@
       isSenderUser: false,
       text: "Perfect! I have everything I need. Let me find you the best options with BA flights and a Marriott in Central London within your budget.",
     },
-    {
-      isSenderUser: false,
-      text: `
-## **Travel Options Found**
-
-**AI:** Great news! I've found several excellent options that meet your requirements. Here are my top recommendations:
-
----
-
-### **✈️ FLIGHT OPTIONS**
-
-**Option 1 (Recommended):**
-- **British Airways BA117** - JFK to LHR
-- **Departure:** March 15, 9:45 PM → **Arrival:** March 16, 8:20 AM +1
-- **Return:** BA112 - March 18, 2:15 PM → 5:45 PM same day
-- **Class:** World Traveller Plus (Premium Economy)
-- **Price:** RM 7,757 roundtrip ($1,847)
-- **Benefits:** Extra legroom, priority boarding, arrives well before your 10 AM meeting
-
-**Option 2 (Budget-friendly):**
-- **British Airways BA179** - JFK to LHR
-- **Departure:** March 15, 7:50 PM → **Arrival:** March 16, 6:35 AM +1
-- **Return:** BA178 - March 17, 8:25 PM → 11:55 PM same day
-- **Class:** World Traveller (Economy)
-- **Price:** RM 5,414 roundtrip ($1,289)
-- **Benefits:** Earlier return saves hotel night, still meets your schedule
-
----
-
-### **🏨 HOTEL OPTIONS**
-
-**Option 1 (Prime Location):**
-- **London Marriott Hotel County Hall**
-- **Location:** South Bank, 12 mins to Bank/Financial District
-- **Dates:** March 15-18 (3 nights)
-- **Room:** Executive King with Thames view
-- **Price:** RM 7,938 total (RM 2,646/night) [$1,890 total]
-- **Amenities:** Executive lounge, 24hr business center, gym
-
-**Option 2 (Business District):**
-- **Marriott London City**
-- **Location:** Heart of Financial District
-- **Dates:** March 15-18 (3 nights)
-- **Room:** Superior King
-- **Price:** RM 6,930 total (RM 2,310/night) [$1,650 total]
-- **Amenities:** Walking distance to meetings, business facilities
-
----
-
-### **🚗 GROUND TRANSPORTATION**
-
-**Airport Transfers:**
-- **Heathrow Express + Taxi:** £45 each way (~RM 470 total) [$112 total]
-- **Private car service:** £85 each way (~RM 890 total) [$212 total]
-- **Recommendation:** Heathrow Express (15 mins) + short taxi
-
----
-
-### **💰 TOTAL PACKAGE COSTS**
-
-**Recommended Package:**
-- Flight Option 1: RM 7,757 ($1,847)
-- Hotel Option 2: RM 6,930 ($1,650)
-- Transfers: RM 470 ($112)
-- **Total: RM 15,157** (**$3,609**) (under your RM 16,800 budget!)
-
-**Budget Package:**
-- Flight Option 2: RM 5,414 ($1,289)
-- Hotel Option 2: RM 6,930 ($1,650)
-- Transfers: RM 470 ($112)
-- **Total: RM 12,814** (**$3,051**) (saves RM 3,986!)
-
-Which option interests you most? I can book immediately and send confirmations to your email.
-
-    `,
-    },
   ];
+
+  function getAnswer() {
+    showAnswer.value = true;
+  }
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -294,7 +463,7 @@ Which option interests you most? I can book immediately and send confirmations t
           conversation.value.push(message);
           scrollToBottom();
         },
-        (index + 1) * 1000,
+        (index + 1) * 0,
       );
     });
   });

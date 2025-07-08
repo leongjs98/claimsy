@@ -268,7 +268,7 @@
     </div>
     <div class="flex justify-center px-4 sm:px-8 lg:px-14">
       <button
-        class="hover:bg-theme-400 z-20 mt-4 rounded bg-theme-300 px-4 py-2 text-white"
+        class="hover:bg-theme-400 mt-4 rounded bg-theme-300 px-4 py-2 text-white"
         :disabled="selectedExpenses.length === 0"
         @click="openDialog = true"
       >

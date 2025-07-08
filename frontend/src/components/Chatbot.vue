@@ -19,7 +19,7 @@
       <Transition name="pane">
         <div
           v-show="isOpen"
-          class="absolute right-8 bottom-20 z-20 h-[50rem] min-h-[50rem] transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:w-full sm:min-w-lg md:min-w-xl"
+          class="absolute right-8 bottom-20 z-20 h-[70vh] transform overflow-hidden rounded-xl bg-white text-left shadow-xl transition-all sm:w-full sm:min-w-lg md:min-w-xl"
         >
           <!-- <h2 class="absolute inset-x-0 h-16 bg-theme-300 py-4 text-center text-xl font-semibold text-white"> -->
           <!--   Claimsy AI -->
@@ -37,7 +37,9 @@
                 <p
                   class="w-fit max-w-80 rounded-lg p-3"
                   :class="
-                    convo.isSenderUser ? 'bg-blue-100' : 'border-2 bg-blue-50'
+                    convo.isSenderUser
+                      ? 'bg-blue-100'
+                      : 'bg-theme-200 text-white'
                   "
                 >
                   {{ convo.text }}
