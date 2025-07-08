@@ -47,7 +47,6 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           Status: "Rejected",
           remark: "Claim for essential software and professional development.",
           IsAnomaly: false,
-          IsFraud: false,
           Items: [
             {
               category: "Software License",
@@ -79,7 +78,6 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           Status: "Pending",
           remark: "Expenses for improving design workflow and ergonomics.",
           IsAnomaly: true,
-          IsFraud: false,
           Items: [
             {
               category: "Design Software Subscription",
@@ -112,7 +110,6 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           Status: "Rejected",
           remark: "Funding for ongoing digital marketing initiatives.",
           IsAnomaly: false,
-          IsFraud: true,
           Items: [
             {
               category: "Advertising",
@@ -135,7 +132,6 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           Status: "Approved",
           remark: "Essential supplies for graphic design work.",
           IsAnomaly: false,
-          IsFraud: false,
           Items: [
             {
               category: "Subscription",
@@ -167,7 +163,6 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           Status: "Pending",
           remark: "Resources for content quality and research.",
           IsAnomaly: true,
-          IsFraud: false,
           Items: [
             {
               category: "Software",
@@ -199,7 +194,6 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           Status: "Approved",
           remark: "Equipment and studio rental for professional shoots.",
           IsAnomaly: false,
-          IsFraud: false,
           Items: [
             {
               category: "Equipment",
@@ -231,7 +225,6 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           Status: "Rejected",
           remark: "Tools and ad spend for social media campaigns.",
           IsAnomaly: true,
-          IsFraud: true,
           Items: [
             {
               category: "Software",
@@ -263,7 +256,6 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           Status: "Pending",
           remark: "Claim for video production software and assets.",
           IsAnomaly: false,
-          IsFraud: false,
           Items: [
             {
               category: "Software",
@@ -294,8 +286,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           Total: "500.00",
           Status: "Approved",
           remark: "Deposits for upcoming corporate event.",
-          IsAnomaly: true,
-          IsFraud: false,
+          IsAnomaly: false,
           Items: [
             {
               category: "Venue",
@@ -328,7 +319,6 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           Status: "Pending",
           remark: "Replenishing printing supplies for the office.",
           IsAnomaly: false,
-          IsFraud: true,
           Items: [
             {
               category: "Supplies",
@@ -361,7 +351,6 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           Status: "Approved",
           remark: "Investment in market intelligence and team development.",
           IsAnomaly: false,
-          IsFraud: false,
           Items: [
             {
               category: "Research",
