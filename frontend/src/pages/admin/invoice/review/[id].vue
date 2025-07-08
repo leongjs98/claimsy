@@ -2,6 +2,7 @@
   <form>
     <!-- Content Border -->
     <div class="mx-auto mt-15 max-w-4xl rounded-2xl border border-gray-200 bg-white px-15 py-10 shadow-lg">
+      
       <!-- Back Button -->
       <div class="space-x-1 border-b border-gray-900/10 pb-12">
         <div class="relative flex items-center">
@@ -16,7 +17,7 @@
             <template v-if="loading">Loading...</template>
             <template v-else-if="error">{{ error }}</template>
             <template v-else-if="staff && invoice">
-              Invoice #{{ invoice.invoiceNumber }} {{ invoice.employee?.name }}
+            #{{ invoice.invoiceNumber }} {{ invoice.employee?.name }}
             </template>
             <template v-else>No data found</template>
           </h1>
@@ -51,38 +52,54 @@
       </div>
 
       <!-- Items/Services -->
-      <div v-if="invoice" class="grid grid-cols-1 gap-x-6 gap-y-8 pb-12 sm:grid-cols-6">
+      <div 
+      v-if="invoice"  
+      class="grid grid-cols-1 gap-x-6 gap-y-8 border-b border-gray-900/10 pb-12 sm:grid-cols-6">
+
         <div class="sm:col-span-full">
-          <h2 class="mt-6 text-sm font-medium text-theme-300">Invoices</h2>
+          <h2 class="mt-6 text-sm font-medium text-theme-300">Items/Services</h2>
           <table class="col-span-full w-full border-separate border-spacing-y-4">
             <thead class="bg-blue-950 text-white">
-              <tr class="">
+              <tr>
                 <th class="rounded-l-lg px-4 py-2 text-left">Description</th>
-                <th class="rounded-l-lg px-4 py-2 text-left">Category</th>
+                <th class="px-4 py-2 text-left">Category</th>
                 <th class="px-4 py-2 text-right">Quantity</th>
                 <th class="rounded-r-lg px-4 py-2 text-right">Total (RM)</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr v-for="(item, index) in invoice?.itemsServices" :key="index" class="bg-gray-200 text-theme-300">
+              <tr 
+              v-for="(item, index) in invoice?.itemsServices" 
+              :key="index" 
+              class="bg-gray-200 text-theme-300 text-sm">
                 <td class="rounded-l-lg px-4 py-3">{{ item.item }}</td>
-                <td class="rounded-l-lg px-4 py-3">{{ invoice?.category }}</td>
+                <td class="px-4 py-3">{{ invoice?.category }}</td>
                 <td class="px-4 py-3 text-right">{{ item.quantity }}</td>
                 <td class="rounded-r-lg px-4 py-3 text-right">
                   {{
-                    formatCurrency(item.unit_price)
+                    item.unit_price.toLocaleString("en-MY", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
                   }}
                 </td>
-                <td>
-                  {{ formatCurrency(item.unit_price * item.quantity) }}
-                </td>
               </tr>
-              <tr class="bg-gray-200 font-semibold">
-                <td colspan="4" class="px-4 py-3 text-right">Invoice Total:</td>
-                <td class="rounded-r-lg px-4 py-3 text-right">
-                  {{formatCurrency(invoice?.itemsServices.reduce((sum, item) => sum + (item.unit_price * item.quantity),
-                    0))
+              <tr class="text-right font-bold text-theme-300 text-sm">
+                <td></td>
+                <td></td>
+                <td class="rounded-l-lg bg-gray-200 px-4 py-3">Total</td>
+                <td class="rounded-r-lg bg-gray-200 px-4 py-3">
+                  {{
+                    invoice?.itemsServices
+                      .reduce(
+                        (sum, item) => sum + item.quantity * item.unit_price,
+                        0,
+                      )
+                      .toLocaleString("en-MY", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })
                   }}
                 </td>
               </tr>
@@ -134,14 +151,18 @@ onMounted(async () => {
 });
 
 const formatDate = (dateString) => {
-  if (!dateString) return '';
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-};
-
-const formatCurrency = (amount) => {
-  if (amount === null || amount === undefined) return '0.00';
-  return `${amount.toFixed(2)}`;
+  if (!dateString) {
+    return '';
+  }
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) {
+    console.error("Invalid date string provided:", dateString);
+    return ''; 
+  }
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
 </script>

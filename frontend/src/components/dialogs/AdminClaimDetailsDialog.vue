@@ -46,7 +46,7 @@
               <th class="px-4 pb-2">Date</th>
               <th class="px-4 pb-2">Merchant</th>
               <th class="px-4 pb-2">Item/Service</th>
-              <th class="px-4 pb-2 text-right">Qty</th>
+              <th class="px-4 pb-2 text-right">Quantity</th>
               <th class="pb-2 pl-4 text-right">Price (RM)</th>
               <th class="pb-2 pl-4"></th>
             </tr>

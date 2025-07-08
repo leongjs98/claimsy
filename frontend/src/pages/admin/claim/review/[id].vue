@@ -26,26 +26,8 @@
           >
             <template v-if="loading">Loading...</template>
             <template v-else-if="error">{{ error }}</template>
-<<<<<<< HEAD
             <template v-else-if="invoice">
               #{{ invoice.invoice_id }} {{ dummyStaff_name }}
-=======
-            <template v-else-if="staff && claim">
-              #{{ claim.id }} {{ staff.name }}
-              <span
-                class="flex items-center rounded-md px-2 py-1 text-base font-medium"
-                :class="{
-                  'bg-emerald-100 text-emerald-600':
-                    claim.status === 'Approved',
-                  'bg-red-100 text-red-600': claim.status === 'Rejected',
-                  'bg-yellow-100 text-yellow-600': claim.status === 'Pending',
-                  'bg-orange-100 text-orange-600': claim.status === 'Fraud',
-                  'bg-black text-white': claim.status === 'Anomaly',
-                }"
-              >
-                {{ claim.status }}
-              </span>
->>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
             </template>
             <template v-else>No data found</template>
           </h1>
@@ -60,7 +42,6 @@
         >
           <div class="sm:col-span-3">
             <DropdownInput
-<<<<<<< HEAD
               v-if="!isStored"
               label="Category"
               name="category"
@@ -76,13 +57,6 @@
               id="category"
               :model-value="invoice.category"
               disabled
-=======
-              label="Status"
-              name="status"
-              id="status"
-              :options="['Pending', 'Approved', 'Rejected']"
-              v-model="claim.status"
->>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
             />
           </div>
 
@@ -92,11 +66,7 @@
               label="Date (YYYY-MM-DD)"
               name="date"
               id="date"
-<<<<<<< HEAD
               :model-value="invoice.invoice_date"
-=======
-              v-model="claim.date"
->>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
               disabled
             />
           </div>
@@ -138,26 +108,22 @@
         </div>
       </div>
 
-      <!-- Invoices -->
+      <!-- Items/Services -->
       <div
         v-if="invoice"
         class="grid grid-cols-1 gap-x-6 gap-y-8 border-b border-gray-900/10 pb-12 sm:grid-cols-6"
       >
         <div class="sm:col-span-full">
-<<<<<<< HEAD
           <h2 class="mt-6 text-sm font-medium text-theme-300">
-           Invoices
+           Items/Services
           </h2>
-=======
-          <h2 class="mt-6 text-sm font-medium text-theme-300">Invoices</h2>
->>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
           <table
             class="col-span-full w-full border-separate border-spacing-y-4"
           >
             <thead class="bg-blue-950 text-white">
               <tr class="">
                 <th class="rounded-l-lg px-4 py-2 text-left">Description</th>
-                <th class="rounded-l-lg px-4 py-2 text-left">Category</th>
+                <th class="px-4 py-2 text-left">Category</th>
                 <th class="px-4 py-2 text-right">Quantity</th>
                 <th class="rounded-r-lg px-4 py-2 text-right">Total (RM)</th>
               </tr>
@@ -169,16 +135,9 @@
                 :key="index"
                 class="bg-gray-200 text-theme-300"
               >
-<<<<<<< HEAD
                 <td class="rounded-l-lg px-4 py-3 text-sm">{{ item.description }}</td>
                 <td class="px-4 py-3 text-right text-sm">{{ item.quantity }}</td>
                 <td class="rounded-r-lg px-4 py-3 text-right text-sm">
-=======
-                <td class="rounded-l-lg px-4 py-3">{{ item.description }}</td>
-                <td class="rounded-l-lg px-4 py-3">Category name</td>
-                <td class="px-4 py-3 text-right">{{ item.quantity }}</td>
-                <td class="rounded-r-lg px-4 py-3 text-right">
->>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
                   {{
                     item.unit_price.toLocaleString("en-MY", {
                       minimumFractionDigits: 2,
@@ -187,7 +146,6 @@
                   }}
                 </td>
               </tr>
-<<<<<<< HEAD
 
               <tr class="text-right font-semibold text-theme-300">
                 <td></td>
@@ -206,8 +164,6 @@
                   }}
                 </td>
               </tr>
-=======
->>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
             </tbody>
           </table>
         </div>
@@ -233,14 +189,9 @@
 </template>
 
 <script setup>
-<<<<<<< HEAD
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { ref, computed, onMounted } from "vue";
-=======
-  import { useRouter } from "vue-router";
-  import { ref, computed, onMounted } from "vue";
->>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
 
 import DropdownInput from "@/components/form/DropdownInput.vue";
 import CalendarInput from "@/components/form/CalendarInput.vue";
@@ -261,7 +212,6 @@ const invoiceId = router.currentRoute.value.params.id;
 await invoiceStore.fetchInvoice(invoiceId);
 });
 
-<<<<<<< HEAD
 const totalAmount = computed(() =>
 invoice.value 
     ? invoice.value.items_services.reduce(
@@ -271,47 +221,3 @@ invoice.value
     : 0,
 );
 </script>
-=======
-      // Mock data for demonstration
-      // ...fetch logic...
-      staff.value = { id: "001", name: "John Doe" };
-      claim.value = {
-        id: "001",
-        status: "Pending",
-        category: "Gadget",
-        date: "2025-05-06",
-        merchantName: "Samsung Store",
-        merchantAddress: "123 Main St",
-        remark: "For project use",
-        items: [
-          {
-            description: "Galaxy Tab S10 Ultra",
-            quantity: 1,
-            unitPrice: 4299.0,
-          },
-          {
-            description: '24" Essential Monitor S3',
-            quantity: 1,
-            unitPrice: 399.0,
-          },
-        ],
-      };
-      // Simulate claim is already stored (set to true after saving)
-      isStored.value = true;
-    } catch (e) {
-      error.value = "Failed to load data.";
-    } finally {
-      loading.value = false;
-    }
-  });
-
-  //  const totalAmount = computed(() =>
-  //    claim.value
-  //      ? claim.value.items.reduce(
-  //          (sum, item) => sum + item.quantity * item.unitPrice,
-  //          0,
-  //        )
-  //      : 0,
-  //  );
-</script>
->>>>>>> fc37ac356ba54503351cf36d33b0e00918e48dc2
