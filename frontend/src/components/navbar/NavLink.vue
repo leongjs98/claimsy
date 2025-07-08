@@ -58,8 +58,14 @@
       return true;
     }
     if (
-      props.link === "/ask-claimsy" &&
-      route.path.includes("/ask-claimsy/smart-suggest")
+      props.link === "/employee/ask-claimsy/" &&
+      route.path.includes("/employee/ask-claimsy")
+    ) {
+      return true;
+    }
+    if (
+      props.link === "/admin/ask-claimsy/" &&
+      route.path.includes("/admin/ask-claimsy")
     ) {
       return true;
     }

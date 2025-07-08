@@ -53,9 +53,16 @@
             <!--   link="/employee/rewards" -->
             <!--   v-if="!route.path.includes('admin')" -->
             <!-- > -->
-            <!-- </NavLink> -->
-            <!-- TODO: make employee's and admin's version of ask claimsy separted -->
-            <NavLink name="Ask Claimsy" link="/ask-claimsy"> </NavLink>
+            <NavLink
+                v-if="!route.path.includes('admin')"
+                name="Ask Claimsy"
+                link="/employee/ask-claimsy/"
+            > </NavLink>
+            <NavLink
+                v-else
+                name="Ask Claimsy"
+                link="/admin/ask-claimsy/"
+            > </NavLink>
           </ul>
         </nav>
         <nav class="flex items-center gap-2">
