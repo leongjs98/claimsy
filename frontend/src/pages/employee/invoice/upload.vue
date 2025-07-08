@@ -255,7 +255,7 @@
       const mergedremarks = remarks.join(" | ");
 
       router.push({
-        path: "/employee/invoice/edit",
+        path: "/employee/invoice/edit/first",
         query: {
           category: firstValid.category,
           date: firstValid.date,

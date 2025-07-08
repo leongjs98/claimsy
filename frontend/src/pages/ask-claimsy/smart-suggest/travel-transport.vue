@@ -1,17 +1,5 @@
 <template>
   <div class="mx-auto my-8 w-full max-w-5xl bg-gray-100">
-    <Tab
-      :tabs="[
-        {
-          link: '/ask-claimsy',
-          routeName: 'Chat with Claimsy',
-        },
-        {
-          link: '/ask-claimsy/smart-suggest/',
-          routeName: 'Smart Suggest',
-        },
-      ]"
-    />
     <div
       class="relative col-span-4 transform overflow-hidden rounded-xl bg-white text-left shadow-sm transition-all sm:w-full sm:min-w-lg md:min-w-xl"
     >

@@ -127,7 +127,7 @@
         <SecondaryButton> Cancel </SecondaryButton>
         <span class="flex items-center justify-center gap-2">
           <RouterLink to="/employee/claim/all">
-            <PrimaryButton @click="uploadFile(selectedFiles)">
+            <PrimaryButton @click="submitInvoice">
               <span v-if="isLoading"> Processing... </span>
               <span v-else>Submit</span>
             </PrimaryButton>
