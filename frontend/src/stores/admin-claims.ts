@@ -1,382 +1,188 @@
 import { defineStore } from "pinia";
+import axios from "axios";
 
-// TODO: complete these functions
-function getClaimsWithStatus(claims, status) {}
-function getClaimsWithDateSorted(claims, ascending) {}
-function getClaimsWithPriceSorted(claims, ascending) {}
+interface ItemService {
+  item: string;
+  quantity: number;
+  unit_price: number;
+}
+
+interface InvoiceResponseSchema {
+  id?: number;
+  invoiceId: number;
+  invoiceNumber: string;
+  claimId?: number;
+  employeeId: number;
+  invoiceDate: string;
+  category?: string;
+  merchantName?: string;
+  merchantAddress?: string;
+  itemsServices: ItemService[];
+  remark?: string;
+  employee?: EmployeeScheme;
+}
+
+type ClaimStatusType = "pending" | "approved" | "rejected";
+
+interface EmployeeScheme {
+  employee_id?: string;
+  name?: string;
+  email?: string;
+  department?: string;
+}
+
+interface ClaimResponseSchema {
+  id: number;
+  claim_number: string; //
+  employee_id: number;
+  claim_type?: string;
+  claim_amount?: number;
+  reason?: string;
+  status: ClaimStatusType;
+  submitted_date?: string;
+  reviewed_date?: string;
+  resolution?: string;
+  created_at: string;
+  updated_at: string;
+  invoices: InvoiceResponseSchema[];
+  employee?: EmployeeScheme;
+  // is_anomaly?: boolean; // Uncomment if added to backend ClaimSchema
+  // is_fraud?: boolean;   // Uncomment if added to backend ClaimSchema
+}
+
+function filterClaimsByStatus(
+  claims: ClaimResponseSchema[],
+  status: string,
+): ClaimResponseSchema[] {
+  return claims.filter(
+    (claim) => claim.status?.toLowerCase() === status.toLowerCase(),
+  );
+}
+
+function sortClaimsByDate(
+  claims: ClaimResponseSchema[],
+  ascending: boolean,
+): ClaimResponseSchema[] {
+  return [...claims].sort((a, b) => {
+    const dateA = a.submitted_date ? new Date(a.submitted_date) : new Date(0);
+    const dateB = b.submitted_date ? new Date(b.submitted_date) : new Date(0);
+    return ascending
+      ? dateA.getTime() - dateB.getTime()
+      : dateB.getTime() - dateA.getTime();
+  });
+}
+
+function sortClaimsByAmount(
+  claims: ClaimResponseSchema[],
+  ascending: boolean,
+): ClaimResponseSchema[] {
+  return [...claims].sort((a, b) => {
+    const amountA = a.claim_amount || 0;
+    const amountB = b.claim_amount || 0;
+    return ascending ? amountA - amountB : amountB - amountA;
+  });
+}
 
 export const useAdminClaimStore = defineStore("adminClaim", {
   state: () => ({
-    claims: [],
+    claims: [] as ClaimResponseSchema[],
   }),
 
   getters: {
-    totalCount: (state) => state.claims.length,
+    totalClaimCount: (state) => state.claims.length,
 
-    approvedCount: (state) =>
-      state.claims.filter((claim) => claim.Status.toLowerCase() === "approved")
-        .length,
+    approvedClaimsCount: (state) =>
+      filterClaimsByStatus(state.claims, "approved").length,
+    rejectedClaimsCount: (state) =>
+      filterClaimsByStatus(state.claims, "rejected").length,
+    pendingClaimsCount: (state) =>
+      filterClaimsByStatus(state.claims, "pending").length,
 
-    rejectedCount: (state) =>
-      state.claims.filter((claim) => claim.Status.toLowerCase() === "rejected")
-        .length,
+    getApprovedClaims: (state) =>
+      filterClaimsByStatus(state.claims, "approved"),
+    getRejectedClaims: (state) =>
+      filterClaimsByStatus(state.claims, "rejected"),
+    getPendingClaims: (state) => filterClaimsByStatus(state.claims, "pending"),
+    getClaimsByStatus: (state) => (status: ClaimStatusType | string) =>
+      filterClaimsByStatus(state.claims, status),
 
-    getApproved: (state) => {
-      return state.claims.filter(
-        (claim) => claim.Status?.toLowerCase() === "approved",
-      );
-    },
-
-    getRejected: (state) => {
-      return state.claims.filter(
-        (claim) => claim.Status?.toLowerCase() === "rejected",
-      );
-    },
+    getClaimsSortedByDate: (state) => (ascending: boolean) =>
+      sortClaimsByDate(state.claims, ascending),
+    getClaimsSortedByAmount: (state) => (ascending: boolean) =>
+      sortClaimsByAmount(state.claims, ascending),
   },
 
   actions: {
-    async initClaims() {
-      this.claims = [
-        {
-          Id: "GMD2039",
-          Name: "Lindsay Walton",
-          title: "Front-End Developer",
-          email: "lindsay.walton@example.com",
-          Date: "29/05/2025",
-          Total: "85.00",
-          Status: "Rejected",
-          remark: "Claim for essential software and professional development.",
-          IsAnomaly: false,
-          Items: [
-            {
-              category: "Software License",
-              date: "29/05/2025",
-              merchantName: "Software Central",
-              merchantAddress: "Level 2, Digital Mall, Petaling Jaya, Selangor",
-              description: "Vue.js Development Tools Subscription",
-              quantity: 1,
-              unitPrice: 50.0,
-            },
-            {
-              category: "Online Course",
-              date: "29/05/2025",
-              merchantName: "CodeAcademy Malaysia",
-              merchantAddress: "Unit 10, Jaya One, Petaling Jaya, Selangor",
-              description: "Advanced JavaScript & Vue.js Course",
-              quantity: 1,
-              unitPrice: 35.0,
-            },
-          ],
-        },
-        {
-          Id: "GMD2040",
-          Name: "Alex Chen",
-          title: "UX Designer",
-          email: "alex.chen@example.com",
-          Date: "30/05/2025",
-          Total: "120.00",
-          Status: "Pending",
-          remark: "Expenses for improving design workflow and ergonomics.",
-          IsAnomaly: true,
-          Items: [
-            {
-              category: "Design Software Subscription",
-              date: "30/05/2025",
-              merchantName: "Creative Suite MY",
-              merchantAddress: "Menara TM, Jalan Pantai Baharu, Kuala Lumpur",
-              description: "Adobe Creative Cloud Annual Plan",
-              quantity: 1,
-              unitPrice: 70.0,
-            },
-            {
-              category: "Hardware",
-              date: "30/05/2025",
-              merchantName: "All IT Hypermarket",
-              merchantAddress:
-                "Low Yat Plaza, Jalan Bukit Bintang, Kuala Lumpur",
-              description: "Logitech MX Master 3S Ergonomic Mouse",
-              quantity: 1,
-              unitPrice: 50.0,
-            },
-          ],
-        },
-        {
-          Id: "GMD2041",
-          Name: "Sarah Johnson",
-          title: "Marketing Specialist",
-          email: "sarah.j@example.com",
-          Date: "31/05/2025",
-          Total: "65.00",
-          Status: "Rejected",
-          remark: "Funding for ongoing digital marketing initiatives.",
-          IsAnomaly: false,
-          Items: [
-            {
-              category: "Advertising",
-              date: "31/05/2025",
-              merchantName: "Digital Marketing Agency (Local)",
-              merchantAddress: "Level 5, The Gardens Mid Valley, Kuala Lumpur",
-              description: "Social Media Ad Campaign - Q2",
-              quantity: 1,
-              unitPrice: 65.0,
-            },
-          ],
-        },
-        {
-          Id: "GMD2042",
-          Name: "Michael Brown",
-          title: "Graphic Designer",
-          email: "michael.b@example.com",
-          Date: "01/06/2025",
-          Total: "45.00",
-          Status: "Approved",
-          remark: "Essential supplies for graphic design work.",
-          IsAnomaly: false,
-          Items: [
-            {
-              category: "Subscription",
-              date: "01/06/2025",
-              merchantName: "Creative Stock MY",
-              merchantAddress: "Online Service (Based in Malaysia)",
-              description: "Local Stock Photo & Vector Subscription",
-              quantity: 1,
-              unitPrice: 25.0,
-            },
-            {
-              category: "Supplies",
-              date: "01/06/2025",
-              merchantName: "CzipLee",
-              merchantAddress: "1 Jalan Telawi 3, Bangsar, Kuala Lumpur",
-              description: "Wacom Pen Nibs (Pack of 5)",
-              quantity: 1,
-              unitPrice: 20.0,
-            },
-          ],
-        },
-        {
-          Id: "GMD2043",
-          Name: "Emily Wilson",
-          title: "Content Writer",
-          email: "emily.w@example.com",
-          Date: "02/06/2025",
-          Total: "90.00",
-          Status: "Pending",
-          remark: "Resources for content quality and research.",
-          IsAnomaly: true,
-          Items: [
-            {
-              category: "Software",
-              date: "02/06/2025",
-              merchantName: "Language AI Solutions",
-              merchantAddress: "Menara Axis, Petaling Jaya, Selangor",
-              description: "Premium Grammar & Plagiarism Checker",
-              quantity: 1,
-              unitPrice: 40.0,
-            },
-            {
-              category: "Book",
-              date: "02/06/2025",
-              merchantName: "MPH Bookstores",
-              merchantAddress: "Mid Valley Megamall, Kuala Lumpur",
-              description: "Essential Guide to Content Marketing",
-              quantity: 1,
-              unitPrice: 50.0,
-            },
-          ],
-        },
-        {
-          Id: "GMD2044",
-          Name: "David Lee",
-          title: "Photographer",
-          email: "david.lee@example.com",
-          Date: "03/06/2025",
-          Total: "150.00",
-          Status: "Approved",
-          remark: "Equipment and studio rental for professional shoots.",
-          IsAnomaly: false,
-          Items: [
-            {
-              category: "Equipment",
-              date: "03/06/2025",
-              merchantName: "Foto Shangri-La",
-              merchantAddress: "Jalan Pudu, Kuala Lumpur",
-              description: "Camera Lens Cleaning Kit",
-              quantity: 1,
-              unitPrice: 100.0,
-            },
-            {
-              category: "Rental",
-              date: "03/06/2025",
-              merchantName: "Studio Rente",
-              merchantAddress: "Sunway Damansara, Petaling Jaya, Selangor",
-              description: "Photography Studio Rental - Half Day",
-              quantity: 1,
-              unitPrice: 50.0,
-            },
-          ],
-        },
-        {
-          Id: "GMD2045",
-          Name: "Jessica Tan",
-          title: "Social Media Manager",
-          email: "jessica.t@example.com",
-          Date: "04/06/2025",
-          Total: "200.00",
-          Status: "Rejected",
-          remark: "Tools and ad spend for social media campaigns.",
-          IsAnomaly: true,
-          Items: [
-            {
-              category: "Software",
-              date: "04/06/2025",
-              merchantName: "SocialReach MY",
-              merchantAddress: "Online Service (Kuala Lumpur Office)",
-              description: "Social Media Management Platform Subscription",
-              quantity: 1,
-              unitPrice: 120.0,
-            },
-            {
-              category: "Advertising",
-              date: "04/06/2025",
-              merchantName: "Facebook / Instagram Ads Malaysia",
-              merchantAddress: "Level 10, TRX Exchange 106, Kuala Lumpur",
-              description: "Instagram Ad Campaign Budget",
-              quantity: 1,
-              unitPrice: 80.0,
-            },
-          ],
-        },
-        {
-          Id: "GMD2046",
-          Name: "Ryan Wong",
-          title: "Video Editor",
-          email: "ryan.w@example.com",
-          Date: "05/06/2025",
-          Total: "350.00",
-          Status: "Pending",
-          remark: "Claim for video production software and assets.",
-          IsAnomaly: false,
-          Items: [
-            {
-              category: "Software",
-              date: "05/06/2025",
-              merchantName: "ProEdit Solutions",
-              merchantAddress: "Cyberjaya City Centre, Cyberjaya, Selangor",
-              description: "Video Editing Software License (Annual)",
-              quantity: 1,
-              unitPrice: 250.0,
-            },
-            {
-              category: "Subscription",
-              date: "05/06/2025",
-              merchantName: "Malay Stock Footage",
-              merchantAddress: "Online Platform (Based in KL)",
-              description: "Premium Stock Footage Subscription",
-              quantity: 1,
-              unitPrice: 100.0,
-            },
-          ],
-        },
-        {
-          Id: "GMD2047",
-          Name: "Amanda Lim",
-          title: "Event Coordinator",
-          email: "amanda.l@example.com",
-          Date: "06/06/2025",
-          Total: "500.00",
-          Status: "Approved",
-          remark: "Deposits for upcoming corporate event.",
-          IsAnomaly: false,
-          Items: [
-            {
-              category: "Venue",
-              date: "06/06/2025",
-              merchantName: "KL Convention Centre",
-              merchantAddress:
-                "Jalan Pinang, Kuala Lumpur City Centre, Kuala Lumpur",
-              description: "Exhibition Hall Booking Deposit",
-              quantity: 1,
-              unitPrice: 300.0,
-            },
-            {
-              category: "Catering",
-              date: "06/06/2025",
-              merchantName: "Big Plate Catering",
-              merchantAddress: "Jalan PJS 11/15, Bandar Sunway, Selangor",
-              description: "Event Catering Service Deposit",
-              quantity: 1,
-              unitPrice: 200.0,
-            },
-          ],
-        },
-        {
-          Id: "GMD2048",
-          Name: "Daniel Koh",
-          title: "Print Specialist",
-          email: "daniel.k@example.com",
-          Date: "07/06/2025",
-          Total: "80.00",
-          Status: "Pending",
-          remark: "Replenishing printing supplies for the office.",
-          IsAnomaly: false,
-          Items: [
-            {
-              category: "Supplies",
-              date: "07/06/2025",
-              merchantName: "MR. D.I.Y.",
-              merchantAddress:
-                "Various outlets, e.g., Mid Valley Megamall, Kuala Lumpur",
-              description: "A4 Printing Paper (10 reams)",
-              quantity: 10,
-              unitPrice: 3.0,
-            },
-            {
-              category: "Supplies",
-              date: "07/06/2025",
-              merchantName: "Inkjet Refill Store",
-              merchantAddress: "Digital Mall, Petaling Jaya, Selangor",
-              description: "Compatible Ink Cartridges (Multi-pack)",
-              quantity: 2,
-              unitPrice: 25.0,
-            },
-          ],
-        },
-        {
-          Id: "GMD2049",
-          Name: "Michelle Ho",
-          title: "Brand Strategist",
-          email: "michelle.h@example.com",
-          Date: "08/06/2025",
-          Total: "600.00",
-          Status: "Approved",
-          remark: "Investment in market intelligence and team development.",
-          IsAnomaly: false,
-          Items: [
-            {
-              category: "Research",
-              date: "08/06/2025",
-              merchantName: "Fusion Analytics MY",
-              merchantAddress: "The Vertical, Bangsar South, Kuala Lumpur",
-              description: "Malaysian Consumer Market Report Q1 2025",
-              quantity: 1,
-              unitPrice: 400.0,
-            },
-            {
-              category: "Workshop",
-              date: "08/06/2025",
-              merchantName: "Local Branding Experts",
-              merchantAddress: "Co-Labs Coworking, The Starling, Petaling Jaya",
-              description: "Effective Brand Communication Workshop",
-              quantity: 1,
-              unitPrice: 200.0,
-            },
-          ],
-        },
-      ];
+    async fetchAdminClaims() {
+      try {
+        const response = await axios.get<ClaimResponseSchema[]>(
+          "http://localhost:8000/admin/claim/all",
+        );
+        this.claims = response.data;
+      } catch (error) {
+        console.error("Failed to fetch all admin claims:", error);
+        this.claims = [];
+        throw error;
+      }
     },
 
-    async initStore() {
-      this.initClaims();
+    async fetchClaimDetails(claimId: number): Promise<ClaimResponseSchema> {
+      try {
+        const response = await axios.get<ClaimResponseSchema>(
+          `http://localhost:8000/admin/claim/${claimId}/details`,
+        );
+        return response.data;
+      } catch (error) {
+        console.error(`Failed to fetch details for claim ${claimId}:`, error);
+        throw error;
+      }
+    },
+
+    async fetchInvoiceDetails(
+      invoiceId: number,
+    ): Promise<InvoiceResponseSchema> {
+      try {
+        const response = await axios.get<InvoiceResponseSchema>(
+          `http://localhost:8000/admin/invoice/${invoiceId}`,
+        );
+        return response.data;
+      } catch (error) {
+        console.error(
+          `Failed to fetch details for invoice ${invoiceId}:`,
+          error,
+        );
+        throw error;
+      }
+    },
+
+    async resolveClaim(
+      claimId: number,
+      approved: boolean,
+    ): Promise<ClaimResponseSchema> {
+      try {
+        const response = await axios.post<ClaimResponseSchema>(
+          `http://localhost:8000/admin/claim/${claimId}/resolve/${approved}`,
+        );
+        const updatedClaim = response.data;
+
+        const index = this.claims.findIndex((claim) => claim.id === claimId);
+        if (index !== -1) {
+          this.claims[index] = updatedClaim;
+        } else {
+          console.warn(
+            `Resolved claim ${claimId} not found in store after update. Re-fetching all claims.`,
+          );
+          await this.fetchAdminClaims();
+        }
+        return updatedClaim;
+      } catch (error) {
+        console.error(`Failed to resolve claim ${claimId}:`, error);
+        throw error;
+      }
+    },
+
+    async initializeAdminClaimStore() {
+      await this.fetchAdminClaims();
     },
   },
 });

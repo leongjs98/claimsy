@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from typing import List
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from db.postgresql_setup import get_db
 from db.tables import Invoice as DBInvoice
 from db.tables import Claim as DBClaim
-from db.schemas import InvoiceSchema, ClaimSchema
+from db.schemas import InvoiceSchema, ClaimSchema, EmployeeScheme
 
 
 router = APIRouter()
@@ -16,7 +16,7 @@ def get_all_claims(db: Session = Depends(get_db)):
     Show all claim made by every employee
     """
     try:
-        claims = db.query(DBClaim).all()
+        claims = db.query(DBClaim).options(joinedload(DBClaim.employee)).all()
         return claims
     except Exception as e:
         raise HTTPException(
@@ -111,7 +111,7 @@ async def get_policy_details():
     }
 
 
-# TODO: complete API /claim/{claim_id}/details
+# TODO: complete API /claim/{claim_id}/details ---> DONE (Diana)
 # for page /admin/claim/review/{claim_id}
 # get all the invoices linkeed to the claim
 @router.get("/claim/{claim_id}/details", response_model=ClaimSchema)
@@ -120,7 +120,7 @@ async def get_claim_by_id(claim_id: int, db: Session = Depends(get_db)):
     Get claim by claim_id
     """
     try:
-        claim = db.query(DBClaim).filter(DBClaim.id == claim_id).first()
+        claim = db.query(DBClaim).options(joinedload(DBClaim.invoices)).filter(DBClaim.id == claim_id).first()
         if claim is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -135,10 +135,42 @@ async def get_claim_by_id(claim_id: int, db: Session = Depends(get_db)):
         )
 
 
-# TODO: complete API /claim/{claim_id}/resolve/{approved}
 # for page /admin/claim/review/{claim_id}
 # approved = True, set status approve
 # approved = False, set status reject
-@router.post("/claim/{claim_id}/resolve/{status}", response_model=InvoiceSchema)
-def approve_or_reject_claim(claim_id: int, status: str, db: Session = Depends(get_db)):
-    return {}
+# TODO: account for pending
+# @router.post("/claim/{claim_id}/resolve/{status}", response_model=InvoiceSchema)
+@router.post("/claim/{claim_id}/resolve/{approved}", response_model=ClaimSchema)
+def approve_or_reject_claim( claim_id: int, approved: bool, db: Session = Depends(get_db)):
+    """
+    Approve or reject a claim.
+    - approved = True: set status to 'approved'
+    - approved = False: set status to 'rejected'
+    """
+    try:
+        claim = db.query(DBClaim).filter(DBClaim.id == claim_id).first()
+        if claim is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Claim with ID {claim_id} not found",
+            )
+
+        if approved:
+            claim.status = "approved"
+            print(f"Claim {claim_id} approved.")
+        else:
+            claim.status = "rejected"
+            # claim.remark = request_body.remark # Update remark if provided (e.g., reason for rejection)
+            print(f"Claim {claim_id} rejected.")
+
+        db.add(claim)
+        db.commit()
+        db.refresh(claim)
+
+        return claim 
+    except Exception as e:
+        print(f"Error resolving claim {claim_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal Server Error: Could not resolve claim. {str(e)}",
+        )
