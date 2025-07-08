@@ -27,7 +27,6 @@ def get_all_claims(employee_id: int, db: Session = Depends(get_db)):
             detail=f"Internal Server Error: Could not retrieve claims. {str(e)}",
         )
 
-
 @router.post("/analyze/invoice")
 async def analyze_invoice(
     files: List[UploadFile] = File(...),  # need to add more file(Multiplefile)):
@@ -48,9 +47,24 @@ async def analyze_invoice(
             results.append({"error": str(e)})
     return {"answers": results}
 
+# sho - create endpoint for unsubmitted invoices
+@router.get("/{employee_id}/invoice/unsubmitted", response_model=List[InvoiceSchema])
+def get_unsubmitted_invoices(employee_id: int, db: Session = Depends(get_db)):
+    try:
+        # Example: invoices where claim_id is None (not submitted)
+        invoices = db.query(DBInvoice).filter(
+            DBInvoice.employee_id == employee_id,
+            DBInvoice.claim_id.is_(None)  # or whatever logic marks as "unsubmitted"
+        ).order_by(DBInvoice.invoice_date.desc()).all()
+        return invoices
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal Server Error: Could not retrieve unsubmitted invoices. {str(e)}",
+        )
+# until here
 
 # TODO: create router for /employee/claim/{id}/edit, (submit here = save)
-
 
 # TODO: complete API /employee/{employee_id}/invoice/submit-into-claim
 # input: multiple invoices.id
@@ -60,15 +74,6 @@ async def analyze_invoice(
     "/employee/{employee_id}/invoice/submit-into-claim", response_model=ClaimSchema
 )
 def submit_invoices_into_claims(employee_id: int, db: Session = Depends(get_db)):
-    return {}
-
-
-# TODO: complete API {employee_id}/invoice/{invoice_id}
-# show invoice details in employee/claim/edit
-@router.get("/{employee_id}/invoice/{invoice_id}", response_model=InvoiceSchema)
-def get_invoice_details(
-    employee_id: int, invoice_id: int, db: Session = Depends(get_db)
-):
     return {}
 
 @router.get("/{employee_id}/invoice/all", response_model=List[InvoiceSchema])
@@ -88,3 +93,13 @@ def get_all_invoices_for_employee(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Internal Server Error: Could not retrieve invoices. {str(e)}",
         )
+    
+# TODO: complete API {employee_id}/invoice/{invoice_id}
+# show invoice details in employee/claim/edit
+@router.get("/{employee_id}/invoice/{invoice_id}", response_model=InvoiceSchema)
+def get_invoice_details(
+    employee_id: int, invoice_id: int, db: Session = Depends(get_db)
+):
+    return {}
+
+
