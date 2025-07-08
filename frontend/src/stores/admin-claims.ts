@@ -1,70 +1,81 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
-interface ItemService { 
+interface ItemService {
   item: string;
   quantity: number;
   unit_price: number;
 }
 
-
-interface InvoiceResponseSchema { 
+interface InvoiceResponseSchema {
   id?: number;
-  invoiceId: number;        
-  invoiceNumber: string;     
-  claimId?: number;         
-  employeeId: number;        
-  invoiceDate: string;       
+  invoiceId: number;
+  invoiceNumber: string;
+  claimId?: number;
+  employeeId: number;
+  invoiceDate: string;
   category?: string;
-  merchantName?: string;     
-  merchantAddress?: string;  
-  itemsServices: ItemService[]; 
+  merchantName?: string;
+  merchantAddress?: string;
+  itemsServices: ItemService[];
   remark?: string;
+  employee?: EmployeeScheme;
 }
-
 
 type ClaimStatusType = "pending" | "approved" | "rejected";
 
-
 interface EmployeeScheme {
-  employee_id?: string
+  employee_id?: string;
   name?: string;
   email?: string;
+  department?: string;
 }
 
-interface ClaimResponseSchema { 
+interface ClaimResponseSchema {
   id: number;
-  claim_number: string; 
-  employee_id: number;  
+  claim_number: string;
+  employee_id: number;
   claim_type?: string;
-  claim_amount?: number;      
+  claim_amount?: number;
   reason?: string;
   status: ClaimStatusType;
-  submitted_date?: string;    
-  reviewed_date?: string;     
+  submitted_date?: string;
+  reviewed_date?: string;
   resolution?: string;
-  created_at: string;         
-  updated_at: string;         
-  invoices: InvoiceResponseSchema[]; 
-  employee?: EmployeeScheme
+  created_at: string;
+  updated_at: string;
+  invoices: InvoiceResponseSchema[];
+  employee?: EmployeeScheme;
   // is_anomaly?: boolean; // Uncomment if added to backend ClaimSchema
   // is_fraud?: boolean;   // Uncomment if added to backend ClaimSchema
-} 
-
-
-function filterClaimsByStatus(claims: ClaimResponseSchema[], status: string): ClaimResponseSchema[] {
-  return claims.filter((claim) => claim.status?.toLowerCase() === status.toLowerCase());
 }
 
-function sortClaimsByDate(claims: ClaimResponseSchema[], ascending: boolean): ClaimResponseSchema[] {
+function filterClaimsByStatus(
+  claims: ClaimResponseSchema[],
+  status: string,
+): ClaimResponseSchema[] {
+  return claims.filter(
+    (claim) => claim.status?.toLowerCase() === status.toLowerCase(),
+  );
+}
+
+function sortClaimsByDate(
+  claims: ClaimResponseSchema[],
+  ascending: boolean,
+): ClaimResponseSchema[] {
   return [...claims].sort((a, b) => {
     const dateA = a.submitted_date ? new Date(a.submitted_date) : new Date(0);
     const dateB = b.submitted_date ? new Date(b.submitted_date) : new Date(0);
-    return ascending ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
+    return ascending
+      ? dateA.getTime() - dateB.getTime()
+      : dateB.getTime() - dateA.getTime();
   });
 }
 
-function sortClaimsByAmount(claims: ClaimResponseSchema[], ascending: boolean): ClaimResponseSchema[] {
+function sortClaimsByAmount(
+  claims: ClaimResponseSchema[],
+  ascending: boolean,
+): ClaimResponseSchema[] {
   return [...claims].sort((a, b) => {
     const amountA = a.claim_amount || 0;
     const amountB = b.claim_amount || 0;
@@ -72,33 +83,40 @@ function sortClaimsByAmount(claims: ClaimResponseSchema[], ascending: boolean): 
   });
 }
 
-
 export const useAdminClaimStore = defineStore("adminClaim", {
   state: () => ({
-    claims: [] as ClaimResponseSchema[], 
+    claims: [] as ClaimResponseSchema[],
   }),
 
   getters: {
     totalClaimCount: (state) => state.claims.length,
 
-    approvedClaimsCount: (state) => filterClaimsByStatus(state.claims, "approved").length,
-    rejectedClaimsCount: (state) => filterClaimsByStatus(state.claims, "rejected").length,
-    pendingClaimsCount: (state) => filterClaimsByStatus(state.claims, "pending").length,
+    approvedClaimsCount: (state) =>
+      filterClaimsByStatus(state.claims, "approved").length,
+    rejectedClaimsCount: (state) =>
+      filterClaimsByStatus(state.claims, "rejected").length,
+    pendingClaimsCount: (state) =>
+      filterClaimsByStatus(state.claims, "pending").length,
 
-    getApprovedClaims: (state) => filterClaimsByStatus(state.claims, "approved"),
-    getRejectedClaims: (state) => filterClaimsByStatus(state.claims, "rejected"),
+    getApprovedClaims: (state) =>
+      filterClaimsByStatus(state.claims, "approved"),
+    getRejectedClaims: (state) =>
+      filterClaimsByStatus(state.claims, "rejected"),
     getPendingClaims: (state) => filterClaimsByStatus(state.claims, "pending"),
-    getClaimsByStatus: (state) => (status: ClaimStatusType | string) => filterClaimsByStatus(state.claims, status),
+    getClaimsByStatus: (state) => (status: ClaimStatusType | string) =>
+      filterClaimsByStatus(state.claims, status),
 
-    getClaimsSortedByDate: (state) => (ascending: boolean) => sortClaimsByDate(state.claims, ascending),
-    getClaimsSortedByAmount: (state) => (ascending: boolean) => sortClaimsByAmount(state.claims, ascending),
+    getClaimsSortedByDate: (state) => (ascending: boolean) =>
+      sortClaimsByDate(state.claims, ascending),
+    getClaimsSortedByAmount: (state) => (ascending: boolean) =>
+      sortClaimsByAmount(state.claims, ascending),
   },
 
   actions: {
     async fetchAdminClaims() {
       try {
         const response = await axios.get<ClaimResponseSchema[]>(
-          "http://localhost:8000/admin/claim/all" 
+          "http://localhost:8000/admin/claim/all",
         );
         this.claims = response.data;
       } catch (error) {
@@ -111,7 +129,7 @@ export const useAdminClaimStore = defineStore("adminClaim", {
     async fetchClaimDetails(claimId: number): Promise<ClaimResponseSchema> {
       try {
         const response = await axios.get<ClaimResponseSchema>(
-          `http://localhost:8000/admin/claim/${claimId}/details` 
+          `http://localhost:8000/admin/claim/${claimId}/details`,
         );
         return response.data;
       } catch (error) {
@@ -120,18 +138,40 @@ export const useAdminClaimStore = defineStore("adminClaim", {
       }
     },
 
-    async resolveClaim(claimId: number, approved: boolean): Promise<ClaimResponseSchema> {
+    async fetchInvoiceDetails(
+      invoiceId: number,
+    ): Promise<InvoiceResponseSchema> {
+      try {
+        const response = await axios.get<InvoiceResponseSchema>(
+          `http://localhost:8000/admin/invoice/${invoiceId}`,
+        );
+        return response.data;
+      } catch (error) {
+        console.error(
+          `Failed to fetch details for invoice ${invoiceId}:`,
+          error,
+        );
+        throw error;
+      }
+    },
+
+    async resolveClaim(
+      claimId: number,
+      approved: boolean,
+    ): Promise<ClaimResponseSchema> {
       try {
         const response = await axios.post<ClaimResponseSchema>(
-          `http://localhost:8000/admin/claim/${claimId}/resolve/${approved}` 
+          `http://localhost:8000/admin/claim/${claimId}/resolve/${approved}`,
         );
         const updatedClaim = response.data;
 
-        const index = this.claims.findIndex(claim => claim.id === claimId);
+        const index = this.claims.findIndex((claim) => claim.id === claimId);
         if (index !== -1) {
           this.claims[index] = updatedClaim;
         } else {
-          console.warn(`Resolved claim ${claimId} not found in store after update. Re-fetching all claims.`);
+          console.warn(
+            `Resolved claim ${claimId} not found in store after update. Re-fetching all claims.`,
+          );
           await this.fetchAdminClaims();
         }
         return updatedClaim;

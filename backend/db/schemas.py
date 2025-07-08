@@ -15,6 +15,8 @@ class EmployeeScheme (BaseModel):
     employee_id: Optional[str] = None
     name: Optional[str] = None
     email: Optional[str] = None  
+    department: Optional[str] = None  
+
 
 class InvoiceSchema(BaseModel):
     id: Optional[int] = None

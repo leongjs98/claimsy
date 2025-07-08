@@ -118,7 +118,7 @@
                         {{ claim.employee?.name }}
                       </span>
                       <span class="text-xs text-gray-500">
-                        {{ claim.claim_type }}
+                        {{ claim.employee?.department }}
                       </span>
                     </div>
                   </td>

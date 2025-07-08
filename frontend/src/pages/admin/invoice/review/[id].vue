@@ -15,8 +15,8 @@
           <h1 class="ml-4 flex items-center justify-center gap-4 text-2xl font-bold text-blue-950">
             <template v-if="loading">Loading...</template>
             <template v-else-if="error">{{ error }}</template>
-            <template v-else-if="staff && claim">
-              Invoice #{{ invoice.employee?.id }} {{ invoice.employee?.name }}
+            <template v-else-if="staff && invoice">
+              Invoice #{{ invoice.invoiceNumber }} {{ invoice.employee?.name }}
             </template>
             <template v-else>No data found</template>
           </h1>
@@ -24,34 +24,34 @@
 
         <!-- Receipt Details -->
         <!-- Category -->
-        <div v-if="claim" class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        <div v-if="invoice" class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <!-- Date -->
           <div class="sm:col-span-3">
-            <CalendarInput label="Date (YYYY-MM-DD)" :model-value="formatDate(invoice.invoice_date)" name="date"
-              id="date" v-model="claim.date" disabled />
+            <CalendarInput label="Date (YYYY-MM-DD)" :model-value="formatDate(invoice?.invoiceDate)" name="date"
+              id="date" model-value="invoice?.invoiceDate" disabled />
           </div>
 
           <!-- Merchant Name -->
           <div class="sm:col-span-full">
             <TextInput label="Merchant Name" name="merchantName" id="merchant-name" autocomplete="name"
-              :model-value="invoice.merchantName" disabled />
+              :model-value="invoice?.merchantName" disabled />
           </div>
 
           <!-- Merchant Address -->
           <div class="sm:col-span-full">
             <TextInput label="Merchant Address" name="merchantAddress" id="merchant-address"
-              autocomplete="street-address" :model-value="invoice.merchantAddress" disabled />
+              autocomplete="street-address" :model-value="invoice?.merchantAddress" disabled />
           </div>
 
           <!-- Remark -->
           <div class="sm:col-span-full">
-            <TextInput label="Remark" name="remark" id="remark" :model-value="claim.remark" disabled />
+            <TextInput label="Remark" name="remark" id="remark" :model-value="invoice?.remark" disabled />
           </div>
         </div>
       </div>
 
       <!-- Items/Services -->
-      <div v-if="claim" class="grid grid-cols-1 gap-x-6 gap-y-8 pb-12 sm:grid-cols-6">
+      <div v-if="invoice" class="grid grid-cols-1 gap-x-6 gap-y-8 pb-12 sm:grid-cols-6">
         <div class="sm:col-span-full">
           <h2 class="mt-6 text-sm font-medium text-theme-300">Invoices</h2>
           <table class="col-span-full w-full border-separate border-spacing-y-4">
@@ -65,9 +65,9 @@
             </thead>
 
             <tbody>
-              <tr v-for="(item, index) in claim.items" :key="index" class="bg-gray-200 text-theme-300">
+              <tr v-for="(item, index) in invoice?.itemsServices" :key="index" class="bg-gray-200 text-theme-300">
                 <td class="rounded-l-lg px-4 py-3">{{ item.item }}</td>
-                <td class="rounded-l-lg px-4 py-3">{{ invoice.category }}</td>
+                <td class="rounded-l-lg px-4 py-3">{{ invoice?.category }}</td>
                 <td class="px-4 py-3 text-right">{{ item.quantity }}</td>
                 <td class="rounded-r-lg px-4 py-3 text-right">
                   {{
@@ -81,8 +81,8 @@
               <tr class="bg-gray-200 font-semibold">
                 <td colspan="4" class="px-4 py-3 text-right">Invoice Total:</td>
                 <td class="rounded-r-lg px-4 py-3 text-right">
-                  {{formatCurrency(invoice.itemsServices.reduce((sum, item) => sum + (item.unit_price * item.quantity),
-                  0))
+                  {{formatCurrency(invoice?.itemsServices.reduce((sum, item) => sum + (item.unit_price * item.quantity),
+                    0))
                   }}
                 </td>
               </tr>
@@ -95,8 +95,8 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-import { ref, computed, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { ref, onMounted } from "vue";
 import { useAdminClaimStore } from "@/stores/admin-claims.ts";
 import { storeToRefs } from "pinia";
 
@@ -105,7 +105,7 @@ const router = useRouter();
 const route = useRoute();
 
 const staff = ref(null);
-const claim = ref(null);
+const invoice = ref(null);
 const loading = ref(true);
 const error = ref("");
 
@@ -113,13 +113,21 @@ const error = ref("");
 onMounted(async () => {
   try {
     loading.value = true;
-    const claimId = Number(route.params.id)
+    const invoiceId = Number(route.params.id)
+    console.log("Fetching claim ID:", invoiceId);
 
-    const claimData = await adminClaims.fetchClaimDetails(claimId);
-    claim.value = claimData;
+    const invoiceData = await adminClaims.fetchInvoiceDetails(invoiceId);
+    console.log("API Response:", invoiceData);
+    if (!invoiceData) {
+      throw new Error("Claim not found");
+    }
+    invoice.value = invoiceData;
+    if (invoiceData.employee) {
+      staff.value = invoiceData.employee;
+    }
   } catch (err) {
     console.error("Error fetching claim details", err);
-    error.value = "Failed to load claim details";
+    error.value = "Failed to load invoice details";
   } finally {
     loading.value = false;
   }

@@ -65,7 +65,7 @@
                   </span>
                   <br />
                   <span class="text-xs text-gray-500">
-                    Invoice #{{ invoice.invoiceNumber }}
+                    {{ invoice.invoiceNumber }}
                   </span>
                 </td>
                 
@@ -98,7 +98,7 @@
                 <!-- Details Link -->
                 <td class="px-4 py-6 text-theme-300 hover:underline">
                   <div class="text-right">
-                    <RouterLink :to="`/admin/invoice/review/${invoice.id}`">
+                    <RouterLink :to="`/admin/invoice/review/${invoice.invoiceId}`">
                       Details
                     </RouterLink>
                   </div>
