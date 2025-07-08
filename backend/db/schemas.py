@@ -10,7 +10,7 @@ class ItemService(BaseModel):
     item: str
     quantity: int
     unit_price: float
-    
+
 class EmployeeScheme (BaseModel):
     employee_id: Optional[str] = None
     name: Optional[str] = None
@@ -49,7 +49,6 @@ class ClaimStatus(str, Enum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"
-
 
 class ClaimSchema(BaseModel):
     id: int
