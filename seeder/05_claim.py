@@ -7,12 +7,13 @@ Due to Foreign keys
 import os
 import sys
 from typing import List
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+import json
 from faker import Faker
 from decimal import Decimal
 import random
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from backend.db.tables import Employee, Invoice, Claim
 from backend.db.postgresql_setup import session
 from backend.db.values import categories
@@ -48,20 +49,19 @@ def find_invoices_of_random_employee():
 def seed_claims_for_employee_id_1():
     employee_1 = session.query(Employee).filter(Employee.id == 1).first()
     try:
-        invoices = (
-            session.query(Invoice)
-            .filter(Invoice.employee_id == 1)
-            .filter(Invoice.claim_id.is_(None))
-            .all()
-        )
         for i in range(MIN_NUM_CLAIM_FOR_EMPLOYEE_ID_1):
+            invoices = (
+                session.query(Invoice)
+                .filter(Invoice.employee_id == 1)
+                .filter(Invoice.claim_id.is_(None))
+                .all()
+            )
             selected_invoices = List[Invoice]
 
             claim = Claim(
                 claim_number=f"CLM-{fake.unique.random_number(digits=8)}",
                 employee_id=1,
                 claim_type=random.choice(claim_types),
-                claim_amount=Decimal(str(round(random.uniform(50.0, 5000.0), 2))),
                 reason=fake.text(max_nb_chars=200),
                 status=random.choice(statuses),
                 submitted_date=fake.date_between(start_date="-1y", end_date="today"),
@@ -75,8 +75,18 @@ def seed_claims_for_employee_id_1():
 
             # Randomly assign 1-3 invoices to each claim using actual invoice IDs
             num_invoices_to_assign = random.randint(1, min(3, len(invoices)))
+            if num_invoices_to_assign > 5:
+                num_invoices_to_assign = 5
+            if num_invoices_to_assign == 0:
+                continue
             selected_invoices = random.sample(invoices, num_invoices_to_assign)
             claim.invoices = selected_invoices
+            total = 0
+            for inv in selected_invoices:
+                data = json.loads(inv.items_services)
+                total = total + data['quantity'] * data['unit_price']
+            claim.claim_amount=Decimal(str(round(random.uniform(1.0, total), 2))),
+            print(num_invoices_to_assign, claim, selected_invoices)
 
             session.add(claim)
 
@@ -123,6 +133,10 @@ def seed_claims():
 
             # Randomly assign 1-3 invoices to each claim using actual invoice IDs
             num_invoices_to_assign = random.randint(1, min(3, len(invoices)))
+            if num_invoices_to_assign > 5:
+                num_invoices_to_assign = 5
+            if num_invoices_to_assign == 0:
+                continue
             selected_invoices = random.sample(invoices, num_invoices_to_assign)
             claim.invoices = selected_invoices
 

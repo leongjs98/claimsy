@@ -1,6 +1,18 @@
 # Code-related Todo's
 ## Todo
+### Feedbacks
+- [ ] john: smart suggest get it done to impress
+- [ ] john: navbar middle and to the sides (absolute and relative)
+- [ ] john: upload receipt, show image (a lot = carousell)
+- [ ] john: submit button in invoice smae column as checkbox
+- [ ] john: invoice/edit (both first and \[id]) table become input to edit (delete button)
+- [ ] john: invoice/edit (both first and \[id]) unit next to quantity
+- [ ] chee tat: category in my invoices (make it click)
+
 ### Essentials
+- [ ] remove claim amount from claim table, fix frontend relying part
+- [ ] fuzzy search button
+- [ ] testing
 - [ ] Smart Suggest feature
 - [ ] seeder for fix chat data
 - [ ] Chatbot feature
