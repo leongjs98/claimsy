@@ -188,15 +188,8 @@ Unsubmitted.vue
                 <td class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500">
                   {{ formatDate(invoice.invoiceDate) }}
                 </td>
-                <td class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500">
-                  <div class="flex flex-col">
-                    <span class="font-medium text-gray-900">{{
-                      invoice.quantity
-                    }}</span>
-                    <span class="text-xs text-gray-500">{{
-                      truncateString(invoice.merchant_address, 25)
-                    }}</span>
-                  </div>
+                <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500">
+                  {{ getItemCount(invoice) }}
                 </td>
                 <td class="w-32 px-3 py-4 text-sm text-gray-500">
                   <span class="block w-48 truncate overflow-hidden text-ellipsis" :title="invoice.remark">
@@ -204,7 +197,7 @@ Unsubmitted.vue
                   </span>
                 </td>
                 <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500">
-                  {{ invoice.invoice_number }}
+                  {{ formatCurrency(getTotalPrice(invoice)) }}
                 </td>
                 <td
                   :class="[
@@ -237,9 +230,9 @@ Unsubmitted.vue
         </div>
       </div>
     </div>
-    <div class="flex justify-center px-4 sm:px-8 lg:px-14">
+    <div class="flex justify-end px-4 sm:px-8 lg:px-14">
       <button
-        class="hover:bg-theme-400 z-20 mt-4 rounded bg-theme-300 px-4 py-2 text-white"
+        class="hover:bg-theme-400 z-25 mt-5 rounded bg-theme-300 px-15 py-2 text-white"
         :disabled="selectedInvoices.length === 0"
         @click="openDialog = true"
       >
@@ -413,6 +406,21 @@ function truncateString(str, maxLength = 30) {
   }
   return str;
 }
+
+// sho - Helper function to count number of items
+function getItemCount(invoice) {
+  const items = invoice.itemsServices;
+  return items.length;
+}
+
+// sho - function to get total price using map and reduce
+function getTotalPrice(invoice) {
+  const items = invoice.itemsServices;
+  return items
+    .map(item => (item.quantity || 0) * (item.unit_price || 0))
+    .reduce((sum, val) => sum + val, 0);
+}
+// until here
 
 // Methods
 function setSort(key) {
