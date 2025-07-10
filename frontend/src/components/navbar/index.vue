@@ -3,8 +3,8 @@
     <header
       class="rounded-2xl bg-theme-300 px-4 text-white shadow-xl/30 shadow-blue-900"
     >
-      <div class="flex justify-between">
-        <nav class="flex items-center">
+      <div class="flex justify-center relative items-center">
+        <nav class="flex items-center absolute left-0">
           <RouterLink to="/">
             <!-- <img class="w-7" src="/logo.svg" alt="Claimsy Logo" /> -->
             <img class="w-32" src="/logo_with_title.svg" alt="Claimsy Logo" />
@@ -65,7 +65,7 @@
             > </NavLink>
           </ul>
         </nav>
-        <nav class="flex items-center gap-2">
+        <nav class="absolute right-0 flex items-center gap-2">
           <!-- <button>
             <svg
               class="size-7"
