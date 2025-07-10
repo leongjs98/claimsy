@@ -38,11 +38,7 @@ Unsubmitted.vue
                   #
                 </th>
                 <th class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold">
-                  <div
-                    @mouseenter="showCategoryDropdown = true"
-                    @mouseleave="showCategoryDropdown = false"
-                    class="flex items-center gap-2"
-                  >
+                  <div class="flex items-center gap-2">
                     <button @click="setSort('Category')">Category</button>
                     <div class="relative inline-block w-full text-left">
                       <div>
@@ -52,6 +48,7 @@ Unsubmitted.vue
                           id="menu-button"
                           aria-expanded="true"
                           aria-haspopup="true"
+                          @click="showCategoryDropdown = !showCategoryDropdown"
                         >
                           <span class="sr-only">Open options</span>
                           <svg
@@ -72,7 +69,6 @@ Unsubmitted.vue
                       <Transition name="dropdown-menu">
                         <div
                           v-show="showCategoryDropdown"
-                          @mouseleave="showCategoryDropdown = false"
                           class="absolute left-0 z-20 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
                           role="menu"
                           aria-orientation="vertical"
@@ -92,12 +88,11 @@ Unsubmitted.vue
                                   selectedCategory === cat,
                                 'text-gray-700': selectedCategory !== cat,
                               }"
-                              showCategoryDropdown="false;"
                               href="#"
                               class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-50 hover:text-theme-200 focus:bg-blue-50 focus:text-theme-200"
                               role="menuitem"
                               tabindex="-1"
-                              id="menu-item-2"
+                              :id="`menu-item-${cat}`"
                             >
                               {{ cat }}
                             </button>
@@ -383,8 +378,8 @@ const sortedInvoices = computed(() => {
 
   if (sortKey.value === "Date") {
     return invoices.slice().sort((a, b) => {
-      const dateA = new Date(a.invoice_date);
-      const dateB = new Date(b.invoice_date);
+      const dateA = new Date(a.invoiceDate);
+      const dateB = new Date(b.invoiceDate);
       return sortAsc.value ? dateA - dateB : dateB - dateA;
     });
   }

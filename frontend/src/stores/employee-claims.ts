@@ -49,7 +49,7 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
   state: () => ({
     claims: [] as Claim[],
     invoices: [] as Invoice[],
-    categories: [] as string[],
+    // categories: [] as string[],
     loading: false,
     error: null as string | null,
     currentEmployeeId: null as number | null,
@@ -79,7 +79,22 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
         new Date(b.submitted_date).getTime() - new Date(a.submitted_date).getTime()
       );
     },
+
+    // aisya-category
+    categories: (state) => {
+    const uniqueCategories = new Set<string>();
+    uniqueCategories.add('All'); // Always include 'All' option
+    state.invoices.forEach(invoice => {
+      if (invoice.category) { // Ensure the category property exists
+        uniqueCategories.add(invoice.category);
+      }
+    });
+    return Array.from(uniqueCategories);
   },
+
+},
+
+  
 
   actions: {
     // Set current employee
@@ -154,17 +169,6 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
       }
     },
 
-    // Initialize categories
-    initializeCategories() {
-      this.categories = [
-        "All",
-        "Travel Expenses",
-        "Accommodation",
-        "Meals and Entertainment",
-        "Office Supplies and Equipment",
-        "Medical Claim",
-      ];
-    },
 
     // sho - changing the initStore to fetch claims by employee ID = 1
     async initStore(employeeId: number) {
