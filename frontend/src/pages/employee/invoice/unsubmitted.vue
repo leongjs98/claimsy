@@ -232,7 +232,7 @@ Unsubmitted.vue
     </div>
     <div class="flex justify-end px-4 sm:px-8 lg:px-14">
       <button
-        class="hover:bg-theme-400 z-25 mt-5 rounded bg-theme-300 px-15 py-2 text-white"
+        class="hover:bg-theme-400 z-25 mt-5 rounded bg-theme-300 px-13 py-2 text-white"
         :disabled="selectedInvoices.length === 0"
         @click="openDialog = true"
       >
