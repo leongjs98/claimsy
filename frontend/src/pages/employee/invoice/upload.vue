@@ -119,64 +119,37 @@
             Supported formats: PDF, JPEG ,JPG or PNG (max 10MB)
           </p>
           <!-- Upload and Cancel buttons -->
-          <div class="mt-6 flex justify-center space-x-10">
-            <button
-              @click="cancelUpload"
-              class="rounded-xl border-1 border-theme-300 bg-white px-10 py-2 text-xs font-medium text-theme-300 shadow-lg transition-colors duration-200 hover:bg-blue-50 focus:ring-1 focus:ring-blue-300 focus:ring-offset-2 focus:outline-none"
-            >
-              Cancel
-            </button>
-            <!-- Hardcoded here might change to dynamic later -->
-            <RouterLink
-              :to="{
-                path: '/employee/claim/edit',
-                query: {
-                  categoryID: 'Gadget',
-                  DateID: '2023-10-01',
-                  MerchantnameID: 'Lin Dan',
-                  MerchanaddressID: 'No 1, Jalan 1/1, Kuala Lumpur',
-                  RemarkID: 'Gadget purchase for event academy for all',
-                },
-              }"
-              class="rounded-xl bg-theme-300 px-10 py-2 text-xs font-medium text-white shadow-lg transition-all duration-200 ease-in-out hover:bg-theme-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              Upload</RouterLink
-            >
-            <!-- <button -->
-            <!--   @click="uploadFile" -->
-            <!--   :disabled="!selectedFile" -->
-            <!--   class="rounded-xl px-10 py-2 text-xs font-medium text-white shadow-lg transition-all duration-200 ease-in-out" -->
-            <!--   :class="{ -->
-            <!--     'bg-theme-300 hover:bg-theme-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2': -->
-            <!--       selectedFile, -->
-            <!--     'cursor-not-allowed bg-gray-400': !selectedFile, -->
-            <!--   }" -->
-            <!-- > -->
-            <!--   <span class="flex items-center"> -->
-            <!--     <svg -->
-            <!--       v-if="isUploading" -->
-            <!--       class="mr-2 -ml-1 h-4 w-4 animate-spin text-white" -->
-            <!--       xmlns="http://www.w3.org/2000/svg" -->
-            <!--       fill="none" -->
-            <!--       viewBox="0 0 24 24" -->
-            <!--     > -->
-            <!--       <circle -->
-            <!--         class="opacity-25" -->
-            <!--         cx="12" -->
-            <!--         cy="12" -->
-            <!--         r="10" -->
-            <!--         stroke="currentColor" -->
-            <!--         stroke-width="4" -->
-            <!--       ></circle> -->
-            <!--       <path -->
-            <!--         class="opacity-75" -->
-            <!--         fill="currentColor" -->
-            <!--         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" -->
-            <!--       ></path> -->
-            <!--     </svg> -->
-            <!--     {{ isUploading ? "Uploading..." : "Upload" }} -->
-            <!--   </span> -->
-            <!-- </button> -->
+          <div class="mt-6 flex items-center justify-center gap-10">
+            <SecondaryButton @click="cancelUpload"> Cancel </SecondaryButton>
+            <span class="flex items-center justify-center gap-2">
+              <PrimaryButton @click="uploadFile(selectedFiles)">
+                <span v-if="isLoading"> Processing... </span>
+                <span v-else> Upload </span>
+              </PrimaryButton>
+              <svg
+                v-if="isLoading"
+                class="size-5 animate-spin"
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+              >
+                <g fill="none" fill-rule="evenodd">
+                  <path
+                    d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M12 4.5a7.5 7.5 0 1 0 0 15a7.5 7.5 0 0 0 0-15M1.5 12C1.5 6.201 6.201 1.5 12 1.5S22.5 6.201 22.5 12S17.799 22.5 12 22.5S1.5 17.799 1.5 12"
+                    opacity=".1"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M12 4.5a7.46 7.46 0 0 0-5.187 2.083a1.5 1.5 0 0 1-2.075-2.166A10.46 10.46 0 0 1 12 1.5a1.5 1.5 0 0 1 0 3"
+                  />
+                </g>
+              </svg>
+            </span>
           </div>
         </div>
       </div>
@@ -185,11 +158,18 @@
 </template>
 
 <script setup>
+  import axios from "axios";
+  import { useRouter } from "vue-router";
   import { ref } from "vue";
+  import { useEmployeeClaimStore } from "@/stores/employee-claims";
+
+  const router = useRouter();
 
   const isDragging = ref(false);
   const selectedFiles = ref([]);
   const isUploading = ref(false);
+  const claimStore = useEmployeeClaimStore();
+  const isLoading = computed(() => claimStore.isLoading("uploading"));
 
   const handleDrop = (e) => {
     isDragging.value = false;
@@ -222,35 +202,74 @@
     selectedFiles.value = [];
   };
 
-  const uploadFile = async () => {
-    if (selectedFiles.value.length === 0) return;
+  const uploadFile = async (file) => {
+    if (!selectedFiles.value || selectedFiles.value.length === 0) {
+      alert("Please upload a file");
+      return;
+    }
 
-    isUploading.value = true;
+    const formData = new FormData(); //this will give you only the first one
+    for (let i = 0; i < selectedFiles.value.length; i++) {
+      formData.append("files", selectedFiles.value[i]);
+    }
 
     try {
-      //I need to append multiple files but I dont think the receiver is ready for it. Therefore, I make it append one by one for now.
-      //not ready because the receipt details will only generate data from the hardcoded one.
-      const formData = new FormData();
-      selectedFiles.value.forEach((file) => {
-        formData.append("files", file);
+      claimStore.startLoading("uploading");
+      isUploading.value = true;
+      const { data } = await axios.post(
+        "http://127.0.0.1:8000/employee/analyze/invoice",
+        formData,
+        {
+          headers: {
+            accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      console.log("Raw answers:", data.answers);
+      const itemsServices = [];
+      let firstValid = null;
+
+      let merchant_Names = [];
+      let merchant_Addresses = [];
+      let remarks = [];
+
+      for (const result of data.answers) {
+        if (!result || result.error || !result.items) continue;
+
+        if (result.merchant_name) merchant_Names.push(result.merchant_name);
+        if (result.merchant_address)
+          merchant_Addresses.push(result.merchant_address);
+        if (result.remark) remarks.push(result.remark);
+
+        if (!firstValid) {
+          firstValid = result;
+        }
+
+        itemsServices.push(...result.items);
+      }
+
+      const mergedNames = merchant_Names.join(" | ");
+      const mergedAddresses = merchant_Addresses.join(" | ");
+      const mergedremarks = remarks.join(" | ");
+
+      router.push({
+        path: "/employee/invoice/edit/first",
+        query: {
+          category: firstValid.category,
+          date: firstValid.date,
+          merchantName: mergedNames,
+          merchantAddress: mergedAddresses,
+          remark: mergedremarks,
+          items: JSON.stringify(itemsServices),
+        },
       });
-
-      // Example upload implementation (uncomment and modify as needed):
-      // const response = await fetch('/api/upload', {
-      //   method: 'POST',
-      //   body: formData
-      // })
-      // const data = await response.json()
-      // console.log('Upload successful:', data)
-
-      // Simulate upload delay
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Clear the form after successful upload
-      selectedFiles.value = [];
-    } catch (error) {
-      console.error("Upload failed:", error);
+    } catch (err) {
+      console.error("Upload failed:", err);
+      alert("LLM analysis unsuccessful");
     } finally {
+      claimStore.stopLoading("uploading");
       isUploading.value = false;
     }
   };

@@ -3,11 +3,11 @@
     <Tab
       :tabs="[
         {
-          link: '/ask-claimsy',
+          link: '/employee/ask-claimsy/',
           routeName: 'Chat with Claimsy',
         },
         {
-          link: '/ask-claimsy/smart-suggest/',
+          link: '/employee/ask-claimsy/smart-suggest/',
           routeName: 'Smart Suggest',
         },
       ]"
@@ -45,7 +45,7 @@
         <div class="mt-8">
           <h3 class="text-base font-semibold text-gray-900">
             <RouterLink
-              to="/ask-claimsy/smart-suggest/travel-transport"
+              to="/employee/ask-claimsy/smart-suggest/travel-transport"
               class="focus:outline-hidden"
             >
               <!-- Extend touch target to entire panel -->
@@ -93,7 +93,7 @@
         <div class="mt-8">
           <h3 class="text-base font-semibold text-gray-900">
             <RouterLink
-              to="/ask-claimsy/smart-suggest/meals-entertainment"
+              to="/employee/ask-claimsy/smart-suggest/meals-entertainment"
               class="focus:outline-hidden"
             >
               <!-- Extend touch target to entire panel -->
@@ -141,7 +141,7 @@
         <div class="mt-8">
           <h3 class="text-base font-semibold text-gray-900">
             <RouterLink
-              to="/ask-claimsy/smart-suggest/health-wellness"
+              to="/employee/ask-claimsy/smart-suggest/health-wellness"
               class="focus:outline-hidden"
             >
               <!-- Extend touch target to entire panel -->
@@ -176,33 +176,30 @@
               xmlns="http://www.w3.org/2000/svg"
               width="32"
               height="32"
-              viewBox="0 0 48 48"
+              viewBox="0 0 24 24"
             >
-              <!-- Icon from IconPark Outline by ByteDance - https://github.com/bytedance/IconPark/blob/master/LICENSE -->
-              <g fill="none" stroke="currentColor" stroke-width="4">
-                <path
-                  stroke-linejoin="round"
-                  d="M22.799 4.201L4.414 22.586a2 2 0 0 0 0 2.828L22.8 43.8a2 2 0 0 0 2.828 0l18.385-18.385a2 2 0 0 0 0-2.828L25.627 4.2a2 2 0 0 0-2.828 0Z"
-                />
-                <path stroke-linecap="round" d="M18 24h12m-6-6v12" />
-              </g>
+              <!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE -->
+              <path
+                fill="currentColor"
+                d="m19.275 19.8l.7-.7L12 11.125q.475-.575.738-1.3T13 8.3q0-1.875-1.313-3.175T8.5 3.825h-.25L11.325 6.9l-4.25 4.225L4 8.05v.275Q4 10.2 5.312 11.5T8.5 12.8q.8 0 1.513-.263T11.3 11.8l7.975 8ZM5.375 3.25q0-.725.775-1.088T8.5 1.8q2.725 0 4.612 1.888T15 8.3q0 .65-.125 1.288T14.5 10.8l6.875 6.875q.575.575.588 1.413T21.4 20.5l-.675.7q-.575.6-1.413.613t-1.437-.588l-6.9-6.9q-.575.25-1.2.363t-1.25.112q-2.725 0-4.612-1.887T2.025 8.3q0-1.6.35-2.363t1.075-.762q.25 0 .463.088t.387.262L7.075 8.3L8.5 6.9L5.725 4.125q-.175-.175-.263-.4t-.087-.475ZM9.2 9Z"
+              />
             </svg>
           </span>
         </div>
         <div class="mt-8">
           <h3 class="text-base font-semibold text-gray-900">
             <RouterLink
-              to="/ask-claimsy/smart-suggest/miscellaneous"
+              to="/employee/ask-claimsy/smart-suggest/supplies_and_equipments"
               class="focus:outline-hidden"
             >
               <!-- Extend touch target to entire panel -->
               <span class="absolute inset-0" aria-hidden="true"></span>
-              Miscellaneous
+              Supplies & Equipments
             </RouterLink>
           </h3>
           <p class="mt-2 text-sm text-gray-500">
             Handle various business needs like office supplies, professional
-            services, and other expenses
+            services etc.
           </p>
         </div>
         <span

@@ -3,11 +3,11 @@
     <Tab
       :tabs="[
         {
-          link: '/ask-claimsy',
+          link: '/employee/ask-claimsy/',
           routeName: 'Chat with Claimsy',
         },
         {
-          link: '/ask-claimsy/smart-suggest/',
+          link: '/employee/ask-claimsy/smart-suggest/',
           routeName: 'Smart Suggest',
         },
       ]"
@@ -56,7 +56,7 @@
               <p
                 class="w-fit max-w-lg rounded-lg p-3"
                 :class="
-                  convo.isSenderUser ? 'bg-blue-100' : 'border-2 bg-blue-50'
+                  convo.isSenderUser ? 'bg-blue-100' : 'bg-theme-200 text-white'
                 "
               >
                 {{ convo.text }}

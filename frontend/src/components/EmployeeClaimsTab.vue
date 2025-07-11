@@ -16,7 +16,7 @@
               page: $route.path === '/employee/claim/expenses',
             }"
           >
-            My Expenses
+            Unsubmitted Invoices
           </RouterLink>
           <RouterLink
             to="/employee/claim/all"

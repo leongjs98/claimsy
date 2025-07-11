@@ -11,10 +11,15 @@ class ItemService(BaseModel):
     quantity: int
     unit_price: float
 
+class EmployeeScheme (BaseModel):
+    employee_id: Optional[str] = None
+    name: Optional[str] = None
+    email: Optional[str] = None  
+    department: Optional[str] = None  
+
 
 class InvoiceSchema(BaseModel):
     id: Optional[int] = None
-    invoice_id: int = Field(alias="invoiceId")
     invoice_number: str = Field(alias="invoiceNumber")
     claim_id: Optional[int] = Field(alias="claimId", default=None)
     employee_id: int = Field(alias="employeeId")
@@ -24,6 +29,8 @@ class InvoiceSchema(BaseModel):
     merchant_address: Optional[str] = Field(alias="merchantAddress", default=None)
     items_services: List[ItemService] = Field(alias="itemsServices")
     remark: Optional[str] = None
+    employee: Optional[EmployeeScheme] = None
+
 
     @field_validator('items_services', mode='before')
     @classmethod
@@ -57,14 +64,11 @@ class ClaimSchema(BaseModel):
     resolution: Optional[str] = None
     created_at: datetime
     updated_at: datetime
-    invoices: List[InvoiceSchema] = []
-
+    invoices: List[InvoiceSchema] = [] 
+    employee: Optional[EmployeeScheme] = None
+    
     class Config:
         from_attributes = True
         json_encoders = {
             Decimal: float
         }
-
-
-
-

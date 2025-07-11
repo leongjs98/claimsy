@@ -8,7 +8,26 @@
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <!-- Tabs Row -->
-          <EmployeeClaimsTab />
+          <Tab
+            :tabs="[
+              {
+                link: '/employee/invoice/unsubmitted',
+                routeName: 'My Invoices',
+              },
+              {
+                link: '/employee/claim/all',
+                routeName: 'All Claims',
+              },
+              {
+                link: '/employee/claim/approved',
+                routeName: 'Approved',
+              },
+              {
+                link: '/employee/claim/rejected',
+                routeName: 'Rejected',
+              },
+            ]"
+          />
           <table
             class="min-w-full divide-y divide-gray-300 rounded-b-lg bg-gray-100 drop-shadow-md"
           >
@@ -249,7 +268,7 @@
     </div>
     <div class="flex justify-center px-4 sm:px-8 lg:px-14">
       <button
-        class="hover:bg-theme-400 z-20 mt-4 rounded bg-theme-300 px-4 py-2 text-white"
+        class="hover:bg-theme-400 mt-4 rounded bg-theme-300 px-4 py-2 text-white"
         :disabled="selectedExpenses.length === 0"
         @click="openDialog = true"
       >

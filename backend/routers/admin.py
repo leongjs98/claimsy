@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from typing import List
 from sqlalchemy.orm import Session, joinedload
-from db.setup import get_db
+from db.postgresql_setup import get_db
 from db.tables import Invoice as DBInvoice
 from db.tables import Claim as DBClaim
-from db.schemas import InvoiceSchema, ClaimSchema
+from db.schemas import InvoiceSchema, ClaimSchema, EmployeeScheme
 
 
 router = APIRouter()
@@ -16,7 +16,7 @@ def get_all_claims(db: Session = Depends(get_db)):
     Show all claim made by every employee
     """
     try:
-        claims = db.query(DBClaim).all()
+        claims = db.query(DBClaim).options(joinedload(DBClaim.employee)).all()
         return claims
     except Exception as e:
         raise HTTPException(
@@ -70,10 +70,24 @@ async def get_policy_details():
     Show the details of the policy
     """
     return {
-        "claim_eligibility_criteria": [
-            "Conditions under which a claim is considered valid.",
-            "Timeframe has changed",
+        "validClaimCriteria": [
+            "Must fall under eligible categories",
+            "Medical, Supplies/Equipment, Travel, Meals/Entertainment, Accommodation",
+            "Submitted within required timeframes (30 days general, 60 days medical)",
+            "Include original receipts and completed expense forms",
+            "Have proper business justification and manager approval",
+            "Stay within spending limits (Medical: RM500, Meals: RM50/day travel, RM25/person business)",
+            "Medical claims require medical certificates",
         ],
+        "fraudulentClaimsIndicators": [
+            "False or altered receipts and signatures",
+            "Double claiming same expense",
+            "Personal expenses claimed as business",
+            "Deliberately inflated amounts",
+            "Claims for non-existent expenses",
+            "Fake medical certificates",
+        ],
+
         "claim_approval_limitations": [
             {
                 "title": "Claim Approval & Limitations",
@@ -97,7 +111,7 @@ async def get_policy_details():
     }
 
 
-# TODO: complete API /claim/{claim_id}/details
+# TODO: complete API /claim/{claim_id}/details ---> DONE (Diana)
 # for page /admin/claim/review/{claim_id}
 # get all the invoices linkeed to the claim
 @router.get("/claim/{claim_id}/details", response_model=ClaimSchema)
@@ -121,10 +135,11 @@ async def get_claim_by_id(claim_id: int, db: Session = Depends(get_db)):
         )
 
 
-# TODO: complete API /claim/{claim_id}/resolve/{approved}
 # for page /admin/claim/review/{claim_id}
 # approved = True, set status approve
 # approved = False, set status reject
+# TODO: account for pending
+# @router.post("/claim/{claim_id}/resolve/{status}", response_model=InvoiceSchema)
 @router.post("/claim/{claim_id}/resolve/{approved}", response_model=ClaimSchema)
 def approve_or_reject_claim( claim_id: int, approved: bool, db: Session = Depends(get_db)):
     """

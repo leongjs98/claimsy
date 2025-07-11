@@ -7,18 +7,24 @@ Due to Foreign keys
 import os
 import sys
 from typing import List
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+import json
 from faker import Faker
 from decimal import Decimal
 import random
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from backend.db.tables import Employee, Invoice, Claim
-from backend.db.setup import session
+from backend.db.postgresql_setup import session
+from backend.db.values import categories
 
 fake = Faker()
 
 NUM_CLAIMS = 20
+MIN_NUM_CLAIM_FOR_EMPLOYEE_ID_1 = 20
+claim_types = list(categories)
+claim_types.append("Mixed")
+statuses = ["pending", "approved", "rejected"]
 
 
 def find_invoices_of_random_employee():
@@ -40,25 +46,72 @@ def find_invoices_of_random_employee():
     return selected_employee, invoices
 
 
+def seed_claims_for_employee_id_1():
+    employee_1 = session.query(Employee).filter(Employee.id == 1).first()
+    try:
+        for i in range(MIN_NUM_CLAIM_FOR_EMPLOYEE_ID_1):
+            invoices = (
+                session.query(Invoice)
+                .filter(Invoice.employee_id == 1)
+                .filter(Invoice.claim_id.is_(None))
+                .all()
+            )
+            selected_invoices = List[Invoice]
+
+            claim = Claim(
+                claim_number=f"CLM-{fake.unique.random_number(digits=8)}",
+                employee_id=1,
+                claim_type=random.choice(claim_types),
+                reason=fake.text(max_nb_chars=200),
+                status=random.choice(statuses),
+                submitted_date=fake.date_between(start_date="-1y", end_date="today"),
+                reviewed_date=fake.date_between(start_date="-6m", end_date="today")
+                if random.choice([True, False])
+                else None,
+                resolution=fake.text(max_nb_chars=150)
+                if random.choice([True, False])
+                else None,
+            )
+
+            # Randomly assign 1-3 invoices to each claim using actual invoice IDs
+            num_invoices_to_assign = random.randint(1, min(3, len(invoices)))
+            if num_invoices_to_assign > 5:
+                num_invoices_to_assign = 5
+            if num_invoices_to_assign == 0:
+                continue
+            selected_invoices = random.sample(invoices, num_invoices_to_assign)
+            claim.invoices = selected_invoices
+            total = 0
+            for inv in selected_invoices:
+                data = json.loads(inv.items_services)
+                total = total + data['quantity'] * data['unit_price']
+            claim.claim_amount=Decimal(str(round(random.uniform(1.0, total), 2))),
+            print(num_invoices_to_assign, claim, selected_invoices)
+
+            session.add(claim)
+
+            if (i + 1) % 10 == 0:
+                print(f"Generated {i + 1} claims...")
+
+        session.commit()
+        print(
+                f"Successfully seeded {MIN_NUM_CLAIM_FOR_EMPLOYEE_ID_1} claims for employee id = 1 {employee_1.name}"
+        )
+    except Exception as e:
+        session.rollback()
+        print(f"Error seeding claims: {e}")
+    finally:
+        session.close()
+
 def seed_claims():
     """Seed the database with fake claims"""
 
     try:
-        claim_types = [
-            "Medical",
-            "Travel",
-            "Equipment",
-            "Training",
-            "Meal",
-            "Transportation",
-        ]
-        statuses = ["pending", "approved", "rejected"]
 
-        claims = []
         for i in range(NUM_CLAIMS):
             selected_employee = Employee()
             invoices = []
-            print("invoices", invoices)
+            selected_invoices = List[Invoice]
             while not invoices:
                 selected_employee, invoices = find_invoices_of_random_employee()
 
@@ -80,15 +133,18 @@ def seed_claims():
 
             # Randomly assign 1-3 invoices to each claim using actual invoice IDs
             num_invoices_to_assign = random.randint(1, min(3, len(invoices)))
+            if num_invoices_to_assign > 5:
+                num_invoices_to_assign = 5
+            if num_invoices_to_assign == 0:
+                continue
             selected_invoices = random.sample(invoices, num_invoices_to_assign)
             claim.invoices = selected_invoices
 
-            claims.append(claim)
+            session.add(claim)
 
             if (i + 1) % 10 == 0:
                 print(f"Generated {i + 1} claims...")
 
-        session.add_all(claims)
         session.commit()
         print(
             f"Successfully seeded {NUM_CLAIMS} claims with actual employee and invoice relationships!"
@@ -123,6 +179,7 @@ if __name__ == "__main__":
     elif len(sys.argv) == 3 and sys.argv[1] in ["--number", "-n"]:
         try:
             NUM_CLAIMS = int(sys.argv[2])
+            seed_claims_for_employee_id_1()
             seed_claims()
         except ValueError:
             print("Error: Please provide a valid number")

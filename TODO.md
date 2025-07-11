@@ -1,14 +1,27 @@
 # Code-related Todo's
 ## Todo
+### Feedbacks
+- [ ] john: smart suggest get it done to impress
+- [ ] john: upload receipt, show image (a lot = carousell)
+
+- [ ] john: invoice/edit (both first and \[id]) table become input to edit (delete button)
+- [ ] john: invoice/edit (both first and \[id]) unit next to quantity
+
+- [ ] john: submit button in invoice same column as checkbox
+- [ ] chee tat: category in my invoices (make it click)
+
 ### Essentials
-- [ ] add isLoading to Pinia
-- [ ] rework claim policy input fields (use AI then real admin validates)
-    - pagination for multiple invoices in 1 claim
-    - temperature 0
+- [ ] fuzzy search button
+- [ ] testing
+- [ ] Smart Suggest feature
+- [ ] seeder for fix chat data
+- [ ] Chatbot feature
+    - connect with backend, use fake data
+    - just for employee 1
 
 ### Nice to have
 - [ ] Pagination
-    - [ ] Claim center
+    - [ ] Claim center (10 claims per page)
     - [ ] Receipt upload (support multiple invoices at once)
 - [ ] Notifications
 - [ ] export data into pdf or csv
@@ -17,12 +30,19 @@
     - [ ] Total (RM)
 
 ## Done
+- [x] john: navbar middle and to the sides (absolute and relative)
+- [x] fix claim totalAmount in seeder
 - [x] Claim has one or many invoice db table and database fix
-- [x] Setup database and create seeder
 - [x] Create `.env.example` and `.env`
 - [x] create end-to-end project structure
-- [-] Create Pinia store to prepare end-to-end
+- [x] Create Pinia store to prepare end-to-end
       - then replace all repeated data in different pages
+- [x] Scan Claim Policy and save it on MongoDB
+    - pagination for multiple invoices in 1 claim
+    - temperature 0
+- [x] add loading animation (isLoading in Pinia) for different page
+- [x] rework claim policy input fields (use AI then real admin validates)
+
 ```
 .
 ├── backend
@@ -33,19 +53,30 @@
 └── README.md
 ```
 
+## Chatbot notes
+- save all previous convo history
+- convo history
+    - employee_id
+    - history: []{ isBotText: boolean text: string }
+    - title
+    - summary
+
+- display old convo
+- pass summary into new bot
+- bot understand from summary
+
+- answer anything according to the mongodb policy
+- summary as context
+- check how to save history in previous slides
+
 ## To be added on Teamhub
-Fix: Date sort in admin claim fix
-Fix: Item number in admin claim fix
+Small Fix: Date sort in admin claim fix
+refer to employee claim
 
-Page to re-evaluate claim status
-go back into admin claim review again
-
-separate employee and admin's ask-claimsy
-employee/ask-claimsy
-admin/ask-claimsy
+Small Fix: Item number/quantity in admin claim fix
 
 plan API for admin dashboard
 
 plan API for ask claimsy
 
-remove every link in navbar when login
+Final remove every link in navbar when login

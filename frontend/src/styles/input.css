@@ -77,3 +77,54 @@
 .dropdown-menu-leave-to {
   @apply scale-95 transform opacity-0;
 }
+
+.dropdown-smart-suggest-enter-from {
+  @apply transition duration-100 ease-out;
+}
+
+.dropdown-smart-suggest-enter-active {
+  @apply scale-y-0 transform opacity-0;
+}
+
+.dropdown-smart-suggest-enter-to {
+  @apply scale-y-100 transform opacity-100;
+}
+
+.dropdown-smart-suggest-leave-from {
+  @apply transition duration-75 ease-in;
+}
+
+.dropdown-smart-suggest-leave-active {
+  @apply scale-y-100 transform opacity-100;
+}
+
+.dropdown-smart-suggest-leave-to {
+  @apply scale-y-0 transform opacity-0;
+}
+
+.markdown-it h2 {
+  @apply mt-2 mb-6 text-3xl;
+}
+
+.markdown-it h3 {
+  @apply my-4 text-2xl;
+}
+
+.markdown-it strong {
+  @apply font-semibold;
+}
+
+.markdown-it p {
+  @apply my-2 pr-4;
+}
+
+.markdown-it hr {
+  @apply my-4 text-gray-200;
+}
+
+.markdown-it ul {
+  @apply space-y-2;
+}
+
+.markdown-it li {
+}

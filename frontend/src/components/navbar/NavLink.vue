@@ -29,21 +29,25 @@
 
     if (props.link === "/employee/claim/all") {
       if (
-        route.path === "/employee/claim/expenses" ||
+        route.path === "/employee/invoice/unsubmitted" ||
         route.path === "/employee/claim/approved" ||
+        route.path.includes("/employee/invoice/edit") ||
         route.path === "/employee/claim/rejected"
       ) {
         return true;
       }
     }
     if (
-      props.link === "/employee/claim/upload" &&
-      route.path === "/employee/claim/edit"
+      props.link === "/employee/invoice/upload" &&
+      route.path === "/employee/invoice/edit/first"
     ) {
       return true;
     }
     if (props.link === "/admin/claim/all") {
       if (route.path.includes("/admin/claim")) {
+        return true;
+      }
+      if (route.path.includes("/admin/invoice/review")) {
         return true;
       }
     }
@@ -54,8 +58,14 @@
       return true;
     }
     if (
-      props.link === "/ask-claimsy" &&
-      route.path.includes("/ask-claimsy/smart-suggest")
+      props.link === "/employee/ask-claimsy/" &&
+      route.path.includes("/employee/ask-claimsy")
+    ) {
+      return true;
+    }
+    if (
+      props.link === "/admin/ask-claimsy/" &&
+      route.path.includes("/admin/ask-claimsy")
     ) {
       return true;
     }

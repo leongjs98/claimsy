@@ -1,27 +1,18 @@
-import os
-from io import BytesIO
-from dotenv import load_dotenv
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from db.setup import get_db
+from db.postgresql_setup import get_db
 from db.tables import Claim as DBClaim
 from db.schemas import ClaimSchema, InvoiceSchema
+from llm.reader import encode_image_file
+from llm.setup import chain_extract_invoice_info, output_parser_invoice_json
+from db.tables import Invoice
 
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.prompts import PromptTemplate
-from langchain.chains.summarize import load_summarize_chain
-from langchain_core.documents import Document
-from pypdf import PdfReader
+
 
 
 router = APIRouter()
-load_dotenv()
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
-    temperature=0.0,
-    api_key=os.getenv("GEMINI_API_KEY"),
-)
+
 
 
 @router.get("{employee_id}/claim/all", response_model=List[ClaimSchema])
@@ -36,65 +27,69 @@ def get_all_claims(employee_id: int, db: Session = Depends(get_db)):
         )
 
 
-def read_file(file_contents: BytesIO) -> str:
-    reader = PdfReader(file_contents)
-    text = ""
-    for page in reader.pages:
+@router.post("/analyze/invoice")
+async def analyze_invoice(
+    files: List[UploadFile] = File(...),  # need to add more file(Multiplefile)):
+):
+    results = []
+
+    for file in files:
         try:
-            page_text = page.extract_text()
-            if page_text:
-                text += page_text
+            image_base64 = encode_image_file(file)
+
+            response = chain_extract_invoice_info.invoke({
+                "image": image_base64,
+                "format_instructions": output_parser_invoice_json.get_format_instructions()
+            })
+
+            results.append(response)
         except Exception as e:
-            print(f"Warning: Could not extract text from a page in the PDF: {e}")
-            continue
-    return text
+            results.append({"error": str(e)})
+    return {"answers": results}
 
 
-# TODO: output (output_parser) JSON for the fields in /employee/claim/edit (not save first)
-# TODO: create /employee/claim/{id}/edit, (submit here = save)
-# TODO: add employee_id to know which employee upload
-@router.post("{employee_id}/invoice/upload")
-async def employee_invoice_upload(employee_id: int, file: UploadFile = File(...)):
-    allowed_extensions = ["pdf", "png", "jpg", "jpeg"]
-    if not file.filename.lower().endswith(allowed_extensions):
-        # might need to alter the front end putting in text saying file must be in pdf, png or jpg format
-        raise HTTPException(status_code=400, detail="File must be in a correct format")
 
+@router.post("/employee/invoice/save", response_model=InvoiceSchema)
+async def save_invoice(
+    invoice: InvoiceSchema,
+    db: Session = Depends(get_db)
+):
     try:
-        contents = await file.read()
-        file_contents = BytesIO(contents)
-        extracted_text = read_file(file_contents)
+        data = invoice.model_dump(by_alias=True)
+        print("💡 Received data:", data)
 
-        if not extracted_text.strip():
-            raise HTTPException(
-                status_code=400,
-                detail="Could not extract any readable text from the PDF. It might be an image-only PDF, encrypted, or empty.",
-            )
+        existing_invoice = db.query(Invoice).filter_by(invoice_number=data["invoiceNumber"]).first()
+        if existing_invoice:
+            return {"error": f"Invoice number {data['invoiceNumber']} already exists."}
 
-        doc = [Document(page_content=extracted_text)]
-
-        summarization_prompt_template = """
-        Please provide a concise and comprehensive summary of the following document.
-        Focus on the main points, key information, and overall purpose.
-
-        Document:
-        "{text}"
-
-        CONCISE SUMMARY:
-        """
-        prompt = PromptTemplate(
-            template=summarization_prompt_template, input_variables=["text"]
+        new_invoice = Invoice(
+            invoice_id=data["invoiceId"],
+            invoice_number=data["invoiceNumber"],
+            claim_id=data["claimId"],
+            employee_id=data["employeeId"],
+            invoice_date=data["invoiceDate"],
+            category=data["category"],
+            merchant_name=data["merchantName"],
+            merchant_address=data["merchantAddress"],
+            items_services=data["itemsServices"],  # already list of dicts
+            remark=data["remark"]
         )
 
-        summary_chain = load_summarize_chain(llm=llm, chain_type="stuff", prompt=prompt)
+        db.add(new_invoice)
+        db.commit()
+        db.refresh(new_invoice)
 
-        summary_output = summary_chain.invoke({"input_documents": doc})
-
-        return {"summary": summary_output["output_text"]}
+        return invoice  # returning Pydantic object
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
+        db.rollback()
+        import traceback
+        traceback.print_exc()
+        return {"error": str(e)}
 
+
+
+# TODO: create router for /employee/claim/{id}/edit, (submit here = save)
 
 # TODO: complete API /employee/{employee_id}/invoice/submit-into-claim
 # input: multiple invoices.id
@@ -109,6 +104,7 @@ def submit_invoices_into_claims(employee_id: int, db: Session = Depends(get_db))
 
 # TODO: complete API {employee_id}/invoice/{invoice_id}
 # show invoice details in employee/claim/edit
+#page ni dekat my claims lepastu filter by claim_id
 @router.get("{employee_id}/invoice/{invoice_id}", response_model=InvoiceSchema)
 def get_invoice_details(
     employee_id: int, invoice_id: int, db: Session = Depends(get_db)
