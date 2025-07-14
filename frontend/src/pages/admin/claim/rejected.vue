@@ -189,26 +189,26 @@
   const selectedClaim = ref(null);
 
   const formatDate = (dateString) => {
-    if (!dateString) return '';
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString(undefined, options);
+    if (!dateString) return "";
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   const capitalizeStatus = (status) => {
-  if (!status) return '';
-  return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+    if (!status) return "";
+    return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
   };
 
   const countItems = (claim) => {
-  if (!claim.invoices) return 0;
-  return claim.invoices.reduce((total, invoice) => {
-    return total + (invoice.itemsServices?.length || 0);
-  }, 0);
+    if (!claim.invoices) return 0;
+    return claim.invoices.reduce((total, invoice) => {
+      return total + (invoice.itemsServices?.length || 0);
+    }, 0);
   };
 
   const formatCurrency = (amount) => {
-  if (amount === null || amount === undefined) return '0.00';
-  return `${amount.toFixed(2)}`;
+    if (amount === null || amount === undefined) return "0.00";
+    return `${amount.toFixed(2)}`;
   };
 
   const openDetails = (claim) => {

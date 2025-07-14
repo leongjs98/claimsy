@@ -9,7 +9,9 @@
           : ''
       "
     >
-      {{ name }}
+      <div>
+        {{ name }}
+      </div>
     </RouterLink>
   </li>
 </template>

@@ -104,7 +104,7 @@
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
                   v-for="(claim, index) in claims"
-                  :key="claim.claim_number "
+                  :key="claim.claim_number"
                   class="shadow-md"
                 >
                   <td
@@ -147,7 +147,7 @@
                   <td
                     class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{ formatCurrency(claim.claim_amount)  }}
+                    {{ formatCurrency(claim.claim_amount) }}
                   </td>
                   <td
                     class="px-4 py-4 text-right text-sm whitespace-nowrap text-theme-300"
@@ -172,7 +172,7 @@
 </template>
 
 <script setup>
-  import { ref, computed, onMounted  } from "vue";
+  import { ref, computed, onMounted } from "vue";
   import { storeToRefs } from "pinia";
   import { useAdminClaimStore } from "@/stores/admin-claims.ts";
 
@@ -188,26 +188,26 @@
   const selectedClaim = ref(null);
 
   const formatDate = (dateString) => {
-  if (!dateString) return '';
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString(undefined, options);
+    if (!dateString) return "";
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   const capitalizeStatus = (status) => {
-  if (!status) return '';
-  return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
-};
+    if (!status) return "";
+    return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+  };
 
   const countItems = (claim) => {
-  if (!claim.invoices) return 0;
-  return claim.invoices.reduce((total, invoice) => {
-    return total + (invoice.itemsServices?.length || 0);
-  }, 0);
+    if (!claim.invoices) return 0;
+    return claim.invoices.reduce((total, invoice) => {
+      return total + (invoice.itemsServices?.length || 0);
+    }, 0);
   };
 
   const formatCurrency = (amount) => {
-  if (amount === null || amount === undefined) return '0.00';
-  return `${amount.toFixed(2)}`;
+    if (amount === null || amount === undefined) return "0.00";
+    return `${amount.toFixed(2)}`;
   };
 
   const openDetails = (claim) => {

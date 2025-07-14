@@ -1,15 +1,20 @@
 <template>
   <v-dialog v-model="isOpen" max-width="1000">
     <v-card class="rounded-lg shadow-lg">
-      <div class="flex items-center justify-between rounded-t-xl bg-theme-300 px-6 py-4 text-white">
+      <div
+        class="flex items-center justify-between rounded-t-xl bg-theme-300 px-6 py-4 text-white"
+      >
         <h2 class="flex items-center gap-4 text-xl font-semibold">
           <span> Claim ID: #{{ data.claim_number }} </span>
           <span
             class="flex w-fit items-center rounded-md px-2 py-1 text-base font-medium"
             :class="{
-              'bg-emerald-100 text-emerald-600': data.status.toLowerCase() === 'approved',
-              'bg-red-100 text-red-600': data.status.toLowerCase() === 'rejected',
-              'bg-yellow-100 text-yellow-600': data.status.toLowerCase() === 'pending'
+              'bg-emerald-100 text-emerald-600':
+                data.status.toLowerCase() === 'approved',
+              'bg-red-100 text-red-600':
+                data.status.toLowerCase() === 'rejected',
+              'bg-yellow-100 text-yellow-600':
+                data.status.toLowerCase() === 'pending',
             }"
           >
             {{ data.status }}
@@ -52,7 +57,10 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="(invoice, invoiceIndex) in data.invoices" :key="`invoice-${invoiceIndex}`">
+            <template
+              v-for="(invoice, invoiceIndex) in data.invoices"
+              :key="`invoice-${invoiceIndex}`"
+            >
               <tr
                 v-for="(item, itemIndex) in invoice.itemsServices"
                 :key="`item-${itemIndex}`"
@@ -72,11 +80,11 @@
                 <!-- Merchant Column -->
                 <td class="px-4 py-6 text-gray-700">
                   <span class="py-6 font-medium text-gray-900">
-                    {{ invoice.merchantName || 'N/A' }}
+                    {{ invoice.merchantName || "N/A" }}
                   </span>
                   <br />
                   <span class="text-xs text-gray-500">
-                    {{ truncateString(invoice.merchantAddress || '') }}
+                    {{ truncateString(invoice.merchantAddress || "") }}
                   </span>
                 </td>
 
@@ -121,7 +129,9 @@
           No invoices in this claim.
         </div>
 
-        <div class="my-6 flex items-center justify-between border-t border-gray-300 pt-4">
+        <div
+          class="my-6 flex items-center justify-between border-t border-gray-300 pt-4"
+        >
           <div v-if="data.reason" class="">
             <h4 class="mb-2 font-semibold text-gray-700">Reason:</h4>
             <p class="text-sm text-gray-600 italic">{{ data.reason }}</p>
@@ -150,85 +160,89 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
-import { useAdminClaimStore } from "@/stores/admin-claims";
+  import { ref, watch, computed } from "vue";
+  import { useAdminClaimStore } from "@/stores/admin-claims";
 
-const props = defineProps({
-  modelValue: Boolean,
-  data: {
-    type: Object as () => {
-      id: number;
-      claim_number: string;
-      status: 'pending' | 'approved' | 'rejected';
-      claim_amount?: number;
-      reason?: string;
-      invoices: Array<{
-        id?: number;
-        invoiceId: number;
-        invoiceNumber: string;
-        invoiceDate: string;
-        merchantName?: string;
-        merchantAddress?: string;
-        itemsServices: Array<{
-          item: string;
-          quantity: number;
-          unit_price: number;
+  const props = defineProps({
+    modelValue: Boolean,
+    data: {
+      type: Object as () => {
+        id: number;
+        claim_number: string;
+        status: "pending" | "approved" | "rejected";
+        claim_amount?: number;
+        reason?: string;
+        invoices: Array<{
+          id?: number;
+          invoiceId: number;
+          invoiceNumber: string;
+          invoiceDate: string;
+          merchantName?: string;
+          merchantAddress?: string;
+          itemsServices: Array<{
+            item: string;
+            quantity: number;
+            unit_price: number;
+          }>;
         }>;
-      }>;
+      },
+      required: true,
     },
-    required: true
-  }
-});
+  });
 
-const emit = defineEmits(["update:modelValue"]);
-const adminClaims = useAdminClaimStore();
+  const emit = defineEmits(["update:modelValue"]);
+  const adminClaims = useAdminClaimStore();
 
-const isOpen = ref(props.modelValue);
+  const isOpen = ref(props.modelValue);
 
-watch(
-  () => props.modelValue,
-  (val) => {
-    isOpen.value = val;
-  }
-);
+  watch(
+    () => props.modelValue,
+    (val) => {
+      isOpen.value = val;
+    },
+  );
 
-watch(isOpen, (val) => {
-  if (!val) {
-    emit("update:modelValue", false);
-  }
-});
+  watch(isOpen, (val) => {
+    if (!val) {
+      emit("update:modelValue", false);
+    }
+  });
 
-// Format date for display
-const formatDate = (dateString: string) => {
-  if (!dateString) return '';
-  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString(undefined, options);
-};
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
-// Format currency (RM)
-const formatCurrency = (amount?: number) => {
-  if (amount === null || amount === undefined) return '0.00';
-  return `${amount.toFixed(2)}`;
-};
+  // Format currency (RM)
+  const formatCurrency = (amount?: number) => {
+    if (amount === null || amount === undefined) return "0.00";
+    return `${amount.toFixed(2)}`;
+  };
 
-// Truncate long strings
-const truncateString = (str?: string, maxLength = 30) => {
-  if (!str) return '';
-  if (str.length > maxLength) {
-    return str.substring(0, maxLength - 3) + '...';
-  }
-  return str;
-};
+  // Truncate long strings
+  const truncateString = (str?: string, maxLength = 30) => {
+    if (!str) return "";
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength - 3) + "...";
+    }
+    return str;
+  };
 
-// Handle claim resolution
-const resolveClaim = async (approved: boolean) => {
-  if (!props.data?.id) return;
+  // Handle claim resolution
+  const resolveClaim = async (approved: boolean) => {
+    if (!props.data?.id) return;
 
-  try {
-    await adminClaims.resolveClaim(props.data.id, approved);
-    isOpen.value = false;
-  } catch (error) {
-    console.error("Failed to resolve claim:", error);
-  }
-};
+    try {
+      await adminClaims.resolveClaim(props.data.id, approved);
+      isOpen.value = false;
+    } catch (error) {
+      console.error("Failed to resolve claim:", error);
+    }
+  };
 </script>

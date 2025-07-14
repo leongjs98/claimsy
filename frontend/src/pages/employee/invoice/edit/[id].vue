@@ -99,15 +99,24 @@
             <!-- TODO: change the table rows into label + input tags -->
             <!-- TODO: add delete button on the side of each items -->
             <tbody>
-              <tr v-for="item in itemsSerivices" class="bg-gray-200 text-theme-300 shadow-md">
+              <tr
+                v-for="item in itemsSerivices"
+                class="bg-gray-200 text-theme-300 shadow-md"
+              >
                 <td class="rounded-l-lg px-4 py-3">{{ item.description }}</td>
-                <td class="px-4 py-3 text-right">{{ item.quantity }}</td>
-                <td class="rounded-r-lg px-4 py-3 text-right">{{ item.unitPrice }}</td>
+                <td class="px-4 py-3 text-right">
+                  {{ item.quantity }} {{ item.unit }}
+                </td>
+                <td class="rounded-r-lg px-4 py-3 text-right">
+                  {{ item.unitPrice }}
+                </td>
               </tr>
               <tr class="text-right font-semibold text-theme-300">
                 <td></td>
                 <td class="rounded-l-lg bg-gray-200 px-4 py-3">Total</td>
-                <td class="rounded-r-lg bg-gray-200 px-4 py-3">{{ totalAmount }}</td>
+                <td class="rounded-r-lg bg-gray-200 px-4 py-3">
+                  {{ totalAmount }}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -163,7 +172,7 @@
   const merchantName = ref("");
   const merchantAddress = ref("");
   const remark = ref("");
-  const itemsSerivices = ref([])
+  const itemsSerivices = ref([]);
   const isLoading = ref(false);
   const error = ref("");
 
@@ -181,11 +190,14 @@
       merchantName.value = "SHELL";
       merchantAddress.value = "LOT 19086 TAMING JAYA BALAKONG, 43300 SELANGOR";
       remark.value = "Fuel purchase for company vehicle.";
-      itemsSerivices.value = [{
-  description: "FuelSave 95 24.390 L",
-  quantity: 24.39,
-  unitPrice: 2.05
-  }]
+      itemsSerivices.value = [
+        {
+          unit: "L",
+          description: "FuelSave 95 24.390",
+          quantity: 24.39,
+          unitPrice: 2.05,
+        },
+      ];
     } catch (e) {
       error.value = "Failed to load data.";
     } finally {

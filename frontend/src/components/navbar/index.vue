@@ -3,8 +3,8 @@
     <header
       class="rounded-2xl bg-theme-300 px-4 text-white shadow-xl/30 shadow-blue-900"
     >
-      <div class="flex justify-center relative items-center">
-        <nav class="flex items-center absolute left-0">
+      <div class="relative flex items-center justify-center">
+        <nav class="absolute left-0 flex items-center">
           <RouterLink to="/">
             <!-- <img class="w-7" src="/logo.svg" alt="Claimsy Logo" /> -->
             <img class="w-32" src="/logo_with_title.svg" alt="Claimsy Logo" />
@@ -54,15 +54,13 @@
             <!--   v-if="!route.path.includes('admin')" -->
             <!-- > -->
             <NavLink
-                v-if="!route.path.includes('admin')"
-                name="Ask Claimsy"
-                link="/employee/ask-claimsy/"
-            > </NavLink>
-            <NavLink
-                v-else
-                name="Ask Claimsy"
-                link="/admin/ask-claimsy/"
-            > </NavLink>
+              v-if="!route.path.includes('admin')"
+              name="Ask Claimsy"
+              link="/employee/ask-claimsy/"
+            >
+            </NavLink>
+            <NavLink v-else name="Ask Claimsy" link="/admin/ask-claimsy/">
+            </NavLink>
           </ul>
         </nav>
         <nav class="absolute right-0 flex items-center gap-2">
