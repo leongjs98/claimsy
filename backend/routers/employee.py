@@ -1,10 +1,13 @@
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy import func
+from datetime import datetime
+import uuid
 from typing import List
 from db.postgresql_setup import get_db
 from db.tables import Claim as DBClaim
 from db.tables import Invoice as DBInvoice
-from db.schemas import ClaimSchema, InvoiceSchema
+from db.schemas import ClaimSchema, InvoiceSchema, SubmitClaimRequest
 from llm.reader import encode_image_file
 from llm.setup import chain_extract_invoice_info, output_parser_invoice_json
 
@@ -71,21 +74,100 @@ def get_unsubmitted_invoices(employee_id: int, db: Session = Depends(get_db)):
 # output: claim
 # page: /employee/claim/expenses
 @router.post(
-    "/employee/{employee_id}/invoice/submit-into-claim", response_model=ClaimSchema
+    "/{employee_id}/invoice/submit-into-claim", 
+    response_model=ClaimSchema
 )
-def submit_invoices_into_claims(employee_id: int, db: Session = Depends(get_db)):
-    return {}
-
-@router.get("/{employee_id}/invoice/all", response_model=List[InvoiceSchema])
-def get_all_invoices_for_employee(
-    employee_id: int, db: Session = Depends(get_db)
+def submit_invoices_into_claims(
+    employee_id: int, 
+    request: SubmitClaimRequest,
+    db: Session = Depends(get_db)
 ):
     try:
-        # Query all invoices for the employee
-        invoices = db.query(DBInvoice).filter(
-            DBInvoice.employee_id == employee_id
-        ).order_by(DBInvoice.invoice_date.desc()).all()
+        # 1. Validate that invoice_ids are provided
+        if not request.invoice_ids:
+            raise HTTPException(
+                status_code=400, 
+                detail="At least one invoice must be selected"
+            )
         
+        # 2. Fetch the selected invoices and validate them
+        invoices = db.query(DBInvoice).filter(
+            DBInvoice.id.in_(request.invoice_ids),
+            DBInvoice.employee_id == employee_id,
+            DBInvoice.claim_id.is_(None)  # Only invoices not already claimed
+        ).all()
+        
+        # 3. Validate that all requested invoices exist and are available
+        if len(invoices) != len(request.invoice_ids):
+            raise HTTPException(
+                status_code=400,
+                detail="Some invoices are not found, don't belong to this employee, or are already claimed"
+            )
+        
+        # 4. Calculate total claim amount
+        # Assuming you have a way to calculate total amount per invoice
+        # You might need to add this calculation based on item_services
+        total_claim_amount = 0
+        for invoice in invoices:
+            # Calculate invoice total from item_services
+            invoice_total = sum(
+                item.quantity * item.unit_price 
+                for item in invoice.item_services
+            )
+            total_claim_amount += invoice_total
+        
+        # 5. Generate unique claim number
+        claim_number = f"CLM-{datetime.now().strftime('%Y%m%d')}-{str(uuid.uuid4())[:8].upper()}"
+        
+        # 6. Create new claim
+        new_claim = DBClaim(
+            claim_number=claim_number,
+            employee_id=employee_id,
+            claim_type=request.claim_type,
+            claim_amount=total_claim_amount,
+            reason=request.reason,
+            status="Pending",  # Initial status
+            submitted_date=datetime.now(),
+            created_at=int(datetime.now().timestamp()),
+            updated_at=int(datetime.now().timestamp())
+        )
+        
+        # 7. Save the claim to get the generated ID
+        db.add(new_claim)
+        db.flush()  # This will assign the ID without committing
+        
+        # 8. Update all selected invoices with the new claim_id
+        db.query(DBInvoice).filter(
+            DBInvoice.id.in_(request.invoice_ids)
+        ).update(
+            {
+                "claim_id": new_claim.id,
+                "updated_at": int(datetime.now().timestamp())
+            },
+            synchronize_session=False
+        )
+        
+        # 9. Commit the transaction
+        db.commit()
+        db.refresh(new_claim)
+        
+        return new_claim
+        
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
+@router.get("/{claim_id}/invoice/all", response_model=List[InvoiceSchema])
+def get_invoices_details(
+    claim_id: int, db: Session = Depends(get_db)
+):
+    try:
+        # Show all invoices for specific invoices
+        invoices = db.query(DBInvoice).filter(
+            DBInvoice.claim_id == claim_id ).all()
         return invoices
         
     except Exception as e:

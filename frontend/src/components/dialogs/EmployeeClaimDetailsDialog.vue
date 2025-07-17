@@ -4,7 +4,7 @@
       <div
         class="flex items-center justify-between rounded-t-xl bg-theme-300 px-6 py-4 text-white"
       >
-        <h2 class="text-xl font-semibold">Claim ID: #{{ data.Id }}</h2>
+        <h2 class="text-xl font-semibold">Claim ID: #{{ data?.claim_number }}</h2>
         <button
           @click="isOpen = false"
           class="rounded-full p-1 text-white hover:bg-blue-800"
@@ -27,8 +27,19 @@
       </div>
 
       <div class="p-6">
+
+        <!-- Loading State -->
+        <div v-if="loading" class="text-center py-8">
+          <div class="text-lg">Loading invoices...</div>
+        </div>
+        <!-- Loading State -->
+        <div v-if="loading" class="text-center py-8">
+          <div class="text-lg">Loading invoices...</div>
+        </div>
+
+        <!-- Invoices Table -->
         <table
-          v-if="data && data.Items && data.Items.length"
+          v-else-if="invoices && invoices.length > 0"
           class="col-span-full mt-6 mb-2 w-full min-w-full table-auto divide-y divide-gray-300"
         >
           <thead class="text-sm font-semibold text-gray-600">
@@ -42,53 +53,56 @@
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(item, index) in data.Items"
-              :key="`${item}-${index}`"
-              class="border-b border-gray-100 py-3 text-sm last:border-b-0"
-            >
-              <td class="px-4 py-6 text-gray-700">
-                <span class="py-6 font-medium text-gray-900">
-                  {{ item.date }}
-                </span>
-                <br />
-                <span class="text-xs text-gray-500">
-                  {{ item.category }}
-                </span>
-              </td>
-              <td class="px-4 py-6 text-gray-700">
-                <span class="py-6 font-medium text-gray-900">
-                  {{ item.merchantName }}
-                </span>
-                <br />
-                <span class="text-xs text-gray-500">
-                  {{ truncateString(item.merchantAddress) }}
-                </span>
-              </td>
-              <td class="max-w-80 px-4 py-6 text-nowrap text-gray-700">
-                {{ truncateString(item.description) }}
-              </td>
-              <td class="px-4 py-6 text-right text-gray-700">
-                {{ item.quantity }}
-              </td>
-              <td class="py-6 text-right font-semibold text-blue-600">
-                {{
-                  (item.quantity * item.unitPrice).toLocaleString("en-US", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })
-                }}
-              </td>
-              <td class="px-4 py-6 text-theme-300 hover:underline">
-                <div class="text-right">
-                  <!-- TODO: change to dynamic link -->
-                  <!-- TODO: admin will view admin version, employee = employee version-->
-                  <RouterLink :to="`/employee/invoice/edit/420`">
-                    Details
-                  </RouterLink>
-                </div>
-              </td>
-            </tr>
+            <!-- Loop through invoices and their items -->
+            <template v-for="invoice in invoices" :key="invoice.id">
+              <tr
+                v-for="(item, itemIndex) in invoice.itemsServices"
+                :key="`${invoice.id}-${itemIndex}`"
+                class="border-b border-gray-100 py-3 text-sm last:border-b-0"
+              >
+                <td class="px-4 py-6 text-gray-700">
+                  <span class="py-6 font-medium text-gray-900">
+                    {{ formatDate(invoice.invoice_date) }}
+                  </span>
+                  <br />
+                  <span class="text-xs text-gray-500">
+                    {{ invoice.category }}
+                  </span>
+                </td>
+                <td class="px-4 py-6 text-gray-700">
+                  <span class="py-6 font-medium text-gray-900">
+                    {{ invoice.merchant_name }}
+                  </span>
+                  <br />
+                  <span class="text-xs text-gray-500">
+                    {{ truncateString(invoice.merchant_address) }}
+                  </span>
+                </td>
+                <td class="max-w-80 px-4 py-6 text-nowrap text-gray-700">
+                  {{ truncateString(item.item) }}
+                </td>
+                <td class="px-4 py-6 text-right text-gray-700">
+                  {{ item.quantity }}
+                </td>
+                <td class="py-6 text-right font-semibold text-blue-600">
+                  {{
+                    (item.quantity * item.unit_price).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  }}
+                </td>
+                <td class="px-4 py-6 text-theme-300 hover:underline">
+                  <div class="text-right">
+                    <RouterLink :to="`/employee/invoice/edit/${invoice.id}`">
+                      Details
+                    </RouterLink>
+                  </div>
+                </td>
+              </tr>
+            </template>
+            
+            <!-- Total Row -->
             <tr class="border-b border-gray-100 py-3 text-sm last:border-b-0">
               <td class="px-4 py-6 font-bold text-gray-800">Total</td>
               <td class="px-4 py-6 text-gray-700"></td>
@@ -106,14 +120,16 @@
             </tr>
           </tbody>
         </table>
+        
+        <!-- No Invoices -->
         <div v-else class="py-4 text-center text-gray-500">
-          No items in this claim.
+          No invoices found for this claim.
         </div>
 
         <div
           class="my-6 flex items-center justify-between border-t border-gray-300 pt-4"
         >
-          <div v-if="data.remark" class="">
+          <div v-if="data?.remark" class="">
             <h4 class="mb-2 font-semibold text-gray-700">Remark:</h4>
             <p class="text-sm text-gray-600 italic">{{ data.remark }}</p>
           </div>
@@ -125,45 +141,62 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch, computed } from "vue";
+import { ref, watch, computed } from "vue";
+import { storeToRefs } from "pinia"; // ADD THIS IMPORT
+import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
 
-  const props = defineProps({
-    modelValue: Boolean,
-    // Expected: { id: string, remark: string, items: Array<{ category: string, date: string, merchantName: string, merchantAddress: string, description: string, quantity: number, unitPrice: number }> }
-    data: Object,
-  });
-  const emit = defineEmits(["update:modelValue"]);
+const props = defineProps({
+  modelValue: Boolean,
+  data: Object,
+});
 
-  const isOpen = ref(props.modelValue);
+const emit = defineEmits(["update:modelValue"]);
+const claimStore = useEmployeeClaimStore();
 
-  watch(
-    () => props.modelValue,
-    (val) => {
-      isOpen.value = val;
-    },
-  );
+// ADD THIS LINE - Use storeToRefs for reactivity
+const { claimInvoices, loading } = storeToRefs(claimStore);
 
-  watch(isOpen, (val) => {
-    if (!val) {
-      emit("update:modelValue", false);
-    }
-  });
+const isOpen = ref(props.modelValue);
 
-  const totalAmount = computed(() => {
-    if (props.data && props.data.Items) {
-      return props.data.Items.reduce(
-        (sum, item) => sum + item.quantity * item.unitPrice,
-        0,
-      );
-    }
-    return 0;
-  });
+watch(
+  () => props.modelValue,
+  (val) => {
+    isOpen.value = val;
+  },
+);
 
-  function truncateString(str, maxLength = 30) {
-    if (str.length > maxLength) {
-      return str.substring(0, maxLength - 3) + "...";
-    } else {
-      return str;
-    }
+watch(isOpen, (val) => {
+  if (!val) {
+    emit("update:modelValue", false);
   }
+});
+
+// CHANGE THIS - Use the reactive reference
+const invoices = computed(() => {
+  console.log('Dialog - claimInvoices.value:', claimInvoices.value); // Debug log
+  return claimInvoices.value || [];
+});
+
+const totalAmount = computed(() => {
+  return invoices.value.reduce((sum, invoice) => {
+    const invoiceTotal = invoice.item_services?.reduce(
+      (itemSum, item) => itemSum + (item.quantity * item.unit_price), 0
+    ) || 0;
+    return sum + invoiceTotal;
+  }, 0);
+});
+
+function truncateString(str, maxLength = 30) {
+  if (!str) return '';
+  if (str.length > maxLength) {
+    return str.substring(0, maxLength - 3) + "...";
+  } else {
+    return str;
+  }
+}
+
+function formatDate(dateString) {
+  if (!dateString) return '';
+  return new Date(dateString).toLocaleDateString('en-GB');
+}
 </script>

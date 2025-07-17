@@ -49,6 +49,7 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
   state: () => ({
     claims: [] as Claim[],
     invoices: [] as Invoice[],
+    claimInvoices: [] as Invoice[],
     // categories: [] as string[],
     loading: false,
     error: null as string | null,
@@ -94,8 +95,6 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
 
 },
 
-  
-
   actions: {
     // Set current employee
     setCurrentEmployee(employeeId: number) {
@@ -119,10 +118,10 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
         this.loading = false;
       }
     },
-    // until here
+    
 
 
-    // Fetch claims by employee ID
+    // aisya - Fetch claims by employee ID
     async fetchClaimsByEmployee(employeeId: number) {
       this.loading = true;
       this.error = null;
@@ -144,20 +143,24 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
       }
     },
 
-
-    // aisya
-     async getInvoices(employeeId: number) {
-        this.loading = true;
-        try {
-          const response = await axios.get(`http://127.0.0.1:8000/employee/${employeeId}/invoice/all`);
-          this.invoices = response.data;
-          console.log('Invoices loaded:', this.invoices.length);
-        } catch (error) {
-          console.error('Error:', error);
-          this.invoices = [];
-        }
+    async fetchInvoicesByClaimId(claimId: number) {
+      this.loading = true;
+      this.error = null;
+      
+      try {
+        const response = await axios.get<Invoice[]>(
+          `http://127.0.0.1:8000/employee/${claimId}/invoice/all`
+        );
+        this.claimInvoices = Array.isArray(response.data) ? response.data : [];
+        return this.claimInvoices;
+      } catch (error) {
+        this.error = "Failed to load claim invoices.";
+        this.claimInvoices = [];
+        throw error;
+      } finally {
         this.loading = false;
-      },
+      }
+    },
 
 
     // Refresh current employee's claims
@@ -195,6 +198,8 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
     // Clear all data
     clearStore() {
       this.claims = [];
+      this.invoices = [];
+      this.claimInvoices = [];
       this.currentEmployeeId = null;
       this.error = null;
       this.loading = false;
