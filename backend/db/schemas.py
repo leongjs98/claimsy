@@ -6,6 +6,7 @@ from decimal import Decimal
 from enum import Enum
 from datetime import datetime
 
+
 class ClaimStatus(str, Enum):
     PENDING = "pending"
     APPROVED = "approved"

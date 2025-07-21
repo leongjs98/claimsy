@@ -35,7 +35,9 @@ export const useInvoiceStore = defineStore("invoice", {
       this.loading = true;
       this.error = null;
       try {
-        const response = await axios.get(`${API_BASE_URL}/${invoiceId}`);
+        const response = await axios.get(
+          "http://127.0.0.1:8000/employee/employee/invoice/save",
+        );
         this.invoice = response.data;
       } catch (error: any) {
         if (error.response) {

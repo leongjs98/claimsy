@@ -143,119 +143,119 @@
 </template>
 
 <script setup>
-  import axios from "axios";
-  import { useRouter } from "vue-router";
-  import { ref } from "vue";
-  import { useEmployeeClaimStore } from "@/stores/employee-claims";
+import axios from "axios";
+import { useRouter } from "vue-router";
+import { ref } from "vue";
+import { useEmployeeClaimStore } from "@/stores/employee-claims";
 
-  const router = useRouter();
+const router = useRouter();
 
-  const isDragging = ref(false);
-  const selectedFiles = ref([]);
-  const isUploading = ref(false);
-  const claimStore = useEmployeeClaimStore();
-  const isLoading = computed(() => claimStore.isLoading("uploading"));
+const isDragging = ref(false);
+const selectedFiles = ref([]);
+const isUploading = ref(false);
+const claimStore = useEmployeeClaimStore();
+const isLoading = computed(() => claimStore.isLoading("uploading"));
 
-  const handleDrop = (e) => {
-    isDragging.value = false;
-    const files = e.dataTransfer.files;
-    if (files.length) {
-      selectedFiles.value.push(...Array.from(files));
-    }
-  };
+const handleDrop = (e) => {
+  isDragging.value = false;
+  const files = e.dataTransfer.files;
+  if (files.length) {
+    selectedFiles.value.push(...Array.from(files));
+  }
+};
 
-  const handleFileInput = (e) => {
-    const files = e.target.files;
-    if (files.length) {
-      selectedFiles.value.push(...Array.from(files));
-    }
-  };
+const handleFileInput = (e) => {
+  const files = e.target.files;
+  if (files.length) {
+    selectedFiles.value.push(...Array.from(files));
+  }
+};
 
-  const removeFile = (indexToRemove) => {
-    selectedFiles.value.splice(indexToRemove, 1);
-  };
+const removeFile = (indexToRemove) => {
+  selectedFiles.value.splice(indexToRemove, 1);
+};
 
-  const formatFileSize = (bytes) => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  };
+const formatFileSize = (bytes) => {
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+};
 
-  const cancelUpload = () => {
-    selectedFiles.value = [];
-  };
+const cancelUpload = () => {
+  selectedFiles.value = [];
+};
 
-  const uploadFile = async (file) => {
-    if (!selectedFiles.value || selectedFiles.value.length === 0) {
-      alert("Please upload a file");
-      return;
-    }
+const uploadFile = async (file) => {
+  if (!selectedFiles.value || selectedFiles.value.length === 0) {
+    alert("Please upload a file");
+    return;
+  }
 
-    const formData = new FormData(); //this will give you only the first one
-    for (let i = 0; i < selectedFiles.value.length; i++) {
-      formData.append("files", selectedFiles.value[i]);
-    }
+  const formData = new FormData(); //this will give you only the first one
+  for (let i = 0; i < selectedFiles.value.length; i++) {
+    formData.append("files", selectedFiles.value[i]);
+  }
 
-    try {
-      claimStore.startLoading("uploading");
-      isUploading.value = true;
-      const { data } = await axios.post(
-        "http://127.0.0.1:8000/employee/analyze/invoice",
-        formData,
-        {
-          headers: {
-            accept: "application/json",
-            "Content-Type": "multipart/form-data",
-          },
+  try {
+    claimStore.startLoading("uploading");
+    isUploading.value = true;
+    const { data } = await axios.post(
+      "http://127.0.0.1:8000/employee/analyze/invoice",
+      formData,
+      {
+        headers: {
+          accept: "application/json",
+          "Content-Type": "multipart/form-data",
         },
-      );
+      },
+    );
 
-      console.log("Raw answers:", data.answers);
-      const itemsServices = [];
-      let firstValid = null;
+    console.log("Raw answers:", data.answers);
+    const itemsServices = [];
+    let firstValid = null;
 
-      let merchant_Names = [];
-      let merchant_Addresses = [];
-      let remarks = [];
+    let merchant_Names = [];
+    let merchant_Addresses = [];
+    let remarks = [];
 
-      for (const result of data.answers) {
-        if (!result || result.error || !result.items) continue;
+    for (const result of data.answers) {
+      if (!result || result.error || !result.items) continue;
 
-        if (result.merchant_name) merchant_Names.push(result.merchant_name);
-        if (result.merchant_address)
-          merchant_Addresses.push(result.merchant_address);
-        if (result.remark) remarks.push(result.remark);
+      if (result.merchant_name) merchant_Names.push(result.merchant_name);
+      if (result.merchant_address)
+        merchant_Addresses.push(result.merchant_address);
+      if (result.remark) remarks.push(result.remark);
 
-        if (!firstValid) {
-          firstValid = result;
-        }
-
-        itemsServices.push(...result.items);
+      if (!firstValid) {
+        firstValid = result;
       }
 
-      const mergedNames = merchant_Names.join(" | ");
-      const mergedAddresses = merchant_Addresses.join(" | ");
-      const mergedremarks = remarks.join(" | ");
-
-      router.push({
-        path: "/employee/invoice/edit",
-        query: {
-          category: firstValid.category,
-          date: firstValid.date,
-          merchantName: mergedNames,
-          merchantAddress: mergedAddresses,
-          remark: mergedremarks,
-          items: JSON.stringify(itemsServices),
-        },
-      });
-    } catch (err) {
-      console.error("Upload failed:", err);
-      alert("LLM analysis unsuccessful");
-    } finally {
-      claimStore.stopLoading("uploading");
-      isUploading.value = false;
+      itemsServices.push(...result.items);
     }
-  };
+
+    const mergedNames = merchant_Names.join(" | ");
+    const mergedAddresses = merchant_Addresses.join(" | ");
+    const mergedremarks = remarks.join(" | ");
+
+    router.push({
+      path: "/employee/invoice/edit",
+      query: {
+        category: firstValid.category,
+        date: firstValid.date,
+        merchantName: mergedNames,
+        merchantAddress: mergedAddresses,
+        remark: mergedremarks,
+        items: JSON.stringify(itemsServices),
+      },
+    });
+  } catch (err) {
+    console.error("Upload failed:", err);
+    alert("LLM analysis unsuccessful");
+  } finally {
+    claimStore.stopLoading("uploading");
+    isUploading.value = false;
+  }
+};
 </script>

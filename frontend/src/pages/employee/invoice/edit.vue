@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <form @submit.prevent="submitInvoice">
     <div
       class="mx-auto mt-15 max-w-4xl rounded-2xl border border-gray-200 bg-white px-15 py-10 shadow-lg"
     >
@@ -126,15 +126,17 @@
         <button
           type="button"
           class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+          @click="router.back()"
         >
           Cancel
         </button>
-        <RouterLink
-          to="/employee/claim/all"
+        <button
+          type="submit"
           class="rounded-md bg-theme-300 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-theme-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200"
+          :disabled="isSubmitting"
         >
-          Submit
-        </RouterLink>
+          {{ isSubmitting ? "Submitting..." : "Submit" }}
+        </button>
         <!-- <button -->
         <!--   type="button" -->
         <!--   class="rounded-md bg-theme-300 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-theme-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-200" -->
@@ -147,33 +149,107 @@
 </template>
 
 <script setup>
-  import { useRouter, useRoute } from "vue-router";
-  import { computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { computed, ref, onMounted } from "vue";
+import axios from "axios";
 
-  const totalAmount = computed(() =>
-    formData.value.items
-      .reduce((sum, item) => sum + item.unit_price * item.quantity, 0)
-      .toFixed(2),
-  );
+const totalAmount = computed(() =>
+  formData.value.items
+    .reduce((sum, item) => sum + item.unit_price * item.quantity, 0)
+    .toFixed(2),
+);
 
-  const router = useRouter();
-  const route = useRoute();
+const router = useRouter();
+const route = useRoute();
+const isSubmitting = ref(false);
 
-  const formData = ref({
-    category: route.query.category || "",
-    date: route.query.date || "",
-    merchantName: route.query.merchantName || "",
-    merchantAddress: route.query.merchantAddress || "",
-    remark: route.query.remark || "",
-    items: [],
-  });
+const formData = ref({
+  invoiceNumber: route.query.invoiceNumber || "",
+  category: route.query.category || "",
+  date: route.query.date || "",
+  merchantName: route.query.merchantName || "",
+  merchantAddress: route.query.merchantAddress || "",
+  remark: route.query.remark || "",
+  items: [],
+});
 
-  onMounted(() => {
-    try {
-      const parsedItems = JSON.parse(route.query.items || "[]");
-      formData.value.items = parsedItems;
-    } catch (e) {
-      console.warn("Failed to parse items", e);
-    }
-  });
+onMounted(() => {
+  try {
+    const parsedItems = JSON.parse(route.query.items || "[]");
+    formData.value.items = parsedItems;
+  } catch (e) {
+    console.warn("Failed to parse items", e);
+  }
+});
+
+const claimId = computed(() => {
+  return route.params.id || route.query.claimId;
+});
+
+const submitInvoice = async (event) => {
+  event.preventDefault();
+
+  if (isSubmitting.value) return;
+
+  isSubmitting.value = true;
+
+  try {
+    const invoiceData = {
+      invoiceId: 345,
+      invoiceNumber: formData.value.invoiceNumber || `INV-${Date.now()}`,
+      claimId: 1,
+      employeeId: 1,
+      invoiceDate: formData.value.date,
+      category: formData.value.category,
+      merchantName: formData.value.merchantName,
+      merchantAddress: formData.value.merchantAddress,
+      itemsServices: formData.value.items.map((item) => ({
+        item: item.description,
+        quantity: parseInt(item.quantity),
+        unit_price: parseFloat(item.unit_price),
+      })),
+      remark: formData.value.remark,
+    };
+
+    console.log("=== FRONTEND DEBUG ===");
+    console.log("Claim ID:", claimId.value);
+    console.log("Form Data:", formData.value);
+    console.log("Prepared Invoice Data:", invoiceData);
+    console.log(
+      "API URL:",
+      `http://localhost:8000/employee/employee/invoice/save`,
+    );
+
+    console.log("==SENDING DATA===");
+
+    const response = await axios.post(
+      `http://127.0.0.1:8000/employee/employee/invoice/save`,
+      invoiceData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    console.log("SUCCESS:", response.data);
+    alert("Invoice submitted successfully!");
+    router.push("/employee/claim/all");
+  } catch (error) {
+    console.error("=== ERROR DEBUG ===");
+    console.error("Error object:", error);
+    console.error("Error response:", error.response);
+    console.error("Error message:", error.message);
+    console.error("Error status:", error.response?.status);
+    console.error("Error data:", error.response?.data);
+
+    console.error(
+      "Validate details:",
+      JSON.stringify(error.response?.data?.detail, null, 2),
+    );
+
+    alert(`Error: ${JSON.stringify(error.response?.data?.detail, null, 2)}`);
+  } finally {
+  }
+};
 </script>
