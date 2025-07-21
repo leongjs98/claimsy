@@ -111,13 +111,11 @@ async def get_policy_details():
     }
 
 
-# TODO: complete API /claim/{claim_id}/details ---> DONE (Diana)
-# for page /admin/claim/review/{claim_id}
-# get all the invoices linkeed to the claim
 @router.get("/claim/{claim_id}/details", response_model=ClaimSchema)
 async def get_claim_by_id(claim_id: int, db: Session = Depends(get_db)):
     """
     Get claim by claim_id
+    get all the invoices linked to the claim
     """
     try:
         claim = db.query(DBClaim).options(joinedload(DBClaim.invoices)).filter(DBClaim.id == claim_id).first()

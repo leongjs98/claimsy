@@ -18,7 +18,12 @@
             />
           </svg>
         </button>
+        <div class="flex justify-center items-center gap-2">
         <h1>Travel & Transportation</h1>
+          <button type="button" class="hover:cursor-pointer" @click="showInfo=true">
+            <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Majesticons by Gerrit Halfmann - https://github.com/halfmage/majesticons/blob/main/LICENSE --><g fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12zm10-5a2 2 0 0 0-2 2a1 1 0 0 1-2 0a4 4 0 1 1 5.31 3.78a.674.674 0 0 0-.273.169a.177.177 0 0 0-.037.054v.497a1 1 0 1 1-2 0V13c0-1.152.924-1.856 1.655-2.11A2.001 2.001 0 0 0 12 7zm1 6.007v-.004v.004zM13 17a1 1 0 1 1-2 0a1 1 0 0 1 2 0z" fill="currentColor"/></g></svg>
+          </button>
+        </div>
         <button @click="showChat = !showChat" class="hover:cursor-pointer">
           <svg
             v-if="showChat"
@@ -247,6 +252,189 @@
       class="markdown-it mt-8 w-full rounded-lg bg-white px-4 py-6 shadow-sm lg:px-6"
     ></p>
   </div>
+
+  <InfoDialog v-model="showInfo">
+  <template #title>
+    Capabilities
+  </template>
+  <template #default>
+      <div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <div class="overflow-hidden shadow-sm ring-1 ring-black/5 sm:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6">Airport Code</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Airport Name</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">City and Country</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              <tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">PVG</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Pudong International Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Shanghai, China</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">LAX</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Los Angeles International Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Los Angeles, CA, USA</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">CDG</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Charles de Gaulle Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Paris, France</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">SAW</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Sabiha Gökçen Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Istanbul, Turkey</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">FDF</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Martinique Aimé Césaire Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Fort-de-France, Martinique</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">PTP</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Le Raizet Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Pointe-à-Pitre, Guadeloupe</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">XPG</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Gare du Nord Rail Station</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Paris, France</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">JFK</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">John F. Kennedy International Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">New York, NY, USA</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">AUH</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Zayed International Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Abu Dhabi, UAE</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">ORY</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Orly Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Paris, France</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">SFO</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">San Francisco International Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">San Francisco, CA, USA</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">EWR</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Newark Liberty International Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Newark, NJ, USA</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">MIA</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Miami International Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Miami, FL, USA</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">AMS</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Schiphol Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Amsterdam, Netherlands</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">BAH</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Bahrain International Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Manama, Bahrain</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">IST</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Istanbul Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Istanbul, Turkey</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">BCN</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Josep Tarradellas Barcelona Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Barcelona, Spain</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">TUN</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Carthage Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Tunis, Tunisia</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">LIN</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Linate Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Milan, Italy</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">MAD</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Adolfo Suárez Madrid-Barajas Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Madrid, Spain</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">YUL</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Pierre Elliott Trudeau International Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Montreal, QC, Canada</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">QQS</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">St Pancras International Rail Station</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">London, England, UK</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">FCO</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Fiumicino Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Rome, Italy</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">LIS</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Lisbon Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Lisbon, Portugal</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">CPH</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Kastrup Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Copenhagen, Denmark</td>
+</tr>
+
+<tr>
+<td class="py-4 pr-3 pl-4 text-sm font-medium text-start whitespace-nowrap text-gray-900 sm:pl-6">RAK</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Menara Airport</td>
+<td class="px-3 py-4 text-sm text-start whitespace-nowrap text-gray-500">Marrakech, Morocco</td>
+</tr>
+              </tbody>
+          </table>
+        </div>
+        </div>
+        </div>
+        </div>
+  </template>
+  </InfoDialog>
+
 </template>
 
 <script setup>
@@ -259,6 +447,7 @@
 
   const showChat = ref(true);
   const showDetails = ref(true);
+  const showInfo = ref(false);
   const showAnswer = ref(false);
   const router = useRouter();
   const isOpen = ref(false);
@@ -345,7 +534,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "I need to fly from New York JFK to London Heathrow.",
+      text: "I need to fly from Sydney to Bangkok.",
     },
     {
       isSenderUser: false,
@@ -353,7 +542,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "I need to leave March 15th, preferably evening, and return March 18th.",
+      text: "I need to leave August 15th, preferably evening, and return August 18th.",
     },
     {
       isSenderUser: false,
@@ -361,7 +550,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Client meetings and a product demo on March 16th.",
+      text: "Client meetings and a product demo on August 16th.",
     },
     {
       isSenderUser: false,
@@ -369,15 +558,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Client meetings and a product demo on March 16th.",
-    },
-    {
-      isSenderUser: false,
-      text: "Important meetings! Do you need to arrive by a specific time for your business commitments?",
-    },
-    {
-      isSenderUser: true,
-      text: "Yes, my first meeting is March 16th at 10 AM, so I need to be there the night before.",
+      text: "Yes, my first meeting is August 16th at 10 AM, so I need to be there the night before.",
     },
     {
       isSenderUser: false,
@@ -393,15 +574,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "We have to book through approved vendors and stay at 4-star hotels minimum.",
-    },
-    {
-      isSenderUser: false,
-      text: "Noted. Do you have any airline or hotel loyalty programs or preferred vendors?",
-    },
-    {
-      isSenderUser: true,
-      text: "I'm Gold status with British Airways and prefer Marriott hotels.",
+      text: "We have to take at least business class for the flights and stay at 4-star hotels minimum.",
     },
     {
       isSenderUser: false,
@@ -409,7 +582,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Departure date is fixed, but I could return March 17th or 19th if there's significant savings.",
+      text: "Departure date and return are fixed.",
     },
     {
       isSenderUser: false,
@@ -417,7 +590,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Yes, somewhere in Central London, close to the financial district.",
+      text: "Yes, somewhere near the Central Bangkok.",
     },
     {
       isSenderUser: false,

@@ -1,6 +1,7 @@
 # Code-related Todo's
 ## Todo
 ### Feedbacks
+- [ ] merge diana branch
 - [ ] john: smart suggest get it done to impress
 - [ ] john: upload receipt, show image (a lot = carousell)
 

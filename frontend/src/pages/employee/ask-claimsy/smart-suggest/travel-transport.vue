@@ -1,5 +1,20 @@
 <template>
   <div class="mx-auto my-8 w-full max-w-5xl bg-gray-100">
+    <div class="mb-8 rounded-md bg-yellow-50 p-4">
+  <div class="flex">
+    <div class="shrink-0">
+      <svg class="size-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+        <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3">
+      <h3 class="text-sm font-medium text-yellow-800">Attention</h3>
+      <div class="mt-2 text-sm text-yellow-700">
+        <p>Only the admin Smart Suggest is working.</p>
+      </div>
+    </div>
+  </div>
+</div>
     <div
       class="relative col-span-4 transform overflow-hidden rounded-xl bg-white text-left shadow-sm transition-all sm:w-full sm:min-w-lg md:min-w-xl"
     >
@@ -154,21 +169,21 @@
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Trip Purpose</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - Client meetings and product demo March 16th
+                - Client meetings and product demo August 16th
                 <br />
-                - First meeting: 10 AM March 16th
+                - First meeting: 10 AM August 16th
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Departure</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - March 15th (evening preferred)
+                - August 15th (evening preferred)
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Return</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - March 18th (flexible: 17th or 19th for savings)
+                - August 18th (flexible: 17th or 19th for savings)
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -257,8 +272,8 @@
 
   const md = new MarkdownIt();
 
-  const showChat = ref(true);
-  const showDetails = ref(true);
+  const showChat = ref(false);
+  const showDetails = ref(false);
   const showAnswer = ref(false);
   const router = useRouter();
   const isOpen = ref(false);
@@ -275,16 +290,16 @@
 
 **Option 1 (Recommended):**
 - **British Airways BA117** - JFK to LHR
-- **Departure:** March 15, 9:45 PM → **Arrival:** March 16, 8:20 AM +1
-- **Return:** BA112 - March 18, 2:15 PM → 5:45 PM same day
+- **Departure:** August 15, 9:45 PM → **Arrival:** August 16, 8:20 AM +1
+- **Return:** BA112 - August 18, 2:15 PM → 5:45 PM same day
 - **Class:** World Traveller Plus (Premium Economy)
 - **Price:** RM 7,757 roundtrip ($1,847)
 - **Benefits:** Extra legroom, priority boarding, arrives well before your 10 AM meeting
 
 **Option 2 (Budget-friendly):**
 - **British Airways BA179** - JFK to LHR
-- **Departure:** March 15, 7:50 PM → **Arrival:** March 16, 6:35 AM +1
-- **Return:** BA178 - March 17, 8:25 PM → 11:55 PM same day
+- **Departure:** August 15, 7:50 PM → **Arrival:** August 16, 6:35 AM +1
+- **Return:** BA178 - August 17, 8:25 PM → 11:55 PM same day
 - **Class:** World Traveller (Economy)
 - **Price:** RM 5,414 roundtrip ($1,289)
 - **Benefits:** Earlier return saves hotel night, still meets your schedule
@@ -296,7 +311,7 @@
 **Option 1 (Prime Location):**
 - **London Marriott Hotel County Hall**
 - **Location:** South Bank, 12 mins to Bank/Financial District
-- **Dates:** March 15-18 (3 nights)
+- **Dates:** August 15-18 (3 nights)
 - **Room:** Executive King with Thames view
 - **Price:** RM 7,938 total (RM 2,646/night) [$1,890 total]
 - **Amenities:** Executive lounge, 24hr business center, gym
@@ -304,7 +319,7 @@
 **Option 2 (Business District):**
 - **Marriott London City**
 - **Location:** Heart of Financial District
-- **Dates:** March 15-18 (3 nights)
+- **Dates:** August 15-18 (3 nights)
 - **Room:** Superior King
 - **Price:** RM 6,930 total (RM 2,310/night) [$1,650 total]
 - **Amenities:** Walking distance to meetings, business facilities
@@ -345,7 +360,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "I need to fly from New York JFK to London Heathrow.",
+      text: "I need to fly from Los Angeles to London.",
     },
     {
       isSenderUser: false,
@@ -353,7 +368,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "I need to leave March 15th, preferably evening, and return March 18th.",
+      text: "I need to leave August 15th, preferably evening, and return August 18th.",
     },
     {
       isSenderUser: false,
@@ -361,7 +376,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Client meetings and a product demo on March 16th.",
+      text: "Client meetings and a product demo on August 16th.",
     },
     {
       isSenderUser: false,
@@ -369,15 +384,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Client meetings and a product demo on March 16th.",
-    },
-    {
-      isSenderUser: false,
-      text: "Important meetings! Do you need to arrive by a specific time for your business commitments?",
-    },
-    {
-      isSenderUser: true,
-      text: "Yes, my first meeting is March 16th at 10 AM, so I need to be there the night before.",
+      text: "Yes, my first meeting is August 16th at 10 AM, so I need to be there the night before.",
     },
     {
       isSenderUser: false,
@@ -393,15 +400,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "We have to book through approved vendors and stay at 4-star hotels minimum.",
-    },
-    {
-      isSenderUser: false,
-      text: "Noted. Do you have any airline or hotel loyalty programs or preferred vendors?",
-    },
-    {
-      isSenderUser: true,
-      text: "I'm Gold status with British Airways and prefer Marriott hotels.",
+      text: "We have to take at least business class for the flights and stay at 4-star hotels minimum.",
     },
     {
       isSenderUser: false,
@@ -409,7 +408,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Departure date is fixed, but I could return March 17th or 19th if there's significant savings.",
+      text: "Departure date and return are fixed.",
     },
     {
       isSenderUser: false,
@@ -417,7 +416,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Yes, somewhere in Central London, close to the financial district.",
+      text: "Yes, somewhere near the Central London",
     },
     {
       isSenderUser: false,
