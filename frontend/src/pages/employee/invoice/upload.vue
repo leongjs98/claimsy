@@ -26,7 +26,7 @@
             @drop.prevent="handleDrop"
           >
             <div class="text-center">
-              <!-- New circular upload icon -->
+              <!-- Circular upload icon -->
               <div
                 class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-blue-100"
               >
@@ -51,12 +51,13 @@
               >
                 <p class="text-xs text-gray-400">Drop your files here or</p>
                 <label
-                  class="relative cursor-pointer rounded-xl bg-theme-100 px-10 py-1 text-white transition-colors duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 focus-within:outline-none hover:bg-theme-200"
+                  class="relative cursor-pointer rounded-xl bg-theme-100 px-10 py-1 text-white transition-colors duration-200 hover:bg-theme-200"
                 >
                   <span
-                    class="flex items-center justify-center px-3 py-2 text-center text-xs"
-                    >Browse Files</span
+                    class="flex items-center justify-center px-3 py-2 text-xs"
                   >
+                    Browse Files
+                  </span>
                   <input
                     type="file"
                     class="sr-only"
@@ -68,42 +69,39 @@
               </div>
             </div>
 
-            <!-- Preview section with enhanced styling -->
+            <!-- Preview thumbnails inside card in a responsive grid -->
             <div
-              v-if="selectedFiles.length > 0"
-              class="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4"
+              v-if="rawFiles.length > 0"
+              class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
             >
               <div
-                v-for="(file, index) in selectedFiles"
+                v-for="(file, index) in previewFiles"
                 :key="file.name + file.size + index"
-                class="flex items-center justify-between py-2"
-                :class="{
-                  'border-b border-gray-200': index < selectedFiles.length - 1,
-                }"
+                class="flex flex-col items-center"
               >
-                <div class="flex items-center space-x-3">
-                  <div class="flex-shrink-0 rounded-full bg-blue-100 p-2">
-                    <svg
-                      class="h-6 w-6 text-blue-600"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <p class="text-sm font-medium text-gray-900">
-                      {{ file.name }}
-                    </p>
-                    <p class="text-xs text-gray-500">
-                      {{ formatFileSize(file.size) }}
-                    </p>
-                  </div>
+                <img
+                  v-if="file.preview"
+                  :src="file.preview"
+                  alt="Receipt thumbnail"
+                  class="h-24 w-24 rounded-lg object-cover shadow"
+                />
+
+                <div
+                  v-else
+                  class="flex h-24 w-24 items-center justify-center rounded-lg bg-blue-100 text-blue-600 shadow"
+                >
+                  <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
                 </div>
+                <p class="mt-2 w-24 truncate text-center text-xs text-gray-700">
+                  {{ file.name }}
+                </p>
+
                 <button
                   @click="removeFile(index)"
                   class="text-sm font-medium text-red-600 transition-colors duration-200 hover:text-red-800 focus:underline focus:outline-none"
@@ -114,25 +112,26 @@
             </div>
           </div>
 
-          <!-- "Supported Format" text -->
           <p class="mt-2 pt-2 text-center text-xs text-theme-100">
-            Supported formats: PDF, JPEG ,JPG or PNG (max 10MB)
+            Supported formats: PDF, JPEG, JPG, PNG (max 10MB)
           </p>
-          <!-- Upload and Cancel buttons -->
+
+          <!-- Buttons -->
           <div class="mt-6 flex justify-center space-x-10">
             <button
               @click="cancelUpload"
-              class="rounded-xl border-1 border-theme-300 bg-white px-10 py-2 text-xs font-medium text-theme-300 shadow-lg transition-colors duration-200 hover:bg-blue-50 focus:ring-1 focus:ring-blue-300 focus:ring-offset-2 focus:outline-none"
+              class="rounded-xl border border-theme-300 bg-white px-10 py-2 text-xs font-medium text-theme-300 shadow-lg hover:bg-blue-50"
             >
               Cancel
             </button>
             <button
-              @click="uploadFile(selectedFiles)"
-              class="cursor-pointer rounded-xl bg-theme-300 px-10 py-2 text-xs font-medium text-white shadow-lg transition-all duration-200 ease-in-out hover:bg-theme-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              @click="uploadFile"
+              class="hover:bg-theme-400 cursor-pointer rounded-xl bg-theme-300 px-10 py-2 text-xs font-medium text-white shadow-lg"
             >
               Upload
             </button>
           </div>
+
           <div v-if="isLoading" class="mt-4 flex justify-center text-blue-600">
             Uploading...Please wait
           </div>
@@ -145,62 +144,74 @@
 <script setup>
 import axios from "axios";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useEmployeeClaimStore } from "@/stores/employee-claims";
 
 const router = useRouter();
+const claimStore = useEmployeeClaimStore();
 
 const isDragging = ref(false);
-const selectedFiles = ref([]);
+const rawFiles = ref([]); // actual File instances
+const previewFiles = ref([]); // UI previews
 const isUploading = ref(false);
-const claimStore = useEmployeeClaimStore();
 const isLoading = computed(() => claimStore.isLoading("uploading"));
 
 const handleDrop = (e) => {
   isDragging.value = false;
-  const files = e.dataTransfer.files;
-  if (files.length) {
-    selectedFiles.value.push(...Array.from(files));
-  }
+  const files = Array.from(e.dataTransfer.files);
+  addFiles(files);
 };
 
 const handleFileInput = (e) => {
-  const files = e.target.files;
-  if (files.length) {
-    selectedFiles.value.push(...Array.from(files));
+  const files = Array.from(e.target.files);
+  addFiles(files);
+};
+
+const addFiles = (files) => {
+  for (const file of files) {
+    const isImage = file.type.startsWith("image/");
+    const preview = isImage ? URL.createObjectURL(file) : null;
+
+    rawFiles.value.push(file);
+    previewFiles.value.push({
+      file,
+      name: file.name,
+      size: file.size,
+      preview,
+    });
   }
 };
 
-const removeFile = (indexToRemove) => {
-  selectedFiles.value.splice(indexToRemove, 1);
-};
-
-const formatFileSize = (bytes) => {
-  if (bytes === 0) return "0 Bytes";
-  const k = 1024;
-  const sizes = ["Bytes", "KB", "MB", "GB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+const removeFile = (index) => {
+  const file = previewFiles.value[index];
+  if (file.preview) URL.revokeObjectURL(file.preview);
+  previewFiles.value.splice(index, 1);
+  rawFiles.value.splice(index, 1);
 };
 
 const cancelUpload = () => {
-  selectedFiles.value = [];
+  previewFiles.value.forEach((f) => {
+    if (f.preview) URL.revokeObjectURL(f.preview);
+  });
+  previewFiles.value = [];
+  rawFiles.value = [];
 };
 
-const uploadFile = async (file) => {
-  if (!selectedFiles.value || selectedFiles.value.length === 0) {
+const uploadFile = async () => {
+  if (!rawFiles.value.length) {
     alert("Please upload a file");
     return;
   }
 
-  const formData = new FormData(); //this will give you only the first one
-  for (let i = 0; i < selectedFiles.value.length; i++) {
-    formData.append("files", selectedFiles.value[i]);
-  }
+  const formData = new FormData();
+  rawFiles.value.forEach((file) => {
+    formData.append("files", file);
+  });
 
   try {
     claimStore.startLoading("uploading");
     isUploading.value = true;
+
     const { data } = await axios.post(
       "http://127.0.0.1:8000/employee/analyze/invoice",
       formData,
@@ -212,44 +223,35 @@ const uploadFile = async (file) => {
       },
     );
 
-    console.log("Raw answers:", data.answers);
     const itemsServices = [];
     let firstValid = null;
-
     let merchant_Names = [];
     let merchant_Addresses = [];
     let remarks = [];
 
     for (const result of data.answers) {
       if (!result || result.error || !result.items) continue;
-
       if (result.merchant_name) merchant_Names.push(result.merchant_name);
       if (result.merchant_address)
         merchant_Addresses.push(result.merchant_address);
       if (result.remark) remarks.push(result.remark);
-
-      if (!firstValid) {
-        firstValid = result;
-      }
-
+      if (!firstValid) firstValid = result;
       itemsServices.push(...result.items);
     }
-
-    const mergedNames = merchant_Names.join(" | ");
-    const mergedAddresses = merchant_Addresses.join(" | ");
-    const mergedremarks = remarks.join(" | ");
 
     router.push({
       path: "/employee/invoice/edit",
       query: {
         category: firstValid.category,
         date: firstValid.date,
-        merchantName: mergedNames,
-        merchantAddress: mergedAddresses,
-        remark: mergedremarks,
+        merchantName: merchant_Names.join(" | "),
+        merchantAddress: merchant_Addresses.join(" | "),
+        remark: remarks.join(" | "),
         items: JSON.stringify(itemsServices),
       },
     });
+
+    cancelUpload(); // clear files
   } catch (err) {
     console.error("Upload failed:", err);
     alert("LLM analysis unsuccessful");
