@@ -195,10 +195,9 @@ const submitInvoice = async (event) => {
 
   try {
     const invoiceData = {
-      invoiceId: 345,
       invoiceNumber: formData.value.invoiceNumber || `INV-${Date.now()}`,
-      claimId: 1,
-      employeeId: 1,
+      claimId: claimId.value,
+      employeeId: 1, // Update this if you're using auth
       invoiceDate: formData.value.date,
       category: formData.value.category,
       merchantName: formData.value.merchantName,

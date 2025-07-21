@@ -3,7 +3,7 @@ PostgreSQL Table Schemas of Claimsy
 """
 
 from typing import List, Dict, Any
-from sqlalchemy import DECIMAL, JSON, Date, ForeignKey, Integer, Text, Column, String
+from sqlalchemy import DECIMAL, JSON, Date, ForeignKey, Integer, Text, Column, String, Identity
 from .postgresql_setup import TableBase, Base
 from sqlalchemy.orm import relationship
 
@@ -50,7 +50,7 @@ class Employee(TableBase, Base):
 class Invoice(TableBase, Base):
     __tablename__ = "invoices"
 
-    invoice_id = Column(Integer, nullable=False)
+    invoice_id = Column(Integer, Identity(always=True), primary_key=True, index=True)
     invoice_number = Column(String(50), unique=True, nullable=False)
     claim_id = Column(Integer, ForeignKey("claims.id"), nullable=True)
     employee_id = Column(Integer, ForeignKey("employees.id"), nullable=False)

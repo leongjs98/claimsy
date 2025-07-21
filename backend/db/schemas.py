@@ -1,7 +1,7 @@
 import json
 from typing import List, Optional
 from datetime import date
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from decimal import Decimal
 from enum import Enum
 from datetime import datetime
@@ -41,7 +41,7 @@ class ItemService(BaseModel):
 
 class InvoiceSchema(BaseModel):
     id: Optional[int] = None
-    invoice_id: int = Field(alias="invoiceId")
+    invoice_id: Optional[int] = Field(alias="invoiceId", default=None)
     invoice_number: str = Field(alias="invoiceNumber")
     claim_id: Optional[int] = Field(alias="claimId", default=None)
     employee_id: int = Field(alias="employeeId")
@@ -62,8 +62,9 @@ class InvoiceSchema(BaseModel):
                 raise ValueError("Invalid JSON format for items_services")
         return v
 
-    class Config:
-        from_attributes = True
-        populate_by_name = True
-
+    class InvoiceSchema(BaseModel):
+        model_config = ConfigDict(
+            from_attributes=True,
+            populate_by_name=True
+    )
 

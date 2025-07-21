@@ -61,7 +61,6 @@ async def save_invoice(invoice: InvoiceSchema, db: Session = Depends(get_db)):
 
         # Create invoice with embedded JSON items
         new_invoice = Invoice(
-            invoice_id=data.get("invoiceId"),
             invoice_number=data["invoiceNumber"],
             claim_id=data.get("claimId"),
             employee_id=data["employeeId"],
@@ -76,11 +75,8 @@ async def save_invoice(invoice: InvoiceSchema, db: Session = Depends(get_db)):
         db.add(new_invoice)
         db.commit()
         db.refresh(new_invoice)
+        return new_invoice
 
-        return {
-            "message": "Invoice saved successfully",
-            "invoice_id": new_invoice.id
-        }
 
     except Exception as e:
         db.rollback()
