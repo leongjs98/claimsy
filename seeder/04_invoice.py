@@ -19,12 +19,14 @@ MIN_NUM_INVOICES_FOR_EMPLOYEE_ID_1 = 50
 
 fake = Faker()
 
-def create_invoice_data(i, employee_ids):
+
+def create_invoice_data(employee_ids):
     """Create fake invoice data"""
+    date = fake.date_between(start_date="-2y", end_date="today")
     return {
-        "invoice_number": f"INV-{fake.year()}-{fake.random_int(min=1000, max=9999)}",
+        "invoice_number": f"INV-{date.year}-{fake.random_int(min=1000, max=9999)}",
         "employee_id": random.choice(employee_ids),
-        "invoice_date": fake.date_between(start_date="-2y", end_date="today"),
+        "invoice_date": date,
         "category": fake.random_element(elements=categories),
         "merchant_name": fake.company(),
         "merchant_address": fake.address(),
@@ -41,6 +43,7 @@ def create_invoice_data(i, employee_ids):
         else None,
     }
 
+
 def seed_invoices_for_employee_id_1():
     """Seed the database with invoice data"""
     try:
@@ -49,7 +52,7 @@ def seed_invoices_for_employee_id_1():
 
         for i in range(MIN_NUM_INVOICES_FOR_EMPLOYEE_ID_1):
             while True:
-                invoice_data = create_invoice_data(i, [1])
+                invoice_data = create_invoice_data([1])
 
                 # Ensure unique invoice number
                 if invoice_data["invoice_number"] not in used_invoice_numbers:
@@ -65,12 +68,15 @@ def seed_invoices_for_employee_id_1():
         session.add_all(invoices)
         session.commit()
 
-        print(f"Successfully seeded {MIN_NUM_INVOICES_FOR_EMPLOYEE_ID_1} invoices for employee id 1!")
+        print(
+            f"Successfully seeded {MIN_NUM_INVOICES_FOR_EMPLOYEE_ID_1} invoices for employee id 1!"
+        )
     except Exception as e:
         session.rollback()
         print(f"Error seeding invoices: {e}")
     finally:
         session.close()
+
 
 def seed_invoices():
     """Seed the database with invoice data"""
@@ -89,7 +95,7 @@ def seed_invoices():
 
         for i in range(NUM_INVOICES):
             while True:
-                invoice_data = create_invoice_data(i, employee_ids)
+                invoice_data = create_invoice_data(employee_ids)
 
                 # Ensure unique invoice number
                 if invoice_data["invoice_number"] not in used_invoice_numbers:
@@ -118,9 +124,7 @@ def show_help():
     print("Invoice Seeder")
     print("=" * 50)
     print("Usage:")
-    print(
-        "will seed at least 20 invoices for employee 1"
-    )
+    print("will seed at least 20 invoices for employee 1")
     print(
         "  python invoice_seeder.py --number 30        - Seed 30 number of invoices (DEFAULT: 20)"
     )
