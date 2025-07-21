@@ -33,7 +33,7 @@
       if (
         route.path === "/employee/invoice/unsubmitted" ||
         route.path === "/employee/claim/approved" ||
-        route.path.includes("/employee/invoice/edit") ||
+        (route.path.includes("/employee/invoice/edit") && route.path !== "/employee/invoice/edit/first" ) ||
         route.path === "/employee/claim/rejected"
       ) {
         return true;
@@ -41,7 +41,7 @@
     }
     if (
       props.link === "/employee/invoice/upload" &&
-      route.path === "/employee/invoice/edit/first"
+      route.path.includes("/employee/invoice/edit/first")
     ) {
       return true;
     }

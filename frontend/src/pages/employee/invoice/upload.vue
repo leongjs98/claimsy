@@ -55,8 +55,9 @@
                 >
                   <span
                     class="flex items-center justify-center px-3 py-2 text-center text-xs"
-                    >Browse Files</span
-                  >
+                    >
+                    Browse Files
+                  </span >
                   <input
                     type="file"
                     class="sr-only"
@@ -74,8 +75,8 @@
               class="mt-6 rounded-lg border border-gray-200 bg-gray-50 p-4"
             >
               <div
-                v-for="(file, index) in selectedFiles"
-                :key="file.name + file.size + index"
+                v-for="(fileEntry, index) in selectedFiles"
+                :key="fileEntry.file.name + fileEntry.file.size + index"
                 class="flex items-center justify-between py-2"
                 :class="{
                   'border-b border-gray-200': index < selectedFiles.length - 1,
@@ -97,19 +98,70 @@
                   </div>
                   <div>
                     <p class="text-sm font-medium text-gray-900">
-                      {{ file.name }}
+                      {{ fileEntry.file.name }}
                     </p>
                     <p class="text-xs text-gray-500">
-                      {{ formatFileSize(file.size) }}
+                      {{ formatFileSize(fileEntry.file.size) }}
                     </p>
                   </div>
                 </div>
-                <button
-                  @click="removeFile(index)"
-                  class="text-sm font-medium text-red-600 transition-colors duration-200 hover:text-red-800 focus:underline focus:outline-none"
-                >
-                  Remove
-                </button>
+                <div class="flex items-center space-x-2">
+                  <button
+                    @click="showReceiptPreview(fileEntry)"
+                    class="rounded-full p-1 text-blue-600 hover:bg-blue-100 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+                    title="View Receipt"
+                  >
+                    <span class="sr-only">View Receipt</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="h-5 w-5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12s-3.75 6.75-9.75 6.75S2.25 12 2.25 12z"
+                      />
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                        fill="currentColor"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    @click="removeFile(index)"
+                    class="rounded-full p-1 text-red-600 hover:bg-red-100 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:outline-none"
+                    title="Remove File"
+                  >
+                    <span class="sr-only">Remove File</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="h-5 w-5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 7h12M9 7V5a3 3 0 0 1 6 0v2m-9 0h12v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7z"
+                      />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M10 11v6m4-6v6"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -122,7 +174,7 @@
           <div class="mt-6 flex items-center justify-center gap-10">
             <SecondaryButton @click="cancelUpload"> Cancel </SecondaryButton>
             <span class="flex items-center justify-center gap-2">
-              <PrimaryButton @click="uploadFile(selectedFiles)">
+              <PrimaryButton @click="uploadFile()">
                 <span v-if="isLoading"> Processing... </span>
                 <span v-else> Upload </span>
               </PrimaryButton>
@@ -154,39 +206,149 @@
         </div>
       </div>
     </div>
+
+    <!-- Receipt View Modal -->
+    <v-dialog v-model="showModal" width="850" height="1000">
+      <v-card class="flex h-full flex-col rounded-lg shadow-lg">
+        <div class="mt-6 flex items-center justify-between px-8">
+          <h2 class="text-lg font-semibold text-gray-900">
+            {{ currentViewedFile?.file.name }}
+          </h2>
+          <button
+            @click="closeModal"
+            class="ml-2 flex items-center justify-center rounded-full p-1 hover:bg-red-600"
+            style="width: 32px; height: 32px"
+            title="Close"
+          >
+            <span class="sr-only">Close</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="h-5 w-5 text-red-600"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="flex-1 items-center justify-center overflow-auto p-6">
+          <iframe
+            v-if="
+              currentViewedFile?.type === 'image' &&
+              currentViewedFile?.previewUrl
+            "
+            :src="currentViewedFile.previewUrl"
+            class="h-full w-full rounded"
+          ></iframe>
+          <iframe
+            v-else-if="
+              currentViewedFile?.type === 'pdf' && currentViewedFile?.previewUrl
+            "
+            :src="currentViewedFile.previewUrl"
+            class="h-full w-full rounded"
+          ></iframe>
+          <div
+            v-else
+            class="flex h-full items-center justify-center text-gray-500"
+          >
+            <p>Cannot display preview for this file type.</p>
+          </div>
+        </div>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script setup>
   import axios from "axios";
   import { useRouter } from "vue-router";
-  import { ref } from "vue";
+  import { ref, computed, onBeforeUnmount } from "vue";
   import { useEmployeeClaimStore } from "@/stores/employee-claims";
 
   const router = useRouter();
 
   const isDragging = ref(false);
   const selectedFiles = ref([]);
-  const isUploading = ref(false);
   const claimStore = useEmployeeClaimStore();
   const isLoading = computed(() => claimStore.isLoading("uploading"));
+
+  // State for the modal
+  const showModal = ref(false);
+  const currentViewedFile = ref(null);
+  const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
+
+  // Helper function to process files (validation and preview URL creation)
+  const processFiles = (files) => {
+    const processed = [];
+    for (const file of files) {
+      const fileType = file.type;
+      const fileName = file.name;
+
+      // Validate file type
+      if (
+        !["application/pdf", "image/jpeg", "image/png"].includes(fileType) &&
+        !fileName.toLowerCase().endsWith(".jpg") // Catch .jpg if mime type is generic
+      ) {
+        alert(
+          `File "${fileName}" is not a supported format. Please upload PDF, JPEG, JPG, or PNG.`,
+        );
+        continue;
+      }
+
+      // Validate file size
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        alert(
+          `File "${fileName}" exceeds the maximum size of 10MB. Please upload a smaller file.`,
+        );
+        continue;
+      }
+
+      let previewUrl = null;
+      let type = "other";
+
+      // Create object URL for both images and PDFs for modal viewing
+      if (fileType.startsWith("image/")) {
+        previewUrl = URL.createObjectURL(file);
+        type = "image";
+      } else if (fileType === "application/pdf") {
+        previewUrl = URL.createObjectURL(file);
+        type = "pdf";
+      }
+
+      processed.push({ file, type, previewUrl });
+    }
+    return processed;
+  };
 
   const handleDrop = (e) => {
     isDragging.value = false;
     const files = e.dataTransfer.files;
     if (files.length) {
-      selectedFiles.value.push(...Array.from(files));
+      selectedFiles.value.push(...processFiles(Array.from(files)));
     }
   };
 
   const handleFileInput = (e) => {
     const files = e.target.files;
     if (files.length) {
-      selectedFiles.value.push(...Array.from(files));
+      selectedFiles.value.push(...processFiles(Array.from(files)));
+      // Clear the input to allow selecting the same file again if needed
+      e.target.value = "";
     }
   };
 
   const removeFile = (indexToRemove) => {
+    const fileEntry = selectedFiles.value[indexToRemove];
+    // Revoke the object URL to free up memory
+    if (fileEntry && fileEntry.previewUrl) {
+      URL.revokeObjectURL(fileEntry.previewUrl);
+    }
     selectedFiles.value.splice(indexToRemove, 1);
   };
 
@@ -199,23 +361,40 @@
   };
 
   const cancelUpload = () => {
+    // Revoke all object URLs before clearing the array
+    selectedFiles.value.forEach((fileEntry) => {
+      if (fileEntry.previewUrl) {
+        URL.revokeObjectURL(fileEntry.previewUrl);
+      }
+    });
     selectedFiles.value = [];
+    closeModal(); // Close modal if open
   };
 
-  const uploadFile = async (file) => {
+  // Functions for modal
+  const showReceiptPreview = (fileEntry) => {
+    currentViewedFile.value = fileEntry;
+    showModal.value = true;
+  };
+
+  const closeModal = () => {
+    showModal.value = false;
+    currentViewedFile.value = null;
+  };
+
+  const uploadFile = async () => {
     if (!selectedFiles.value || selectedFiles.value.length === 0) {
-      alert("Please upload a file");
+      alert("Please select at least one file to upload.");
       return;
     }
 
-    const formData = new FormData(); //this will give you only the first one
-    for (let i = 0; i < selectedFiles.value.length; i++) {
-      formData.append("files", selectedFiles.value[i]);
-    }
+    const formData = new FormData();
+    selectedFiles.value.forEach((fileEntry) => {
+      formData.append("files", fileEntry.file); // Append the actual File object
+    });
 
     try {
       claimStore.startLoading("uploading");
-      isUploading.value = true;
       const { data } = await axios.post(
         "http://127.0.0.1:8000/employee/analyze/invoice",
         formData,
@@ -254,23 +433,36 @@
       const mergedAddresses = merchant_Addresses.join(" | ");
       const mergedremarks = remarks.join(" | ");
 
-      router.push({
-        path: "/employee/invoice/edit/first",
-        query: {
-          category: firstValid.category,
-          date: firstValid.date,
-          merchantName: mergedNames,
-          merchantAddress: mergedAddresses,
-          remark: mergedremarks,
-          items: JSON.stringify(itemsServices),
-        },
-      });
+      // Ensure firstValid exists before navigating
+      if (firstValid) {
+        router.push({
+          path: "/employee/invoice/edit/first",
+          query: {
+            category: firstValid.category,
+            date: firstValid.date,
+            merchantName: mergedNames,
+            merchantAddress: mergedAddresses,
+            remark: mergedremarks,
+            items: JSON.stringify(itemsServices),
+          },
+        });
+      } else {
+        alert("No valid invoice data was extracted from the uploaded files.");
+      }
     } catch (err) {
       console.error("Upload failed:", err);
-      alert("LLM analysis unsuccessful");
+      alert(
+        "LLM analysis unsuccessful. Please try again or upload different files.",
+      );
     } finally {
       claimStore.stopLoading("uploading");
-      isUploading.value = false;
+      // Clear files after successful or failed upload attempt
+      cancelUpload();
     }
   };
+
+  // Lifecycle hook to clean up object URLs when the component is unmounted
+  onBeforeUnmount(() => {
+    cancelUpload(); // This will revoke all URLs and close modal
+  });
 </script>
