@@ -2,7 +2,6 @@
 ## Todo
 ### Feedbacks
 - [ ] john: smart suggest get it done to impress
-- [ ] john: upload receipt, show image (a lot = carousell)
 
 - [ ] john: invoice/edit (both first and \[id]) table become input to edit (delete button)
 - [ ] john: invoice/edit (both first and \[id]) unit next to quantity
@@ -30,6 +29,7 @@
     - [ ] Total (RM)
 
 ## Done
+- [x] john: upload receipt, show image (a lot = carousell)
 - [x] john: navbar middle and to the sides (absolute and relative)
 - [x] fix claim totalAmount in seeder
 - [x] Claim has one or many invoice db table and database fix
