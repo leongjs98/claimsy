@@ -427,7 +427,7 @@ async function refreshClaims() {
   await claimStore.refreshClaims();
 }
 
-// NEW: Submit selected invoices function
+// aisya - Submit selected invoices function
 async function submitSelectedInvoices() {
   if (selectedInvoices.value.length === 0) {
     alert('Please select at least one invoice to submit.');
