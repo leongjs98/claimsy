@@ -54,51 +54,61 @@ import { onMounted, ref, watch, nextTick, onUnmounted } from "vue";
 import Chart from "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { useAdminClaimStore } from "@/stores/admin-claims.ts";
+
+// Register Chart.js plugins globally
 Chart.register(ChartDataLabels);
 
+// --- Reactive State ---
 const adminClaimStore = useAdminClaimStore();
 const loading = ref(true);
 const error = ref("");
 
-// Refs for canvas elements
+// --- Template Refs for Canvas Elements ---
 const expenseDonutChart = ref(null);
 const categoryBarChart = ref(null);
 const expenseLineChart = ref(null);
 
-// Variables to hold Chart.js instances
+// --- Chart.js Instance Variables (to manage chart lifecycle) ---
 let expenseDonutChartInstance = null;
 let categoryBarChartInstance = null;
 let expenseLineChartInstance = null;
 
-// Chart.js plugin for center text in donut
+// --- Chart.js Plugin: Custom Center Text for Donut Chart ---
+// This plugin draws "Total Expenses" and the calculated sum in the center of the donut chart.
 Chart.register({
   id: "centerText",
   afterDraw(chart) {
-    if (chart.config.type !== "doughnut") return;
+    if (chart.config.type !== "doughnut") return; // Apply only to doughnut charts
+
     const {
       ctx,
       chartArea: { width, height },
     } = chart;
-    ctx.save();
-    ctx.font = " 10px Inter";
+    ctx.save(); // Save the current canvas state
+
+    // First line of text: "Total Expenses:"
+    ctx.font = "12px Inter";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText("Total Expenses:", width / 2, height / 2 - 10);
-    // Second line: total amount
+
+    // Calculate the total amount from all claims for the second line
     const totalAmountAllClaims = adminClaimStore.claims.reduce((claimSum, claim) => {
-      return (
-        claimSum +
-        (claim.invoices?.reduce((invoiceSum, invoice) => {
-          return (
-            invoiceSum +
-            (invoice.itemsServices?.reduce(
+      // Sum invoices within each claim
+      const claimInvoicesTotal =
+        claim.invoices?.reduce((invoiceSum, invoice) => {
+          // Sum items/services within each invoice
+          const invoiceItemsTotal =
+            invoice.itemsServices?.reduce(
               (currentSum, item) => currentSum + item.quantity * item.unit_price,
               0,
-            ) || 0)
-          );
-        }, 0) || 0)
-      );
+            ) || 0;
+          return invoiceSum + invoiceItemsTotal;
+        }, 0) || 0;
+      return claimSum + claimInvoicesTotal;
     }, 0);
+
+    // Second line of text: the total calculated amount
     ctx.font = "bold 13px Inter";
     ctx.fillText(
       "RM " +
@@ -108,31 +118,32 @@ Chart.register({
       width / 2,
       height / 2 + 8,
     );
-    ctx.restore();
+    ctx.restore(); // Restore the canvas state
   },
 });
 
-// Horizontal Bar Chart Data (Claims by Category)
+// --- Static Budget Data ---
+// Budgets for the Horizontal Bar Chart (Category-wise)
 const categoryBudgets = {
   "Medical \nExpenses": 100000,
   "Accommodation": 100000,
-  "Meals &\nEntertainment": 100000, // Corrected typo here from Entertaiment
+  "Meals &\nEntertainment": 100000,
   "Supplies &\nEquipment": 100000,
   "Travel \nExpenses": 100000,
 };
 
-// Line Chart (Expenses over Years)
+// Budgets for the Line Chart (Yearly)
 const yearlyBudgets = {
   2023: 500000,
   2024: 550000,
   2025: 400000,
 };
 
-// Function to process data and render/update charts
+// --- Function to Process Data and Render/Update Charts ---
 const processAndRenderCharts = () => {
   const claimsData = adminClaimStore.claims;
 
-  // Destroy existing charts and nullify instances
+  // 1. Destroy any existing chart instances to prevent memory leaks and ensure clean re-rendering
   if (expenseDonutChartInstance) {
     expenseDonutChartInstance.destroy();
     expenseDonutChartInstance = null;
@@ -146,34 +157,33 @@ const processAndRenderCharts = () => {
     expenseLineChartInstance = null;
   }
 
-  // If no claims data, just return after destroying existing charts
+  // Early exit if no claims data or if canvas elements are not yet available
   if (!claimsData || claimsData.length === 0) {
     console.log("No claims data available, charts not rendered.");
     return;
   }
-
-  // Ensure canvas elements are available before rendering
   if (!expenseDonutChart.value || !categoryBarChart.value || !expenseLineChart.value) {
     console.warn("Chart canvas refs are not yet available. Skipping chart rendering.");
     return;
   }
 
-  // --- Data Processing for Donut Chart (Category Type) ---
+  // --- 2. Data Processing for Donut Chart (Category Type) ---
   const categoryAmountTotals = {};
   claimsData.forEach((claim) => {
     claim.invoices.forEach((invoice) => {
-      // Normalizing category names to match budget keys
+      // Normalize category names to match the keys defined in `categoryBudgets`
       let normalizedCategory = invoice.category || "Uncategorized";
-       if (normalizedCategory === "Medical Expenses") {
+      if (normalizedCategory === "Medical Expenses") {
         normalizedCategory = "Medical \nExpenses";
-      } else if (normalizedCategory === "Meals & Entertaiment") { // Fix typo and add newline
-         normalizedCategory = "Meals &\nEntertainment";
+      } else if (normalizedCategory === "Meals & Entertaiment") {
+        normalizedCategory = "Meals &\nEntertainment";
       } else if (normalizedCategory === "Supplies and Equipment") {
         normalizedCategory = "Supplies &\nEquipment";
       } else if (normalizedCategory === "Travel Expenses") {
         normalizedCategory = "Travel \nExpenses";
       }
 
+      // Aggregate total amount for each normalized category
       categoryAmountTotals[normalizedCategory] =
         (categoryAmountTotals[normalizedCategory] || 0) +
         (invoice.itemsServices?.reduce(
@@ -188,20 +198,24 @@ const processAndRenderCharts = () => {
     0,
   );
 
-  const categoryLabels = Object.keys(categoryAmountTotals);
-  const categoryPercentData = categoryLabels.map((cat) =>
+  const donutChartLabels = Object.keys(categoryAmountTotals);
+  const donutChartPercentData = donutChartLabels.map((cat) =>
     ((categoryAmountTotals[cat] / totalAmountAll) * 100).toFixed(2),
   );
 
-  // --- Data Processing for Bar Chart (Total Expenses vs Total Budget) ---
-  const barDataKeys = Object.keys(categoryBudgets);
-  const chartBarLabels = barDataKeys.map(key => key.split('\n'));
-  const claimedAmounts = barDataKeys.map(
-    (cat) => (categoryAmountTotals[cat] || 0) / 5000, // Data scaled down by 5000
-  );
-  const budgetAmounts = barDataKeys.map((cat) => categoryBudgets[cat] / 5000); // Data scaled down by 5000
+  // --- 3. Data Processing for Bar Chart (Total Expenses vs Total Budget) ---
+  const barChartDataKeys = Object.keys(categoryBudgets);
+  // Prepare labels for multiline display on the Y-axis
+  const barChartLabels = barChartDataKeys.map((key) => key.split("\n"));
 
-  // --- Data Processing for Line Chart (Total Expenses Over Years) ---
+  // Get claimed amounts (expenses) for each category
+  const barChartClaimedAmounts = barChartDataKeys.map(
+    (cat) => categoryAmountTotals[cat] || 0, // Using actual unscaled amounts
+  );
+  // Get budget amounts for each category
+  const barChartBudgetAmounts = barChartDataKeys.map((cat) => categoryBudgets[cat]); // Using actual unscaled amounts
+
+  // --- 4. Data Processing for Line Chart (Total Expenses Over Years) ---
   const yearAmounts = {};
   claimsData.forEach((claim) => {
     const year = new Date(claim.submitted_date).getFullYear();
@@ -217,30 +231,31 @@ const processAndRenderCharts = () => {
       }, 0) || 0;
     yearAmounts[year] = (yearAmounts[year] || 0) + claimTotalFromInvoices;
   });
-  const yearLabels = Object.keys(yearlyBudgets).sort();
-  const yearData = yearLabels.map((y) => yearAmounts[y] || 0);
-  const yearBudgetData = yearLabels.map((y) => yearlyBudgets[y] || 0);
 
-  // --- Chart Rendering ---
+  const lineChartYearLabels = Object.keys(yearlyBudgets).sort(); // Ensure years are sorted
+  const lineChartYearData = lineChartYearLabels.map((y) => yearAmounts[y] || 0);
+  const lineChartYearBudgetData = lineChartYearLabels.map((y) => yearlyBudgets[y] || 0);
 
-  // Donut Chart
+  // --- 5. Chart Rendering ---
+
+  // Donut Chart Initialization
   expenseDonutChartInstance = new Chart(expenseDonutChart.value, {
     type: "doughnut",
     data: {
-      labels: categoryLabels,
+      labels: donutChartLabels,
       datasets: [
         {
-          data: categoryPercentData,
+          data: donutChartPercentData,
           backgroundColor: ["#FFAD05", "#2A9D8F", "#00246A", "#0353A4", "#CAE9FF"],
         },
       ],
     },
     options: {
-      cutout: "65%",
-      responsive: false,
+      cutout: "65%", // Defines the size of the center hole
+      responsive: false, // Disables Chart.js's built-in responsiveness
       plugins: {
         legend: {
-          position: "right",
+          position: "right", // Position legend to the right
           labels: {
             boxWidth: 14,
             boxHeight: 14,
@@ -248,26 +263,26 @@ const processAndRenderCharts = () => {
             padding: 10,
           },
         },
-        datalabels: { display: false },
+        datalabels: { display: false }, // Hide default datalabels (custom plugin handles center text)
         tooltip: {
           callbacks: {
-            label: (context) => `  ${context.raw || 0}%`,
+            label: (context) => `  ${context.raw || 0}%`, // Custom tooltip format for percentages
           },
         },
       },
     },
-    plugins: ["centerText"],
+    plugins: ["centerText"], // Enable the custom centerText plugin
   });
 
-  // Horizontal Bar Chart
+  // Horizontal Bar Chart Initialization
   categoryBarChartInstance = new Chart(categoryBarChart.value, {
     type: "bar",
     data: {
-      labels: chartBarLabels,
+      labels: barChartLabels,
       datasets: [
         {
           label: "Total Expenses",
-          data: claimedAmounts, // Scaled data
+          data: barChartClaimedAmounts, // Actual unscaled expense amounts
           backgroundColor: "#0353A4",
           borderRadius: 6,
           barPercentage: 0.9,
@@ -276,18 +291,20 @@ const processAndRenderCharts = () => {
             anchor: "end",
             align: "end",
             color: "#222",
-            font: { family: "Inter, sans-serif", weight: "bold", size: 11 },
+            font: { family: "Inter, sans-serif", weight: "bold", size: 12 },
             formatter: (v) =>
-              `RM ${Number(v * 5000).toLocaleString("en-MY", { minimumFractionDigits: 0 })}`, // Display original value
-            clamp: true,
+              `RM ${Number(v).toLocaleString("en-MY", { minimumFractionDigits: 0 })}`, // Format as currency
+            clamp: true, // Keep labels within the chart area
           },
           tooltip: {
             callbacks: {
               label: (context) => {
-                const category = context.label;
-                const value = context.raw * 5000; // Display original value
-                const budget = categoryBudgets[category] || 0;
+                const originalCategoryKey = barChartDataKeys[context.dataIndex];
+                const value = context.raw; // The actual expense value
+                const budget = categoryBudgets[originalCategoryKey] || 0; // The actual budget value
+
                 let percent = budget ? ((value / budget) * 100).toFixed(2) : "N/A";
+
                 return [
                   `Expenses: RM ${Number(value).toLocaleString("en-MY")}`,
                   `Budget: RM ${Number(budget).toLocaleString("en-MY")}`,
@@ -299,7 +316,7 @@ const processAndRenderCharts = () => {
         },
         {
           label: "Total Budget",
-          data: budgetAmounts, // Scaled data
+          data: barChartBudgetAmounts, // Actual unscaled budget amounts
           backgroundColor: "#FFAD05",
           borderRadius: 6,
           barPercentage: 0.9,
@@ -309,22 +326,23 @@ const processAndRenderCharts = () => {
             align: "end",
             color: "#222",
             font: { family: "Inter, sans-serif", weight: "regular", size: 11 },
-            formatter: (v) =>
-              `RM ${Number(v * 5000).toLocaleString("en-MY", { minimumFractionDigits: 0 })}`, // Display original value
+            formatter: (v) => {
+              return `RM ${Number(v).toLocaleString("en-MY", { minimumFractionDigits: 0 })}`; // Format as currency
+            },
             clamp: true,
           },
         },
       ],
     },
     options: {
-      indexAxis: "y",
+      indexAxis: "y", // Make bars horizontal
       responsive: false,
-      maintainAspectRatio: false,
+      maintainAspectRatio: false, // Allow custom width/height
       layout: {
         padding: {
           left: 0,
-          right: 60,
-          top: 5
+          right: 60, // Add padding on the right for datalabels
+          top: 5,
         },
       },
       plugins: {
@@ -332,13 +350,13 @@ const processAndRenderCharts = () => {
           position: "top",
           labels: { boxWidth: 14, boxHeight: 14, font: { size: 12 } },
         },
-        datalabels: { display: true },
+        datalabels: { display: true }, // Enable datalabels for this chart
       },
       scales: {
         x: {
           beginAtZero: true,
-          display: false, // Hide the numerical X-axis to avoid clutter
-          max: (Math.max(...claimedAmounts, ...budgetAmounts) * 1.1) || 10, // Max based on scaled data
+          display: false, // Hide the numerical X-axis
+          max: (Math.max(...barChartClaimedAmounts, ...barChartBudgetAmounts) * 1.1) || 100000, // Dynamic max based on largest value + buffer
           title: { display: false },
           grid: { display: false },
           ticks: { font: { family: "Inter, sans-serif", size: 11 } },
@@ -347,39 +365,41 @@ const processAndRenderCharts = () => {
           title: { display: false, text: "Category" },
           grid: { display: false },
           ticks: {
-            font: { family: "Inter, sans-serif", size: 11 },
+            font: { family: "Inter, sans-serif", size: 12 },
             callback: function (value) {
-            return this.getLabelForValue(value);
+              return this.getLabelForValue(value); // Display original category label (handles newlines)
             },
           },
         },
       },
     },
-    plugins: [ChartDataLabels],
+    plugins: [ChartDataLabels], // Ensure datalabels plugin is applied to this chart
   });
 
-  // Line Chart
+  // Line Chart Initialization
   const ctx = expenseLineChart.value.getContext("2d");
+  // Create gradient for expense area fill
   const expenseGradient = ctx.createLinearGradient(0, 0, 0, 300);
-  expenseGradient.addColorStop(0, "rgba(3,83,164,1)");
-  expenseGradient.addColorStop(1, "rgba(3,83,164,0.15)");
+  expenseGradient.addColorStop(0, "rgba(3,83,164,1)"); // Solid blue at top
+  expenseGradient.addColorStop(1, "rgba(3,83,164,0.15)"); // Fading blue at bottom
 
+  // Create gradient for budget area fill (though fill is false, good practice)
   const budgetGradient = ctx.createLinearGradient(0, 0, 0, 300);
-  budgetGradient.addColorStop(0, "rgba(251,191,36,1)");
-  budgetGradient.addColorStop(1, "rgba(251,191,36,0.15)");
+  budgetGradient.addColorStop(0, "rgba(251,191,36,1)"); // Solid yellow at top
+  budgetGradient.addColorStop(1, "rgba(251,191,36,0.15)"); // Fading yellow at bottom
 
   expenseLineChartInstance = new Chart(expenseLineChart.value, {
     type: "line",
     data: {
-      labels: yearLabels,
+      labels: lineChartYearLabels,
       datasets: [
         {
           label: "Total Expenses",
-          data: yearData,
-          fill: true,
+          data: lineChartYearData,
+          fill: true, // Fill the area under the line
           borderColor: "#0353A4",
           backgroundColor: expenseGradient,
-          tension: 0.1,
+          tension: 0.1, // Smooth the line
           pointBackgroundColor: "#0353A4",
           borderWidth: 2,
           datalabels: {
@@ -395,8 +415,8 @@ const processAndRenderCharts = () => {
             callbacks: {
               label: (context) => {
                 const yearIndex = context.dataIndex;
-                const expense = yearData[yearIndex];
-                const budget = yearBudgetData[yearIndex];
+                const expense = lineChartYearData[yearIndex];
+                const budget = lineChartYearBudgetData[yearIndex];
                 let percent = budget ? ((expense / budget) * 100).toFixed(2) : "N/A";
                 return [
                   `Expense: RM ${Number(expense).toLocaleString("en-MY")}`,
@@ -409,11 +429,11 @@ const processAndRenderCharts = () => {
         },
         {
           label: "Total Budget",
-          data: yearBudgetData,
-          fill: false,
+          data: lineChartYearBudgetData,
+          fill: false, // Only show the line, no fill
           borderColor: "#FFAD05",
-          backgroundColor: budgetGradient,
-          borderDash: [3, 3],
+          backgroundColor: budgetGradient, // Though fill is false, keeping for consistency
+          borderDash: [3, 3], // Dashed line style
           borderWidth: 2,
           tension: 0.1,
           pointBackgroundColor: "#FFAD05",
@@ -432,7 +452,7 @@ const processAndRenderCharts = () => {
     options: {
       responsive: true,
       layout: {
-        padding: { left: 40, right: 40 },
+        padding: { left: 40, right: 40 }, // Padding around the chart area
       },
       plugins: {
         legend: {
@@ -443,8 +463,8 @@ const processAndRenderCharts = () => {
       scales: {
         y: {
           beginAtZero: true,
-          display: false,
-          max: Math.max(...yearData, ...yearBudgetData) * 1.1 || 10000,
+          display: false, // Hide Y-axis numerical labels
+          max: Math.max(...lineChartYearData, ...lineChartYearBudgetData) * 1.1 || 10000, // Dynamic max with buffer
           title: { display: true, text: "Amount (RM)" },
           grid: { display: false },
           ticks: { font: { family: "Inter, sans-serif", size: 12 } },
@@ -464,9 +484,14 @@ const processAndRenderCharts = () => {
   });
 };
 
+// --- Lifecycle Hooks and Watchers ---
+
+// Watch for changes in the adminClaimStore.claims array
+// Deep watch ensures reactivity to changes within objects inside the array.
 watch(
   () => adminClaimStore.claims,
   () => {
+    // Use nextTick to ensure DOM is updated before attempting to re-render charts
     nextTick(() => {
       processAndRenderCharts();
     });
@@ -474,6 +499,7 @@ watch(
   { deep: true },
 );
 
+// On component mount: fetch data and render charts
 onMounted(async () => {
   loading.value = true;
   error.value = null;
@@ -484,11 +510,13 @@ onMounted(async () => {
     error.value = "Failed to load dashboard data. Please try again later.";
   } finally {
     loading.value = false;
+    // Ensure DOM is updated after loading data, then render charts
     await nextTick();
     processAndRenderCharts();
   }
 });
 
+// On component unmount: destroy chart instances to prevent memory leaks
 onUnmounted(() => {
   if (expenseDonutChartInstance) expenseDonutChartInstance.destroy();
   if (categoryBarChartInstance) categoryBarChartInstance.destroy();
