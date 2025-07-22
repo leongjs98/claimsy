@@ -158,9 +158,7 @@
     </div>
   </form>
   <SuccessDialog v-model="showSuccessDialog">
-    <template #header>
-      <h1>Invoice Uploaded</h1>
-    </template>
+    <template #header> Invoice Uploaded </template>
     <template #default>
       <p>This invoice has been uploaded as {{ invoiceNumber }}.</p>
       <p>Remember to submit it as a claim!</p>
