@@ -119,6 +119,29 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
       }
     },
     
+    async submitInvoicesIntoClaim(employeeId: number, invoiceIds: number[], claimType: string, reason: string) {
+      this.loading = true;
+      try {
+        const response = await axios.post(
+          `http://127.0.0.1:8000/employee/${employeeId}/invoice/submit-into-claim`,
+          {
+            invoice_ids: invoiceIds,
+            claim_type: claimType,
+            reason: reason
+          }
+        );
+        
+        // Refresh the invoices list after successful submission
+        await this.fetchUnsubmittedInvoices(employeeId);
+        
+        return response.data; // Return the created claim
+      } catch (error) {
+        this.error = "Failed to submit claim.";
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
 
 
     // aisya - Fetch claims by employee ID
@@ -162,7 +185,7 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
       }
     },
 
-
+    
     // Refresh current employee's claims
     async refreshClaims() {
       if (this.currentEmployeeId) {

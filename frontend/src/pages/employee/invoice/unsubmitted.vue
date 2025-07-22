@@ -227,11 +227,12 @@ Unsubmitted.vue
     </div>
     <div class="flex justify-end px-4 sm:px-8 lg:px-14">
       <button
-        class="hover:bg-theme-400 z-25 mt-5 rounded bg-theme-300 px-13 py-2 text-white"
-        :disabled="selectedInvoices.length === 0"
-        @click="openDialog = true"
+        class="hover:bg-theme-400 z-25 mt-5 rounded bg-theme-300 px-13 py-2 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
+        :disabled="selectedInvoices.length === 0 || isSubmitting"
+        @click="submitSelectedInvoices"
       >
-        Submit ({{ selectedInvoices.length }})
+        <span v-if="isSubmitting">Submitting...</span>
+        <span v-else>Submit ({{ selectedInvoices.length }})</span>
       </button>
     </div>
   </div>
@@ -312,7 +313,7 @@ Unsubmitted.vue
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
-import { storeToRefs } from "pinia"; //sho
+import { storeToRefs } from "pinia";
 
 // Pinia store
 const claimStore = useEmployeeClaimStore();
@@ -325,6 +326,7 @@ const showCategoryDropdown = ref(false);
 const selectedCategory = ref("All");
 const selectedInvoices = ref([]);
 const openDialog = ref(false);
+const isSubmitting = ref(false); // Add loading state
 
 // sho - calling this action on mount to initialize the store
 onMounted(async () => {
@@ -332,10 +334,10 @@ onMounted(async () => {
   await claimStore.fetchUnsubmittedInvoices(employeeId);
 });
 
-// Helper functions
+// Helper functions (keep all your existing helper functions)
 function formatDate(dateString) {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-GB'); // DD/MM/YYYY format
+  return date.toLocaleDateString('en-GB');
 }
 
 function formatCurrency(amount) {
@@ -346,7 +348,6 @@ function formatCurrency(amount) {
 }
 
 function getCategoryFromType(claimType) {
-  // Map claim types to categories
   const categoryMap = {
     'Travel': 'Travel Expenses',
     'Accommodation': 'Accommodation', 
@@ -357,25 +358,20 @@ function getCategoryFromType(claimType) {
   return categoryMap[claimType] || 'Other';
 }
 
-//Get all invoices from all claims
 const allInvoices = computed(() => claimStore.invoices);
 
-// Computed properties
 const filteredInvoices = computed(() => {
-  const invoices = allInvoices.value; // Explicitly get the current value from ref
-
+  const invoices = allInvoices.value;
   if (selectedCategory.value === "All") {
     return invoices;
   }
-
   return invoices.filter(invoice => {
     return invoice.category.toLowerCase() === selectedCategory.value.toLowerCase();
   });
 });
 
 const sortedInvoices = computed(() => {
-  const invoices = filteredInvoices.value; // Also get the computed value explicitly
-
+  const invoices = filteredInvoices.value;
   if (sortKey.value === "Date") {
     return invoices.slice().sort((a, b) => {
       const dateA = new Date(a.invoiceDate);
@@ -383,17 +379,14 @@ const sortedInvoices = computed(() => {
       return sortAsc.value ? dateA - dateB : dateB - dateA;
     });
   }
-
   return invoices;
 });
 
-//Helper function to get claim number
 function getClaimNumber(claimId) {
   const claim = claimStore.claims.find(c => c.id === claimId);
   return claim ? claim.claim_number : 'Unknown';
 }
 
-//Helper function to truncate strings
 function truncateString(str, maxLength = 30) {
   if (!str) return '';
   if (str.length > maxLength) {
@@ -402,22 +395,18 @@ function truncateString(str, maxLength = 30) {
   return str;
 }
 
-// sho - Helper function to count number of items
 function getItemCount(invoice) {
   const items = invoice.itemsServices;
   return items.length;
 }
 
-// sho - function to get total price using map and reduce
 function getTotalPrice(invoice) {
   const items = invoice.itemsServices;
   return items
     .map(item => (item.quantity || 0) * (item.unit_price || 0))
     .reduce((sum, val) => sum + val, 0);
 }
-// until here
 
-// Methods
 function setSort(key) {
   if (key === "Date") {
     if (sortKey.value === key) {
@@ -431,31 +420,43 @@ function setSort(key) {
 
 function handleDialogClose() {
   openDialog.value = false;
-  selectedInvoices.value = []; // Clear selections after submission
+  selectedInvoices.value = [];
 }
 
-// Optional: Refresh data function
 async function refreshClaims() {
   await claimStore.refreshClaims();
 }
 
-// Optional: Submit selected claims function
+// NEW: Submit selected invoices function
 async function submitSelectedInvoices() {
+  if (selectedInvoices.value.length === 0) {
+    alert('Please select at least one invoice to submit.');
+    return;
+  }
+
   try {
-    // Here you can add logic to update claim status or create submissions
-    console.log('Submitting invoice:', selectedInvoices.value);
+    const employeeId = 1;
+    const invoiceIds = selectedInvoices.value.map(invoice => invoice.id);
     
-    // Example: Update each selected invoice status to 'submitted'
-    for (const invoice of selectedInvoices.value) {
-      await claimStore.updateClaim(claim.id, { 
-        status: 'submitted',
-        reviewed_date: new Date()
-      });
-    }
+    // Use the store action instead of direct fetch
+    const newClaim = await claimStore.submitInvoicesIntoClaim(
+      employeeId,
+      invoiceIds,
+      "travel", // or make this dynamic
+      "Business expense reimbursement"
+    );
     
+    console.log('Claim created successfully:', newClaim);
+    
+    // Show success dialog
     openDialog.value = true;
+    
+    // Clear selections
+    selectedInvoices.value = [];
+    
   } catch (error) {
-    console.error('Failed to submit claims:', error);
+    console.error('Failed to submit invoices:', error);
+    alert(`Failed to submit invoices: ${error.message}`);
   }
 }
 </script>
