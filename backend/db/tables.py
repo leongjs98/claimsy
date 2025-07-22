@@ -48,7 +48,6 @@ class Employee(TableBase, Base):
 
 class Invoice(TableBase, Base):
     __tablename__ = "invoices"
-
     invoice_number = Column(String(50), unique=True, nullable=False)
     claim_id = Column(Integer, ForeignKey("claims.id"), nullable=True)
     employee_id = Column(Integer, ForeignKey("employees.id"), nullable=False)

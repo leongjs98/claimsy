@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from db.postgresql_setup import get_db
 from db.tables import Claim as DBClaim
-from db.schemas import ClaimSchema, InvoiceSchema
+from db.schemas import ClaimSchema, InvoiceSchema, ItemService
 from llm.reader import encode_image_file
 from llm.setup import chain_extract_invoice_info, output_parser_invoice_json
 from db.tables import Invoice
@@ -48,45 +48,41 @@ async def analyze_invoice(
     return {"answers": results}
 
 
-
-@router.post("/employee/invoice/save", response_model=InvoiceSchema)
-async def save_invoice(
-    invoice: InvoiceSchema,
-    db: Session = Depends(get_db)
-):
+@router.post("/employee/invoice/save")
+async def save_invoice(invoice: InvoiceSchema, db: Session = Depends(get_db)):
     try:
         data = invoice.model_dump(by_alias=True)
         print("💡 Received data:", data)
 
+        # Check for duplicate invoice number
         existing_invoice = db.query(Invoice).filter_by(invoice_number=data["invoiceNumber"]).first()
         if existing_invoice:
-            return {"error": f"Invoice number {data['invoiceNumber']} already exists."}
+            raise HTTPException(status_code=400, detail=f"Invoice number {data['invoiceNumber']} already exists.")
 
+        # Create invoice with embedded JSON items
         new_invoice = Invoice(
-            invoice_id=data["invoiceId"],
             invoice_number=data["invoiceNumber"],
-            claim_id=data["claimId"],
+            claim_id=data.get("claimId"),
             employee_id=data["employeeId"],
             invoice_date=data["invoiceDate"],
-            category=data["category"],
-            merchant_name=data["merchantName"],
-            merchant_address=data["merchantAddress"],
-            items_services=data["itemsServices"],  # already list of dicts
-            remark=data["remark"]
+            category=data.get("category"),
+            merchant_name=data.get("merchantName"),
+            merchant_address=data.get("merchantAddress"),
+            items_services=data.get("itemsServices"),  # this is JSON
+            remark=data.get("remark")
         )
 
         db.add(new_invoice)
         db.commit()
         db.refresh(new_invoice)
+        return new_invoice
 
-        return invoice  # returning Pydantic object
 
     except Exception as e:
         db.rollback()
         import traceback
         traceback.print_exc()
-        return {"error": str(e)}
-
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
 # TODO: create router for /employee/claim/{id}/edit, (submit here = save)

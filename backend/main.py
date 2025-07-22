@@ -2,18 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer
 from routers import admin, employee
-from fastapi.middleware.cors import CORSMiddleware
 
 security = HTTPBearer()
 app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"], 
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 origins = [
     "http://localhost",

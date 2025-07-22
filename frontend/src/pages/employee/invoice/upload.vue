@@ -55,9 +55,9 @@
                 >
                   <span
                     class="flex items-center justify-center px-3 py-2 text-center text-xs"
-                    >
+                  >
                     Browse Files
-                  </span >
+                  </span>
                   <input
                     type="file"
                     class="sr-only"
@@ -426,28 +426,27 @@
           firstValid = result;
         }
 
+        const mergedNames = merchant_Names.join(" | ");
+        const mergedAddresses = merchant_Addresses.join(" | ");
+        const mergedremarks = remarks.join(" | ");
         itemsServices.push(...result.items);
-      }
 
-      const mergedNames = merchant_Names.join(" | ");
-      const mergedAddresses = merchant_Addresses.join(" | ");
-      const mergedremarks = remarks.join(" | ");
-
-      // Ensure firstValid exists before navigating
-      if (firstValid) {
-        router.push({
-          path: "/employee/invoice/edit/first",
-          query: {
-            category: firstValid.category,
-            date: firstValid.date,
-            merchantName: mergedNames,
-            merchantAddress: mergedAddresses,
-            remark: mergedremarks,
-            items: JSON.stringify(itemsServices),
-          },
-        });
-      } else {
-        alert("No valid invoice data was extracted from the uploaded files.");
+        // Ensure firstValid exists before navigating
+        if (firstValid) {
+          router.push({
+            path: "/employee/invoice/edit/first",
+            query: {
+              category: firstValid.category,
+              date: firstValid.date,
+              merchantName: mergedNames,
+              merchantAddress: mergedAddresses,
+              remark: mergedremarks,
+              items: JSON.stringify(itemsServices),
+            },
+          });
+        } else {
+          alert("No valid invoice data was extracted from the uploaded files.");
+        }
       }
     } catch (err) {
       console.error("Upload failed:", err);
