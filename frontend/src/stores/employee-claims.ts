@@ -93,6 +93,10 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
     return Array.from(uniqueCategories);
   },
 
+    getInvoicesByClaimId: (state) => (claimId: number) => {
+    return state.invoices.filter(invoice => invoice.claim_id === claimId);
+  }
+  
 },
 
   actions: {
@@ -119,6 +123,7 @@ export const useEmployeeClaimStore = defineStore("employeeClaim", {
       }
     },
     
+    //aisya
     async submitInvoicesIntoClaim(employeeId: number, invoiceIds: number[], claimType: string, reason: string) {
       this.loading = true;
       try {

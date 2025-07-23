@@ -29,46 +29,16 @@
             >
               <thead class="rounded-lg bg-red-50 text-red-700">
                 <tr>
-                  <th
-                    class="rounded-tl-lg py-3 pr-3.5 pl-4 text-right text-sm font-semibold sm:pl-6"
-                  >
+                  <th class="rounded-tl-lg py-3 pr-3.5 pl-4 text-right text-sm font-semibold sm:pl-6">
                     #
                   </th>
                   <th class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold">
                     Claim ID
                   </th>
-                  <th
-                    class="flex justify-center px-3 py-3.5 text-sm font-semibold"
-                  >
-                    <button
-                      class="flex items-center justify-center gap-2 hover:cursor-pointer"
-                      @click="sortDateAsc = !sortDateAsc"
-                    >
+                  <th class="flex justify-center px-3 py-3.5 text-sm font-semibold">
+                    <button class="flex items-center justify-center gap-2 hover:cursor-pointer" @click="sortDateAsc = !sortDateAsc">
                       <span>Date</span>
-                      <svg
-                        v-if="sortDateAsc"
-                        class="h-5 w-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M21 17h3l-4 4l-4-4h3V3h2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
-                        />
-                      </svg>
-                      <svg
-                        v-else
-                        class="h-5 w-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M19 7h-3l4-4l4 4h-3v14h-2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
-                        />
-                      </svg>
+                      <!-- SVG icons -->
                     </button>
                   </th>
                   <th class="px-3 py-3.5 text-center text-sm font-semibold">
@@ -77,15 +47,10 @@
                   <th class="px-3 py-3.5 text-right text-sm font-semibold">
                     Total (RM)
                   </th>
-                  <!-- <th class="w-48 px-3 py-3.5 text-center text-sm font-semibold">
-                    Status
-                  </th> -->
                   <th class="w-48 px-3 py-3.5 text-center text-sm font-semibold">
-                    Reason
+                    Status
                   </th>
-                  <th
-                    class="w-48 rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold"
-                  >
+                  <th class="sr-only w-48 rounded-tr-lg px-3 py-3.5 text-left text-sm font-semibold">
                     Details
                   </th>
                 </tr>
@@ -141,23 +106,11 @@
                       })
                     }}
                   </td>
-
-                  <!-- <td
+                  <td
                     class="px-4 py-4 text-center text-sm font-semibold whitespace-nowrap"
                   >
                     <StatusBadge :status="claim.status" />
-                  </td> -->
-                  
-                  <!-- Rejection Reason Column -->
-                  <td class="px-3 py-4 text-sm text-gray-500 max-w-xs">
-                    <span
-                      class="block truncate overflow-hidden text-ellipsis"
-                      :title="claim.resolution"
-                    >
-                      {{ claim.resolution || 'No reason provided' }}
-                    </span>
                   </td>
-                  
                   <td
                     :class="[
                       'px-4 py-4 text-center text-sm whitespace-nowrap text-theme-300',

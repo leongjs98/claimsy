@@ -288,7 +288,7 @@ Unsubmitted.vue
                   </h3>
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
-                      Successfully submitted {{ selectedInvoices.length }} invoices for approval.
+                      Successfully submitted {{ submittedInvoicesCount }} invoices for approval.
                     </p>
                   </div>
                 </div>
@@ -297,7 +297,7 @@ Unsubmitted.vue
                 <button
                   @click="openDialog = false"
                   type="button"
-                  class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  class="inline-flex w-full justify-center rounded-md bg-theme-300 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-theme-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Go back
                 </button>
@@ -326,7 +326,8 @@ const showCategoryDropdown = ref(false);
 const selectedCategory = ref("All");
 const selectedInvoices = ref([]);
 const openDialog = ref(false);
-const isSubmitting = ref(false); // Add loading state
+const isSubmitting = ref(false); 
+const submittedInvoicesCount = ref(0);
 
 // sho - calling this action on mount to initialize the store
 onMounted(async () => {
@@ -438,6 +439,9 @@ async function submitSelectedInvoices() {
     const employeeId = 1;
     const invoiceIds = selectedInvoices.value.map(invoice => invoice.id);
     
+    // Store the count BEFORE clearing the array
+    const submittedCount = selectedInvoices.value.length;
+
     // Use the store action instead of direct fetch
     const newClaim = await claimStore.submitInvoicesIntoClaim(
       employeeId,
@@ -448,6 +452,12 @@ async function submitSelectedInvoices() {
     
     console.log('Claim created successfully:', newClaim);
     
+    // Clear selections BEFORE showing dialog
+    selectedInvoices.value = [];
+    
+    // Store the count for the dialog
+    submittedInvoicesCount.value = submittedCount;
+
     // Show success dialog
     openDialog.value = true;
     

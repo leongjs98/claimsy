@@ -27,11 +27,6 @@
       </div>
 
       <div class="p-6">
-
-        <!-- Loading State -->
-        <div v-if="loading" class="text-center py-8">
-          <div class="text-lg">Loading invoices...</div>
-        </div>
         <!-- Loading State -->
         <div v-if="loading" class="text-center py-8">
           <div class="text-lg">Loading invoices...</div>
@@ -46,61 +41,55 @@
             <tr class="text-left">
               <th class="px-4 pb-2">Date</th>
               <th class="px-4 pb-2">Merchant</th>
-              <th class="px-4 pb-2">Item/Service</th>
-              <th class="px-4 pb-2 text-right">Qty</th>
-              <th class="pb-2 pl-4 text-right">Price (RM)</th>
+              <th class="px-4 pb-2">Category</th>
+              <th class="px-4 pb-2 text-right">Total Items</th>
+              <th class="pb-2 pl-4 text-right">Total Amount (RM)</th>
               <th class="pb-2 pl-4"></th>
             </tr>
           </thead>
           <tbody>
-            <!-- Loop through invoices and their items -->
-            <template v-for="invoice in invoices" :key="invoice.id">
-              <tr
-                v-for="(item, itemIndex) in invoice.itemsServices"
-                :key="`${invoice.id}-${itemIndex}`"
-                class="border-b border-gray-100 py-3 text-sm last:border-b-0"
-              >
-                <td class="px-4 py-6 text-gray-700">
-                  <span class="py-6 font-medium text-gray-900">
-                    {{ formatDate(invoice.invoice_date) }}
-                  </span>
-                  <br />
-                  <span class="text-xs text-gray-500">
-                    {{ invoice.category }}
-                  </span>
-                </td>
-                <td class="px-4 py-6 text-gray-700">
-                  <span class="py-6 font-medium text-gray-900">
-                    {{ invoice.merchant_name }}
-                  </span>
-                  <br />
-                  <span class="text-xs text-gray-500">
-                    {{ truncateString(invoice.merchant_address) }}
-                  </span>
-                </td>
-                <td class="max-w-80 px-4 py-6 text-nowrap text-gray-700">
-                  {{ truncateString(item.item) }}
-                </td>
-                <td class="px-4 py-6 text-right text-gray-700">
-                  {{ item.quantity }}
-                </td>
+            <!-- Loop through invoices only -->
+            <tr
+              v-for="invoice in invoices"
+              :key="invoice.id"
+              class="border-b border-gray-100 py-3 text-sm last:border-b-0"
+            >
+              <td class="px-4 py-6 text-gray-700">
+                <span class="py-6 font-medium text-gray-900">
+                  {{ formatDate(invoice.invoiceDate) }}
+                </span>
+              </td>
+              <td class="px-4 py-6 text-gray-700">
+                <span class="py-6 font-medium text-gray-900">
+                  {{ invoice.merchantName }}
+                </span>
+                <br />
+                <span class="text-xs text-gray-500">
+                  {{ truncateString(invoice.merchantAddress) }}
+                </span>
+              </td>
+              <td class="max-w-80 px-4 py-6 text-nowrap text-gray-700">
+                {{ invoice.category }}
+              </td>
+              <td class="px-4 py-6 text-center text-gray-700">
+                {{ invoice.itemsServices?.length || 0 }}
+              </td>
                 <td class="py-6 text-right font-semibold text-blue-600">
                   {{
-                    (item.quantity * item.unit_price).toLocaleString("en-US", {
+                    (invoice.itemsServices?.reduce((sum, item) => sum + (item.unit_price * item.quantity), 0) || 0).toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
                     })
                   }}
                 </td>
-                <td class="px-4 py-6 text-theme-300 hover:underline">
-                  <div class="text-right">
-                    <RouterLink :to="`/employee/invoice/edit/${invoice.id}`">
-                      Details
-                    </RouterLink>
-                  </div>
-                </td>
-              </tr>
-            </template>
+              <td class="px-4 py-6 text-theme-300 hover:underline">
+                <div class="text-right">
+                  <RouterLink :to="`/employee/invoice/edit/${invoice.id}`">
+                    Details
+                  </RouterLink>
+                </div>
+              </td>
+            </tr>
             
             <!-- Total Row -->
             <tr class="border-b border-gray-100 py-3 text-sm last:border-b-0">
@@ -179,7 +168,7 @@ const invoices = computed(() => {
 
 const totalAmount = computed(() => {
   return invoices.value.reduce((sum, invoice) => {
-    const invoiceTotal = invoice.item_services?.reduce(
+    const invoiceTotal = invoice.itemsServices?.reduce(
       (itemSum, item) => itemSum + (item.quantity * item.unit_price), 0
     ) || 0;
     return sum + invoiceTotal;

@@ -93,7 +93,7 @@
               <tbody class="divide-y divide-gray-200 bg-white">
                 <!-- No Approved Claims Row -->
                 <tr v-if="sortedApprovedClaims.length === 0" class="shadow-md">
-                  <td colspan="8" class="py-8 text-center text-gray-500 rounded-b-lg">
+                  <td colspan="7" class="py-8 text-center text-gray-500 rounded-b-lg">
                     <div class="flex flex-col items-center space-y-2">
                       <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -147,12 +147,7 @@
                   >
                     <StatusBadge :status="claim.status" />
                   </td>
-                  
-                  <!-- Approved Date Column
-                  <td class="px-3 py-4 text-center text-sm text-gray-500">
-                    {{ formatDate(claim.reviewed_date) }}
-                  </td> -->
-                  
+                
                   <td
                     :class="[
                       'px-4 py-4 text-center text-sm whitespace-nowrap text-theme-300',
