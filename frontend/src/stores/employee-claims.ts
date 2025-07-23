@@ -1,275 +1,237 @@
 import { defineStore } from "pinia";
+import axios from "axios";
 
-interface Expense {
-  Id: string;
-  Name: string;
-  Category: string;
-  Date: string;
-  Quantity: number;
-  Remark: string;
-  Total: number;
-  Status: string;
-  Items: {
-    category: string;
-    date: string;
-    merchantName: string;
-    merchantAddress: string;
-    description: string;
-    quantity: number;
-    unitPrice: number;
-  }[];
+// Interfaces
+interface ItemService {
+  item: string;
+  quantity: number;
+  unit_price: number;
 }
 
-function getClaimsWithStatus(claims: Expense[], status: string) {
-  return claims.filter((c) => c.Status.toLowerCase() === status.toLowerCase());
+interface Invoice {
+  id: number;
+  invoice_id: number;
+  invoice_number: string;
+  invoice_date: Date;
+  claim_id: number;
+  employee_id: number;
+  created_at: number;
+  updated_at: number;
+  category: string;
+  merchant_name: string;
+  merchant_address: string;
+  item_services: ItemService[];
+  remark: string;
 }
-function getClaimsWithPriceSorted(claims: Expense[], ascending: boolean) {}
+
+interface Claim {
+  id: number;
+  claim_number: string;
+  employee_id: number;
+  claim_type: string;
+  claim_amount: number;
+  reason: string;
+  status: string;
+  submitted_date: Date;
+  reviewed_date: Date;
+  resolution: string;
+  created_at: number;
+  updated_at: number;
+  Items: Invoice[];
+}
+
+// Helper function
+function getClaimsWithStatus(claims: Claim[], status: string): Claim[] {
+  return claims.filter((c) => c.status.toLowerCase() === status.toLowerCase());
+}
 
 export const useEmployeeClaimStore = defineStore("employeeClaim", {
   state: () => ({
-    expenses: [] as Expense[],
-    categories: [] as string[],
-    loadArr: [] as Array<string>,
+    claims: [] as Claim[],
+    invoices: [] as Invoice[],
+    claimInvoices: [] as Invoice[],
+    // categories: [] as string[],
+    loading: false,
+    error: null as string | null,
+    currentEmployeeId: null as number | null,
   }),
 
   getters: {
-    isLoading: (state) => (task: string) => state.loadArr.includes(task),
-    totalCount: (state) => state.expenses.length,
+    // Basic counts
+    totalCount: (state) => state.claims.length,
+    approvedCount: (state) => getClaimsWithStatus(state.claims, "approved").length,
+    rejectedCount: (state) => getClaimsWithStatus(state.claims, "rejected").length,
+    pendingCount: (state) => getClaimsWithStatus(state.claims, "pending").length,
 
-    approvedCount: (state) =>
-      getClaimsWithStatus(state.expenses, "approved").length,
+    // Claims by status
+    approvedClaims: (state) => getClaimsWithStatus(state.claims, "approved"),
+    rejectedClaims: (state) => getClaimsWithStatus(state.claims, "rejected"),
+    pendingClaims: (state) => getClaimsWithStatus(state.claims, "pending"),
 
-    rejectedCount: (state) =>
-      getClaimsWithStatus(state.expenses, "rejected").length,
-
-    getExpensesByDateAsc: (state): Expense[] => {
-      return [...state.expenses].sort((a, b) => {
-        const dateA = new Date(a.Date.split("/").reverse().join("-"));
-        const dateB = new Date(b.Date.split("/").reverse().join("-"));
-        return dateA.getTime() - dateB.getTime();
-      });
+    // Sort by date
+    getClaimsByDateAsc: (state): Claim[] => {
+      return [...state.claims].sort((a, b) => 
+        new Date(a.submitted_date).getTime() - new Date(b.submitted_date).getTime()
+      );
     },
 
-    getExpensesByDateDesc: (state): Expense[] => {
-      return [...state.expenses].sort((a, b) => {
-        const dateA = new Date(a.Date.split("/").reverse().join("-"));
-        const dateB = new Date(b.Date.split("/").reverse().join("-"));
-        return dateB.getTime() - dateA.getTime();
-      });
+    getClaimsByDateDesc: (state): Claim[] => {
+      return [...state.claims].sort((a, b) => 
+        new Date(b.submitted_date).getTime() - new Date(a.submitted_date).getTime()
+      );
     },
+
+    // aisya-category
+    categories: (state) => {
+    const uniqueCategories = new Set<string>();
+    uniqueCategories.add('All'); // Always include 'All' option
+    state.invoices.forEach(invoice => {
+      if (invoice.category) { // Ensure the category property exists
+        uniqueCategories.add(invoice.category);
+      }
+    });
+    return Array.from(uniqueCategories);
   },
 
+    getInvoicesByClaimId: (state) => (claimId: number) => {
+    return state.invoices.filter(invoice => invoice.claim_id === claimId);
+  }
+  
+},
+
   actions: {
-    startLoading(task: string) {
-      if (!this.loadArr.includes(task)) {
-        this.loadArr.push(task);
+    // Set current employee
+    setCurrentEmployee(employeeId: number) {
+      this.currentEmployeeId = employeeId;
+
+    },
+
+
+    // sho - pinia store to fetch unsubmitted invoice
+    async fetchUnsubmittedInvoices(employeeId: number) {
+      this.loading = true;
+      try {
+        const response = await axios.get<Invoice[]>(
+          `http://127.0.0.1:8000/employee/${employeeId}/invoice/unsubmitted`
+        );
+        this.invoices = Array.isArray(response.data) ? response.data : [];
+      } catch (error) {
+        this.error = "Failed to load unsubmitted invoices.";
+        this.invoices = [];
+      } finally {
+        this.loading = false;
+      }
+    },
+    
+    //aisya
+    async submitInvoicesIntoClaim(employeeId: number, invoiceIds: number[], claimType: string, reason: string) {
+      this.loading = true;
+      try {
+        const response = await axios.post(
+          `http://127.0.0.1:8000/employee/${employeeId}/invoice/submit-into-claim`,
+          {
+            invoice_ids: invoiceIds,
+            claim_type: claimType,
+            reason: reason
+          }
+        );
+        
+        // Refresh the invoices list after successful submission
+        await this.fetchUnsubmittedInvoices(employeeId);
+        
+        return response.data; // Return the created claim
+      } catch (error) {
+        this.error = "Failed to submit claim.";
+        throw error;
+      } finally {
+        this.loading = false;
       }
     },
 
-    stopLoading(task: string) {
-      this.loadArr = this.loadArr.filter((t) => t !== task);
+
+    // aisya - Fetch claims by employee ID
+    async fetchClaimsByEmployee(employeeId: number) {
+      this.loading = true;
+      this.error = null;
+      
+      try {
+        this.currentEmployeeId = employeeId;
+        const response = await axios.get<Claim[]>(
+          `http://127.0.0.1:8000/employee/${employeeId}/claim/all`
+        );
+        this.claims = response.data;
+        console.log(`Successfully fetched ${this.claims.length} claims for employee ${employeeId}`);
+      } catch (error) {
+        console.error("Failed to fetch employee claims:", error);
+        this.error = error instanceof Error ? error.message : 'Failed to fetch claims';
+        this.claims = [];
+        throw error;
+      } finally {
+        this.loading = false;
+      }
     },
 
-    initializeExpenses() {
-      this.expenses = [
-        {
-          Id: "C0001",
-          Name: "Laptop",
-          Category: "Office Supplies and Equipment",
-          Date: "30/01/2025",
-          Quantity: 6,
-          Remark: "Dell 1.35GHz 8GB 256GB SSD - for new employee Sasha",
-          Total: 48285.0,
-          Status: "Approved",
-          Items: [
-            {
-              category: "Computer Hardware",
-              date: "30/01/2025",
-              merchantName: "Dell Malaysia",
-              merchantAddress: "Level 15, Menara LGB, KLCC, Kuala Lumpur",
-              description: "Dell Laptop 1.35GHz 8GB RAM 256GB SSD",
-              quantity: 6,
-              unitPrice: 8047.5,
-            },
-          ],
-        },
-        {
-          Id: "C0002",
-          Name: "Whiteboard 4x6ft",
-          Category: "Office Supplies and Equipment",
-          Date: "21/02/2025",
-          Quantity: 2,
-          Remark: "for training room",
-          Total: 1200.0,
-          Status: "Approved",
-          Items: [
-            {
-              category: "Office Furniture",
-              date: "21/02/2025",
-              merchantName: "Office Depot Malaysia",
-              merchantAddress: "Lot 3.01, Mid Valley Megamall, Kuala Lumpur",
-              description: "Magnetic Whiteboard 4x6ft with markers",
-              quantity: 2,
-              unitPrice: 600.0,
-            },
-          ],
-        },
-        {
-          Id: "C0003",
-          Name: "Meeting at Damansara",
-          Category: "Travel Expenses",
-          Date: "29/03/2025",
-          Quantity: 1,
-          Remark: "Lunch with client",
-          Total: 150.0,
-          Status: "Rejected",
-          Items: [
-            {
-              category: "Transportation",
-              date: "29/03/2025",
-              merchantName: "Grab Malaysia",
-              merchantAddress: "Digital Service",
-              description: "Taxi fare to Damansara client meeting",
-              quantity: 1,
-              unitPrice: 45.0,
-            },
-            {
-              category: "Client Entertainment",
-              date: "29/03/2025",
-              merchantName: "The Curve Restaurant",
-              merchantAddress: "The Curve Shopping Mall, Damansara, Selangor",
-              description: "Business lunch with client",
-              quantity: 1,
-              unitPrice: 105.0,
-            },
-          ],
-        },
-        {
-          Id: "C0004",
-          Name: "Lunch",
-          Category: "Meals and Entertainment",
-          Date: "29/03/2025",
-          Quantity: 10,
-          Remark: "team lunch",
-          Total: 250.0,
-          Status: "Rejected",
-          Items: [
-            {
-              category: "Team Meal",
-              date: "29/03/2025",
-              merchantName: "Nando's Malaysia",
-              merchantAddress: "Ground Floor, Pavilion KL, Bukit Bintang",
-              description: "Team lunch for 10 people",
-              quantity: 10,
-              unitPrice: 25.0,
-            },
-          ],
-        },
-        {
-          Id: "C0005",
-          Name: "Dinner",
-          Category: "Meals and Entertainment",
-          Date: "18/05/2025",
-          Quantity: 6,
-          Remark: "Sales team dinner",
-          Total: 138.0,
-          Status: "Rejected",
-          Items: [
-            {
-              category: "Team Meal",
-              date: "18/05/2025",
-              merchantName: "Tony Roma's",
-              merchantAddress:
-                "Level 4, Sunway Pyramid, Bandar Sunway, Selangor",
-              description: "Sales team appreciation dinner",
-              quantity: 6,
-              unitPrice: 23.0,
-            },
-          ],
-        },
-        {
-          Id: "C0006",
-          Name: "Stationery",
-          Category: "Office Supplies and Equipment",
-          Date: "12/06/2025",
-          Quantity: 15,
-          Remark: "for new employee",
-          Total: 1000.0,
-          Status: "Approved",
-          Items: [
-            {
-              category: "Office Supplies",
-              date: "12/06/2025",
-              merchantName: "Popular Bookstore",
-              merchantAddress:
-                "Level 3, 1 Utama Shopping Centre, Petaling Jaya",
-              description: "Complete stationery set for new employees",
-              quantity: 15,
-              unitPrice: 66.67,
-            },
-          ],
-        },
-        {
-          Id: "C0007",
-          Name: "Flight to Penang",
-          Category: "Travel Expenses",
-          Date: "29/07/2025",
-          Quantity: 2,
-          Remark: "Flight tickets for conference",
-          Total: 1200.0,
-          Status: "Approved",
-          Items: [
-            {
-              category: "Air Travel",
-              date: "29/07/2025",
-              merchantName: "Malaysia Airlines",
-              merchantAddress: "KLIA Terminal 1, Sepang, Selangor",
-              description: "Return flight tickets KL to Penang for conference",
-              quantity: 2,
-              unitPrice: 600.0,
-            },
-          ],
-        },
-        {
-          Id: "C0008",
-          Name: "Hotel at Penang",
-          Category: "Accomodation",
-          Date: "29/08/2025",
-          Quantity: 2,
-          Remark: "Company conference",
-          Total: 2500.0,
-          Status: "Pending",
-          Items: [
-            {
-              category: "Accommodation",
-              date: "29/08/2025",
-              merchantName: "Eastern & Oriental Hotel",
-              merchantAddress: "10 Lebuh Farquhar, George Town, Penang",
-              description: "3 nights accommodation for company conference",
-              quantity: 2,
-              unitPrice: 1250.0,
-            },
-          ],
-        },
-      ];
-
-      this.getExpensesByDateAsc;
+    async fetchInvoicesByClaimId(claimId: number) {
+      this.loading = true;
+      this.error = null;
+      
+      try {
+        const response = await axios.get<Invoice[]>(
+          `http://127.0.0.1:8000/employee/${claimId}/invoice/all`
+        );
+        this.claimInvoices = Array.isArray(response.data) ? response.data : [];
+        return this.claimInvoices;
+      } catch (error) {
+        this.error = "Failed to load claim invoices.";
+        this.claimInvoices = [];
+        throw error;
+      } finally {
+        this.loading = false;
+      }
     },
 
-    initializeCategories() {
-      this.categories = [
-        "All",
-        "Travel Expenses",
-        "Accomodation",
-        "Meals and Entertainment",
-        "Office Supplies and Equipment",
-        "Medical Claim",
-      ];
+    
+    // Refresh current employee's claims
+    async refreshClaims() {
+      if (this.currentEmployeeId) {
+        await this.fetchClaimsByEmployee(this.currentEmployeeId);
+      } else {
+        console.warn('No current employee ID set');
+      }
     },
 
-    initStore() {
-      this.initializeExpenses();
-      this.initializeCategories();
+
+    // sho - changing the initStore to fetch claims by employee ID = 1
+    async initStore(employeeId: number) {
+      this.loading = true;
+      try {
+        // Use the same endpoint as fetchClaimsByEmployee
+        const response = await axios.get<Claim[]>(`http://127.0.0.1:8000/employee/${employeeId}/claim/all`);
+        this.claims = Array.isArray(response.data) ? response.data : [];
+      } catch (error) {
+        this.error = "Failed to load claims.";
+        console.error(error);
+        this.claims = [];
+      } finally {
+        this.loading = false;
+      }
+    },
+    // until here --------------
+
+    // Clear error
+    clearError() {
+      this.error = null;
+    },
+
+    // Clear all data
+    clearStore() {
+      this.claims = [];
+      this.invoices = [];
+      this.claimInvoices = [];
+      this.currentEmployeeId = null;
+      this.error = null;
+      this.loading = false;
     },
   },
 });
+

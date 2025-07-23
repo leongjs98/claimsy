@@ -6,6 +6,17 @@ from decimal import Decimal
 from enum import Enum
 from datetime import datetime
 
+class SubmitClaimRequest(BaseModel):
+    invoice_ids: List[int]
+    claim_type: str
+    reason: str
+    
+class ClaimStatus(str, Enum):
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+
+
 class ItemService(BaseModel):
     item: str
     quantity: int
@@ -46,11 +57,6 @@ class InvoiceSchema(BaseModel):
         from_attributes = True
         populate_by_name = True
 
-class ClaimStatus(str, Enum):
-    PENDING = "pending"
-    APPROVED = "approved"
-    REJECTED = "rejected"
-
 class ClaimSchema(BaseModel):
     id: int
     claim_number: str
@@ -64,9 +70,8 @@ class ClaimSchema(BaseModel):
     resolution: Optional[str] = None
     created_at: datetime
     updated_at: datetime
-    invoices: List[InvoiceSchema] = [] 
-    employee: Optional[EmployeeScheme] = None
-    
+    Items: List[InvoiceSchema] = []
+
     class Config:
         from_attributes = True
         json_encoders = {
