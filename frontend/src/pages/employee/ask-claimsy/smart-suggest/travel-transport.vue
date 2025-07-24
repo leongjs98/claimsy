@@ -68,9 +68,13 @@
               ></p>
             </div>
           </div>
-          <form @submit.prevent="" class="grid w-full grid-cols-1 py-8">
+          <form
+            @submit.prevent="sendMessage"
+            class="grid w-full grid-cols-1 py-8"
+          >
             <label for="chat-input" class="hidden"> Chat Input </label>
             <input
+              v-model="userInput"
               type="text"
               id="chat-input"
               name="chatInput"
@@ -78,6 +82,7 @@
             />
             <button
               type="button"
+              @click="sendMessage"
               class="col-start-1 row-start-1 mr-2 size-7 self-center justify-self-end text-theme-300 transition hover:text-theme-200 sm:size-6"
             >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -154,79 +159,62 @@
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Trip Purpose</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - Client meetings and product demo March 16th
-                <br />
-                - First meeting: 10 AM March 16th
+                {{ conversationDetails.tripPurpose || "—" }}
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Departure</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - March 15th (evening preferred)
+                {{ conversationDetails.departure || "—" }}
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Return</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - March 18th (flexible: 17th or 19th for savings)
+                {{ conversationDetails.return || "—" }}
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Route</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - From: New York JFK
-                <br />
-                - To: London Heathrow
+                - From: {{ conversationDetails.route.from || "—" }}<br />
+                - To: {{ conversationDetails.route.to || "—" }}
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Budget</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - $4,000 total (flights + hotel)
+                {{ conversationDetails.budget || "—" }}
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Accommodation</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - Central London, financial district
-                <br />
-                - 4-star minimum
-                <br />
-                - Marriott preferred
+                {{ conversationDetails.accomodation || "—" }}
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Transport</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - Airport Transfers
-                <br />
-                - Taxis for meetings
+                {{ conversationDetails.transport || "—" }}
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt class="text-sm font-medium text-gray-900">
-                Loyalty Programs
-              </dt>
+              <dt class="text-sm font-medium text-gray-900">loyalty</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - British Airways Gold status
-                <br />
-                - Marriott hotels
+                {{ conversationDetails.loyalty || "—" }}
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Travel Policies</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - Approved vendors only
-                <br />
-                - 4-star hotel minimum
+                {{ conversationDetails.policies || "—" }}
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Flexibility</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - Departure date: Fixed
-                <br />
-                - Return date: Flexible for savings
+                {{ conversationDetails.flexibility || "—" }}
               </dd>
             </div>
           </dl>
@@ -250,21 +238,134 @@
 </template>
 
 <script setup>
-  import { ref } from "vue";
-  import { useRouter } from "vue-router";
-  import { onMounted } from "vue";
-  import MarkdownIt from "markdown-it";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { onMounted } from "vue";
+import MarkdownIt from "markdown-it";
 
-  const md = new MarkdownIt();
+const md = new MarkdownIt();
 
-  const showChat = ref(true);
-  const showDetails = ref(true);
-  const showAnswer = ref(false);
-  const router = useRouter();
-  const isOpen = ref(false);
-  const conversation = ref([]);
-  const answer = ref(
-    `
+const showChat = ref(false);
+const showDetails = ref(true);
+const showAnswer = ref(false);
+const router = useRouter();
+const isOpen = ref(false);
+const conversation = ref([]);
+const userInput = ref("");
+
+const conversationDetails = ref({
+  tripPurpose: "",
+  departure: "",
+  return: "",
+  route: {
+    from: "",
+    to: "",
+  },
+  budget: "",
+  accomodation: "",
+  transport: "",
+  loyalty: "",
+  policies: "",
+  flexibility: "",
+});
+
+const sendMessage = async () => {
+  const input = userInput.value.trim();
+  if (!input) return;
+
+  const history = conversation.value.map((msg) => ({
+    role: msg.isSenderUser ? "user" : "assistant",
+    content: msg.text,
+  }));
+
+  const payload = {
+    question: input,
+    history,
+  };
+
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/employee/employee/ask-claimsy/smart-suggest/travel-transport",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      },
+    );
+
+    const responseData = await response.json();
+
+    // Add user message to conversation
+    conversation.value.push({
+      isSenderUser: true,
+      text: input,
+    });
+
+    // Add AI response from backend
+    conversation.value.push({
+      isSenderUser: false,
+      text: responseData.answer || "No response received.",
+    });
+
+    userInput.value = "";
+  } catch (error) {
+    console.error("Error fetching from backend:", error);
+
+    conversation.value.push({
+      isSenderUser: false,
+      text: "Sorry, unable to connect with the server",
+    });
+  }
+};
+
+function extractDetails(text) {
+  const details = ref({
+    tripPurpose: "",
+    departure: "",
+    return: "",
+    route: {
+      from: "",
+      to: "",
+    },
+    budget: "",
+    accomodation: "",
+    transport: "",
+    loyalty: "",
+    policies: "",
+    flexibility: "",
+  });
+
+  if (/from\s+(\w+)/i.test(text)) {
+    showDetails.route.from =
+      text.match(/from\s+([A-Za-z\s]+)/i)?.[1]?.trim() || "";
+  }
+  if (/to\s+(\w+)/i.test(text)) {
+    details.route.to = text.match(/to\s+([A-Za-z\s]+)/i)?.[1]?.trim() || "";
+  }
+  if (/budget.*?(\$\d+)/i.test(text)) {
+    details.budget = text.match(/budget.*?(\$\d+)/i)?.[1];
+  }
+  if (/purpose.*?([A-Za-z\s]+)/i.test(text)) {
+    details.tripPurpose =
+      text.match(/purpose.*?([A-Za-z\s]+)/i)?.[1]?.trim() || "";
+  }
+
+  if (/departure.*?(\w+\s+\d+)/i.test(text)) {
+    details.departure =
+      text.match(/departure.*?(\w+\s+\d+)/i)?.[1]?.trim() || "";
+  }
+
+  if (/return.*?(\w+\s+\d+)/i.test(text)) {
+    details.return = text.match(/return.*?(\w+\s+\d+)/i)?.[1]?.trim() || "";
+  }
+
+  return details;
+}
+
+const answer = ref(
+  `
 ## **Travel Options Found**
 
 **AI:** Great news! I've found several excellent options that meet your requirements. Here are my top recommendations:
@@ -336,123 +437,123 @@
 
 Which option interests you most? I can book immediately and send confirmations to your email.
     `,
-  );
+);
 
-  const savedConvo = [
-    {
-      isSenderUser: false,
-      text: "Hi! I'm here to help plan your business travel. What are your departure and destination cities or airports?",
-    },
-    {
-      isSenderUser: true,
-      text: "I need to fly from New York JFK to London Heathrow.",
-    },
-    {
-      isSenderUser: false,
-      text: "Perfect! What are your preferred travel dates and times?",
-    },
-    {
-      isSenderUser: true,
-      text: "I need to leave March 15th, preferably evening, and return March 18th.",
-    },
-    {
-      isSenderUser: false,
-      text: "Got it. What's the purpose of your trip?",
-    },
-    {
-      isSenderUser: true,
-      text: "Client meetings and a product demo on March 16th.",
-    },
-    {
-      isSenderUser: false,
-      text: "Important meetings! Do you need to arrive by a specific time for your business commitments?",
-    },
-    {
-      isSenderUser: true,
-      text: "Client meetings and a product demo on March 16th.",
-    },
-    {
-      isSenderUser: false,
-      text: "Important meetings! Do you need to arrive by a specific time for your business commitments?",
-    },
-    {
-      isSenderUser: true,
-      text: "Yes, my first meeting is March 16th at 10 AM, so I need to be there the night before.",
-    },
-    {
-      isSenderUser: false,
-      text: "Understood. What's your budget range or spending authority for this trip?",
-    },
-    {
-      isSenderUser: true,
-      text: "Company budget is $4,000 total for flights and hotel.",
-    },
-    {
-      isSenderUser: false,
-      text: "Thanks! Are there any company travel policies I should consider?",
-    },
-    {
-      isSenderUser: true,
-      text: "We have to book through approved vendors and stay at 4-star hotels minimum.",
-    },
-    {
-      isSenderUser: false,
-      text: "Noted. Do you have any airline or hotel loyalty programs or preferred vendors?",
-    },
-    {
-      isSenderUser: true,
-      text: "I'm Gold status with British Airways and prefer Marriott hotels.",
-    },
-    {
-      isSenderUser: false,
-      text: "Excellent! How flexible are your dates if I find better rates or options?",
-    },
-    {
-      isSenderUser: true,
-      text: "Departure date is fixed, but I could return March 17th or 19th if there's significant savings.",
-    },
-    {
-      isSenderUser: false,
-      text: "Will you need hotel accommodations, and any preferred location?",
-    },
-    {
-      isSenderUser: true,
-      text: "Yes, somewhere in Central London, close to the financial district.",
-    },
-    {
-      isSenderUser: false,
-      text: "Last question - will you need rental car or other ground transportation?",
-    },
-    {
-      isSenderUser: true,
-      text: "No car needed, just airport transfers and taxis for meetings.",
-    },
-    {
-      isSenderUser: false,
-      text: "Perfect! I have everything I need. Let me find you the best options with BA flights and a Marriott in Central London within your budget.",
-    },
-  ];
+const savedConvo = [
+  {
+    isSenderUser: false,
+    text: "Hi! I'm here to help plan your business travel. What are your departure and destination cities or airports?",
+  },
+  {
+    isSenderUser: true,
+    text: "I need to fly from New York JFK to London Heathrow.",
+  },
+  {
+    isSenderUser: false,
+    text: "Perfect! What are your preferred travel dates and times?",
+  },
+  {
+    isSenderUser: true,
+    text: "I need to leave March 15th, preferably evening, and return March 18th.",
+  },
+  {
+    isSenderUser: false,
+    text: "Got it. What's the purpose of your trip?",
+  },
+  {
+    isSenderUser: true,
+    text: "Client meetings and a product demo on March 16th.",
+  },
+  {
+    isSenderUser: false,
+    text: "Important meetings! Do you need to arrive by a specific time for your business commitments?",
+  },
+  {
+    isSenderUser: true,
+    text: "Client meetings and a product demo on March 16th.",
+  },
+  {
+    isSenderUser: false,
+    text: "Important meetings! Do you need to arrive by a specific time for your business commitments?",
+  },
+  {
+    isSenderUser: true,
+    text: "Yes, my first meeting is March 16th at 10 AM, so I need to be there the night before.",
+  },
+  {
+    isSenderUser: false,
+    text: "Understood. What's your budget range or spending authority for this trip?",
+  },
+  {
+    isSenderUser: true,
+    text: "Company budget is $4,000 total for flights and hotel.",
+  },
+  {
+    isSenderUser: false,
+    text: "Thanks! Are there any company travel policies I should consider?",
+  },
+  {
+    isSenderUser: true,
+    text: "We have to book through approved vendors and stay at 4-star hotels minimum.",
+  },
+  {
+    isSenderUser: false,
+    text: "Noted. Do you have any airline or hotel loyalty programs or preferred vendors?",
+  },
+  {
+    isSenderUser: true,
+    text: "I'm Gold status with British Airways and prefer Marriott hotels.",
+  },
+  {
+    isSenderUser: false,
+    text: "Excellent! How flexible are your dates if I find better rates or options?",
+  },
+  {
+    isSenderUser: true,
+    text: "Departure date is fixed, but I could return March 17th or 19th if there's significant savings.",
+  },
+  {
+    isSenderUser: false,
+    text: "Will you need hotel accommodations, and any preferred location?",
+  },
+  {
+    isSenderUser: true,
+    text: "Yes, somewhere in Central London, close to the financial district.",
+  },
+  {
+    isSenderUser: false,
+    text: "Last question - will you need rental car or other ground transportation?",
+  },
+  {
+    isSenderUser: true,
+    text: "No car needed, just airport transfers and taxis for meetings.",
+  },
+  {
+    isSenderUser: false,
+    text: "Perfect! I have everything I need. Let me find you the best options with BA flights and a Marriott in Central London within your budget.",
+  },
+];
 
-  function getAnswer() {
-    showAnswer.value = true;
-  }
+function getAnswer() {
+  showAnswer.value = true;
+}
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const scrollToBottom = () => {
-    const chatbox = document.getElementById("chatbox");
-    chatbox.scrollTop = chatbox.scrollHeight;
-  };
+const scrollToBottom = () => {
+  const chatbox = document.getElementById("chatbox");
+  chatbox.scrollTop = chatbox.scrollHeight;
+};
 
-  onMounted(() => {
-    savedConvo.forEach((message, index) => {
-      setTimeout(
-        () => {
-          conversation.value.push(message);
-          scrollToBottom();
-        },
-        (index + 1) * 0,
-      );
-    });
+onMounted(() => {
+  savedConvo.forEach((message, index) => {
+    setTimeout(
+      () => {
+        conversation.value.push(message);
+        scrollToBottom();
+      },
+      (index + 1) * 0,
+    );
   });
+});
 </script>
