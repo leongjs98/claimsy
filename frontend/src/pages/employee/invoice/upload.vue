@@ -270,13 +270,14 @@
   import { useRouter } from "vue-router";
   import { ref, computed, onBeforeUnmount } from "vue";
   import { useEmployeeClaimStore } from "@/stores/employee-claims";
+  import { storeToRefs } from "pinia";
 
   const router = useRouter();
 
   const isDragging = ref(false);
   const selectedFiles = ref([]);
   const claimStore = useEmployeeClaimStore();
-  const isLoading = computed(() => claimStore.isLoading("uploading"));
+  const {isLoading} = storeToRefs(claimStore)
 
   // State for the modal
   const showModal = ref(false);
@@ -394,7 +395,7 @@
     });
 
     try {
-      claimStore.startLoading("uploading");
+      isLoading.value = true;
       const { data } = await axios.post(
         "http://127.0.0.1:8000/employee/analyze/invoice",
         formData,
@@ -454,7 +455,7 @@
         "LLM analysis unsuccessful. Please try again or upload different files.",
       );
     } finally {
-      claimStore.stopLoading("uploading");
+      isLoading.value = false;
       // Clear files after successful or failed upload attempt
       cancelUpload();
     }

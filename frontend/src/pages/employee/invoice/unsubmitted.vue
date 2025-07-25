@@ -1,33 +1,27 @@
+Unsubmitted.vue
 <template>
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
-    <!-- Cards Row -->
-    <EmployeeClaimsCard :totalCount="8" :approvedCount="4" :rejectedCount="3" />
+    <EmployeeClaimsCard />
+
+     <!-- Loading state -->
+    <div v-if="claimStore.loading" class="flex justify-center items-center py-8">
+      <div class="text-lg text-gray-600">Loading claims...</div>
+    </div>
+    <!-- Error handling -->
+    <div v-if="claimStore.error" class="mx-4 my-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+      <p>{{ claimStore.error }}</p>
+      <button @click="claimStore.clearError()" class="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+        Clear Error
+      </button>
+    </div>
+
     <!-- Expenses Table -->
     <div class="mt-4 mb-2"></div>
     <div class="mt-8 flow-root px-4 sm:px-8 lg:px-14">
       <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
         <div class="min-w-full py-2 align-middle sm:px-6 lg:px-8">
           <!-- Tabs Row -->
-          <Tab
-            :tabs="[
-              {
-                link: '/employee/invoice/unsubmitted',
-                routeName: 'My Invoices',
-              },
-              {
-                link: '/employee/claim/all',
-                routeName: 'All Claims',
-              },
-              {
-                link: '/employee/claim/approved',
-                routeName: 'Approved',
-              },
-              {
-                link: '/employee/claim/rejected',
-                routeName: 'Rejected',
-              },
-            ]"
-          />
+          <EmployeeClaimsTab />
           <table
             class="min-w-full divide-y divide-gray-300 rounded-b-lg bg-gray-100 drop-shadow-md"
           >
@@ -39,11 +33,7 @@
                   #
                 </th>
                 <th class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold">
-                  <div
-                    @mouseenter="showCategoryDropdown = true"
-                    @mouseleave="showCategoryDropdown = false"
-                    class="flex items-center gap-2"
-                  >
+                  <div class="flex items-center gap-2">
                     <button @click="setSort('Category')">Category</button>
                     <div class="relative inline-block w-full text-left">
                       <div>
@@ -53,6 +43,7 @@
                           id="menu-button"
                           aria-expanded="true"
                           aria-haspopup="true"
+                          @click="showCategoryDropdown = !showCategoryDropdown"
                         >
                           <span class="sr-only">Open options</span>
                           <svg
@@ -73,7 +64,6 @@
                       <Transition name="dropdown-menu">
                         <div
                           v-show="showCategoryDropdown"
-                          @mouseleave="showCategoryDropdown = false"
                           class="absolute left-0 z-20 mt-2 w-56 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
                           role="menu"
                           aria-orientation="vertical"
@@ -82,7 +72,7 @@
                         >
                           <div class="py-1" role="none">
                             <button
-                              v-for="cat in categories"
+                              v-for="cat in claimStore.categories"
                               :key="cat"
                               @click="
                                 selectedCategory = cat;
@@ -93,12 +83,11 @@
                                   selectedCategory === cat,
                                 'text-gray-700': selectedCategory !== cat,
                               }"
-                              showCategoryDropdown="false;"
                               href="#"
                               class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-blue-50 hover:text-theme-200 focus:bg-blue-50 focus:text-theme-200"
                               role="menuitem"
                               tabindex="-1"
-                              id="menu-item-2"
+                              :id="`menu-item-${cat}`"
                             >
                               {{ cat }}
                             </button>
@@ -106,29 +95,6 @@
                         </div>
                       </Transition>
                     </div>
-                    <!-- <span class="flex items-center relative ml-1 cursor-pointer rounded-tl-lg text-xs" -->
-                    <!--   @mouseenter="showCategoryDropdown = true"> -->
-                    <!--   <button class="focus:outline-none" @click="setSort('Category')"> -->
-                    <!--     <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="32" height="32" -->
-                    <!--       viewBox="0 0 24 24"> -->
-                    <!--       <path fill="currentColor" -->
-                    <!--         d="M11 20q-.425 0-.712-.288T10 19v-6L4.2 5.6q-.375-.5-.112-1.05T5 4h14q.65 0 .913.55T19.8 5.6L14 13v6q0 .425-.288.713T13 20z" /> -->
-                    <!--     </svg> -->
-                    <!--   </button> -->
-                    <!--   <div v-show="showCategoryDropdown" -->
-                    <!--     class="absolute left-0 z-10 mt-2 w-48 rounded bg-white font-normal text-theme-300 shadow-xl" -->
-                    <!--     @mouseenter="showCategoryDropdown = true" @mouseleave="showCategoryDropdown = false"> -->
-                    <!--     <ul> -->
-                    <!--       <li v-for="cat in categories" :key="cat" @click=" -->
-                    <!--         selectedCategory = cat; -->
-                    <!--       showCategoryDropdown = false; -->
-                    <!-- " class="cursor-pointer rounded px-4 py-2 hover:bg-[#FFAD05] hover:text-white" -->
-                    <!-- :class="{ 'bg-theme-200 text-white': selectedCategory === cat, }"> -->
-                    <!--         {{ cat }} -->
-                    <!--       </li> -->
-                    <!--     </ul> -->
-                    <!--   </div> -->
-                    <!-- </span> -->
                   </div>
                 </th>
                 <th
@@ -174,7 +140,7 @@
                   Remark
                 </th>
                 <th class="px-3 py-3.5 text-right text-sm font-semibold">
-                  Total (RM)
+                  Price (RM)
                 </th>
                 <th
                   class="w-48 rounded-tr-lg px-3 py-3.5 text-center text-sm font-semibold"
@@ -184,15 +150,16 @@
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
+              {{ console.log('sortedInvoices', sortedInvoices) }}
               <tr
-                v-for="(product, index) in sortedExpenses"
-                :key="product.Name"
+                v-for="(invoice, index) in sortedInvoices"
+                :key="invoice.id"
                 class="shadow-md"
               >
                 <td
                   :class="[
                     'py-4 pr-3 pl-4 text-right text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6',
-                    index === sortedExpenses.length - 1 ? 'rounded-bl-lg' : '',
+                    index === sortedInvoices.length - 1 ? 'rounded-bl-lg' : '',
                   ]"
                 >
                   {{ index + 1 }}
@@ -201,54 +168,45 @@
                 <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                   <div class="flex flex-col">
                     <span class="font-medium text-gray-900">{{
-                      product.Name
+                      invoice.category
                     }}</span>
-                    <span class="text-xs text-gray-500">{{
-                      product.Category
-                    }}</span>
+                    <!-- <span class="text-xs text-gray-500">
+                      Claim #{{ getClaimNumber(invoice.claim_id) }}
+                    </span> -->
                   </div>
                 </td>
-                <td
-                  class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
-                >
-                  {{ product.Date }}
+                <td class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500">
+                  {{ formatDate(invoice.invoiceDate) }}
                 </td>
-                <td
-                  class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
-                >
-                  {{ product.Item }}
+                <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500">
+                  {{ getItemCount(invoice) }}
                 </td>
                 <td class="w-32 px-3 py-4 text-sm text-gray-500">
-                  <span
-                    class="block w-48 truncate overflow-hidden text-ellipsis"
-                  >
-                    {{ product.Remark }}
+                  <span class="block w-48 truncate overflow-hidden text-ellipsis" :title="invoice.remark">
+                    {{ invoice.remark || 'No remark' }}
                   </span>
                 </td>
-
-                <td
-                  class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
-                >
-                  {{ product.Total }}
+                <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500">
+                  {{ formatCurrency(getTotalPrice(invoice)) }}
                 </td>
                 <td
                   :class="[
                     'min-h-[69px] px-4 py-4 text-center text-sm whitespace-nowrap text-amber-500',
-                    index === sortedExpenses.length - 1 ? 'rounded-br-lg' : '',
+                    index === sortedInvoices.length - 1 ? 'rounded-br-lg' : '',
                   ]"
                 >
                   <div class="flex items-center justify-center">
                     <input
                       type="checkbox"
-                      :value="product"
-                      v-model="selectedExpenses"
-                      :id="`checkbox-product-${index}`"
+                      :value="invoice"
+                      v-model="selectedInvoices"
+                      :id="`checkbox-invoice-${index}`"
                       class="checkbox-input sr-only"
                     />
 
                     <!-- Visual representation of the checkbox -->
                     <label
-                      :for="`checkbox-product-${index}`"
+                      :for="`checkbox-invoice-${index}`"
                       class="checkbox-label relative flex h-6 w-6 cursor-pointer items-center justify-center overflow-hidden rounded-md border-1 border-theme-200 transition-colors ease-in-out hover:border-theme-300 focus:border-theme-300"
                     >
                       <!-- The expanding fill element -->
@@ -256,208 +214,193 @@
                     </label>
                   </div>
                 </td>
-                <!-- <td class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
-                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, {{ person.name
-                        }}</span></a>
-                  </td> -->
               </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
-    <div class="flex justify-center px-4 sm:px-8 lg:px-14">
+    <div class="flex justify-end px-4 sm:px-8 lg:px-14">
       <button
-        class="mt-4 rounded bg-theme-300 px-4 py-2 text-white outline-2 hover:bg-theme-300 focus:bg-theme-200 focus:outline-theme-300"
-        :disabled="selectedExpenses.length === 0"
-        @click="openDialog = true"
+        class="hover:bg-theme-200 z-25 mt-5 rounded outline-2 bg-theme-300 px-13 py-2 text-white disabled:bg-gray-400 disabled:cursor-not-allowed  focus:bg-theme-200 focus:outline-theme-300"
+        :disabled="selectedInvoices.length === 0 || isSubmitting"
+        @click="submitSelectedInvoices"
       >
-        Submit
+        <span v-if="isSubmitting">Submitting...</span>
+        <span v-else>Submit ({{ selectedInvoices.length }})</span>
       </button>
     </div>
   </div>
   <div>
     <SuccessDialog v-model="openDialog">
-      <template #header> Submission successful </template>
+      <template #header>Submission successful</template>
+
       <template #default>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
-        amet labore.
+          Successfully submitted {{ submittedInvoicesCount }} invoices for approval.
       </template>
     </SuccessDialog>
   </div>
 </template>
 
 <script setup>
-  import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
+import { storeToRefs } from "pinia";
 
-  const sortKey = ref("Date");
-  const sortAsc = ref(false);
-  const showCategoryDropdown = ref(false);
+// Pinia store
+const claimStore = useEmployeeClaimStore();
 
-  const expenses = [
-    {
-      ClaimID: "C0001",
-      Name: "Laptop",
-      Category: "Office Supplies and Equipment",
-      Date: "30/01/2025",
-      Item: "6",
-      Remark: "Dell 1.35GHz 8GB 256GB SSD - for new employee sasascdavadfa",
-      Total: "48,285.00",
-      Status: "Approved",
-    },
-    {
-      ClaimID: "C0002",
-      Name: "Whiteboard 4x6ft",
-      Category: "Office Supplies and Equipment",
-      Date: "21/02/2025",
-      Item: "2",
-      Remark: "for training room",
-      Total: "1,200.00",
-      Status: "Approved",
-    },
-    {
-      ClaimID: "C0003",
-      Name: "Meeting at Damansara",
-      Category: "Travel Expenses",
-      Date: "29/03/2025",
-      Item: "1",
-      Remark: "Lunch with client",
-      Total: "150.00",
-      Status: "Rejected",
-    },
-    {
-      ClaimID: "C0003",
-      Name: "Lunch",
-      Category: "Meals and Entertainment",
-      Date: "29/03/2025",
-      Item: "10",
-      Remark: "team lunch",
-      Total: "250.00",
-      Status: "Rejected",
-    },
-    {
-      ClaimID: "C0005",
-      Name: "Dinner",
-      Category: "Meals and Entertainment",
-      Date: "18/05/2025",
-      Item: "6",
-      Remark: "Sales team dinner",
-      Total: "138.00",
-      Status: "Rejected",
-    },
-    {
-      ClaimID: "C0006",
-      Name: "Stationery",
-      Category: "Office Supplies and Equipment",
-      Date: "12/06/2025",
-      Item: "15",
-      Remark: "for new employee",
-      Total: "1,000.00",
-      Status: "Approved",
-    },
-    {
-      ClaimID: "C0007",
-      Name: "Flight to Penang",
-      Category: "Travel Expenses",
-      Date: "29/07/2025",
-      Item: "2",
-      Remark: "Flight tickets for conference",
-      Total: "1,200.00",
-      Status: "Approved",
-    },
+console.log("success")
+// Reactive data
+const sortKey = ref("Date");
+const sortAsc = ref(false);
+const showCategoryDropdown = ref(false);
+const selectedCategory = ref("All");
+const selectedInvoices = ref([]);
+const openDialog = ref(false);
+const isSubmitting = ref(false);
+const submittedInvoicesCount = ref(0);
 
-    {
-      ClaimID: "C0008",
-      Name: "Hotel at Penang",
-      Category: "Accomodation",
-      Date: "29/08/2025",
-      Item: "2",
-      Remark: "Company conference",
-      Total: "2,500.00",
-      Status: "Pending",
-    },
-  ];
+// sho - calling this action on mount to initialize the store
+onMounted(async () => {
+  const employeeId = 1; // or get from auth/route
+  await claimStore.fetchUnsubmittedInvoices(employeeId);
+});
 
-  const categories = [
-    "All",
-    "Travel Expenses",
-    "Accomodation",
-    "Meals and Entertainment",
-    "Office Supplies and Equipment",
-    "Medical Claim",
-  ];
+// Helper functions (keep all your existing helper functions)
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-GB');
+}
 
-  const selectedCategory = ref("All");
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('en-MY', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(amount);
+}
 
-  const selectedExpenses = ref([]); // store selected expense indexes or IDs
+function getCategoryFromType(claimType) {
+  const categoryMap = {
+    'Travel': 'Travel Expenses',
+    'Accommodation': 'Accommodation',
+    'Meals': 'Meals and Entertainment',
+    'Office': 'Office Supplies and Equipment',
+    'Medical': 'Medical Claim'
+  };
+  return categoryMap[claimType] || 'Other';
+}
 
-  //sort by date in descending order (default)
-  function parseDate(dateStr) {
-    // Converts "DD/MM/YYYY" to a Date object
-    const [day, month, year] = dateStr.split("/");
-    return new Date(`${year}-${month}-${day}`);
+const allInvoices = computed(() => claimStore.invoices);
+
+const filteredInvoices = computed(() => {
+  const invoices = allInvoices.value;
+  if (selectedCategory.value === "All") {
+    return invoices;
   }
-
-  const filteredExpenses = computed(() =>
-    selectedCategory.value === "All"
-      ? expenses
-      : expenses.filter(
-          (e) =>
-            e.Category &&
-            e.Category.toLowerCase() === selectedCategory.value.toLowerCase(),
-        ),
-  );
-
-  const sortedExpenses = computed(() => {
-    // Only sort by Date, otherwise keep original order
-    if (sortKey.value === "Date") {
-      return filteredExpenses.value.slice().sort((a, b) => {
-        const dateA = parseDate(a.Date);
-        const dateB = parseDate(b.Date);
-        return sortAsc.value ? dateA - dateB : dateB - dateA;
-      });
-    }
-    return filteredExpenses.value;
+  return invoices.filter(invoice => {
+    return invoice.category.toLowerCase() === selectedCategory.value.toLowerCase();
   });
+});
 
-  function setSort(key) {
-    if (key === "Date") {
-      if (sortKey.value === key) {
-        sortAsc.value = !sortAsc.value;
-      } else {
-        sortKey.value = key;
-        sortAsc.value = true;
-      }
+const sortedInvoices = computed(() => {
+  const invoices = filteredInvoices.value;
+  if (sortKey.value === "Date") {
+    return invoices.slice().sort((a, b) => {
+      const dateA = new Date(a.invoiceDate);
+      const dateB = new Date(b.invoiceDate);
+      return sortAsc.value ? dateA - dateB : dateB - dateA;
+    });
+  }
+  return invoices;
+});
+
+function getClaimNumber(claimId) {
+  const claim = claimStore.claims.find(c => c.id === claimId);
+  return claim ? claim.claim_number : 'Unknown';
+}
+
+function truncateString(str, maxLength = 30) {
+  if (!str) return '';
+  if (str.length > maxLength) {
+    return str.substring(0, maxLength - 3) + "...";
+  }
+  return str;
+}
+
+function getItemCount(invoice) {
+  const items = invoice.itemsServices;
+  return items.length;
+}
+
+function getTotalPrice(invoice) {
+  const items = invoice.itemsServices;
+  return items
+    .map(item => (item.quantity || 0) * (item.unit_price || 0))
+    .reduce((sum, val) => sum + val, 0);
+}
+
+function setSort(key) {
+  if (key === "Date") {
+    if (sortKey.value === key) {
+      sortAsc.value = !sortAsc.value;
+    } else {
+      sortKey.value = key;
+      sortAsc.value = true;
     }
   }
+}
 
-  const totalCount = computed(() => {
-    const ids = new Set(expenses.map((e) => e.ClaimID));
-    return ids.size;
-  });
+function handleDialogClose() {
+  openDialog.value = false;
+  selectedInvoices.value = [];
+}
 
-  const approvedCount = computed(() => {
-    const ids = new Set(
-      expenses.filter((e) => e.Status === "Approved").map((e) => e.ClaimID),
-    );
-    return ids.size;
-  });
+async function refreshClaims() {
+  await claimStore.refreshClaims();
+}
 
-  const rejectedCount = computed(() => {
-    const ids = new Set(
-      expenses.filter((e) => e.Status === "Rejected").map((e) => e.ClaimID),
-    );
-    return ids.size;
-  });
-
-  function submitForApproval() {
-    sortedExpenses.value = sortedExpenses.value.filter((expense) =>
-      selectedExpenses.value.includes(expense),
-    );
-    selectedExpenses.value = [];
+// aisya - Submit selected invoices function
+async function submitSelectedInvoices() {
+  if (selectedInvoices.value.length === 0) {
+    alert('Please select at least one invoice to submit.');
+    return;
   }
 
-  const openDialog = ref(false);
+  try {
+    const employeeId = 1;
+    const invoiceIds = selectedInvoices.value.map(invoice => invoice.id);
+
+    // Store the count BEFORE clearing the array
+    const submittedCount = selectedInvoices.value.length;
+
+    // Use the store action instead of direct fetch
+    const newClaim = await claimStore.submitInvoicesIntoClaim(
+      employeeId,
+      invoiceIds,
+      "travel", // or make this dynamic
+      "Business expense reimbursement"
+    );
+
+    console.log('Claim created successfully:', newClaim);
+
+    // Clear selections BEFORE showing dialog
+    selectedInvoices.value = [];
+
+    // Store the count for the dialog
+    submittedInvoicesCount.value = submittedCount;
+
+    // Show success dialog
+    openDialog.value = true;
+
+    // Clear selections
+    selectedInvoices.value = [];
+
+  } catch (error) {
+    console.error('Failed to submit invoices:', error);
+    alert(`Failed to submit invoices: ${error.message}`);
+  }
+}
 </script>
 
 <style scoped>

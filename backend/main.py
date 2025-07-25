@@ -32,3 +32,7 @@ app.include_router(
     tags=["Admin"],
     responses={404: {"description": "Not Found"}},
 )
+
+@app.get("/")
+def read_root():
+    return {"message": "API is running"}

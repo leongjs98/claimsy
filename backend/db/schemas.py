@@ -6,6 +6,11 @@ from decimal import Decimal
 from enum import Enum
 from datetime import datetime
 
+class SubmitClaimRequest(BaseModel):
+    invoice_ids: List[int]
+    claim_type: str
+    reason: str
+    
 class ItemService(BaseModel):
     item: str
     quantity: int
