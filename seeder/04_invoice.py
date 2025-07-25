@@ -24,7 +24,7 @@ def create_invoice_data(employee_ids):
     """Create fake invoice data"""
     date = fake.date_between(start_date="-2y", end_date="today")
     return {
-        "invoice_number": f"INV-{date.year}-{fake.random_int(min=1000, max=9999)}",
+        "invoice_number": f"INV-{date.year}-{fake.random_int(min=1000, max=9999)}-{fake.random_int(min=1000, max=9999)}",
         "employee_id": random.choice(employee_ids),
         "invoice_date": date,
         "category": fake.random_element(elements=categories),
