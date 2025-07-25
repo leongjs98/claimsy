@@ -59,6 +59,7 @@ function filterClaimsByStatus(
   );
 }
 
+// TODO: make sort claim by date works with backend
 function sortClaimsByDate(
   claims: ClaimResponseSchema[],
   ascending: boolean,
