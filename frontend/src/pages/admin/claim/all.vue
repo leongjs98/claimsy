@@ -52,35 +52,33 @@
                   <th class="flex px-3 py-3.5 text-sm font-semibold">
                     <button
                       class="flex items-center justify-center gap-2 hover:cursor-pointer"
-                      @click="setSort('Date')"
+                      @click="sortDateAsc = !sortDateAsc"
                     >
                       <span> Date </span>
-                      <svg
-                        v-show="!sortAsc"
-                        class="h-5 w-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                      >
-                        <!-- Icon from Material Design Icons by Pictogrammers - https://github.com/Templarian/MaterialDesign/blob/master/LICENSE -->
-                        <path
-                          fill="currentColor"
-                          d="M19 7h-3l4-4l4 4h-3v14h-2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
-                        />
-                      </svg>
-                      <svg
-                        v-show="sortAsc"
-                        class="h-5 w-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 24 24"
-                      >
-                        <!-- Icon from Material Design Icons by Pictogrammers - https://github.com/Templarian/MaterialDesign/blob/master/LICENSE -->
-                        <path
-                          fill="currentColor"
-                          d="M21 17h3l-4 4l-4-4h3V3h2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
-                        />
-                      </svg>
+                    <svg
+                      v-if="sortDateAsc"
+                      class="h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M21 17h3l-4 4l-4-4h3V3h2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
+                      />
+                    </svg>
+                    <svg
+                      v-else
+                      class="h-5 w-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M19 7h-3l4-4l4 4h-3v14h-2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
+                      />
+                    </svg>
                     </button>
                   </th>
                   <th
@@ -103,7 +101,7 @@
               </thead>
               <tbody class="divide-y divide-gray-200 bg-white">
                 <tr
-                  v-for="(claim, index) in claims"
+                  v-for="(claim, index) in sortedClaims"
                   :key="claim.claim_number"
                   class="shadow-md"
                 >
@@ -183,9 +181,15 @@
     await adminClaims.initializeAdminClaimStore();
   });
 
-  const sortAsc = ref(false);
+  const sortDateAsc = ref(false);
   const showDialog = ref(false);
   const selectedClaim = ref(null);
+
+  const sortedClaims = computed(() => {
+    return sortDateAsc.value
+      ? adminClaims.getClaimsSortedByDate(true)
+      : adminClaims.getClaimsSortedByDate(false);
+  });
 
   const formatDate = (dateString) => {
     if (!dateString) return "";

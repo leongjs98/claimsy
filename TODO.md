@@ -10,15 +10,16 @@
 - [ ] chee tat: category in my invoices (make it click)
 
 ### Essentials
-- [ ] fuzzy search button
-- [ ] testing
 - [ ] Smart Suggest feature
+- [ ] seeder for fix employee demo data (using previous mock data)
+- [ ] seeder for employee id 1 name
 - [ ] seeder for fix chat data
 - [ ] Chatbot feature
     - connect with backend, use fake data
     - just for employee 1
 
 ### Nice to have
+- [ ] fuzzy search button
 - [ ] Pagination
     - [ ] Claim center (10 claims per page)
     - [ ] Receipt upload (support multiple invoices at once)
@@ -27,6 +28,7 @@
 - [ ] More sorting
     - [ ] pending status in all claims
     - [ ] Total (RM)
+- [ ] testing
 
 ## Done
 - [x] john: upload receipt, show image (a lot = carousell)

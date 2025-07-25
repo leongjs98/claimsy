@@ -63,14 +63,16 @@ function filterClaimsByStatus(
 function sortClaimsByDate(
   claims: ClaimResponseSchema[],
   ascending: boolean,
-): ClaimResponseSchema[] {
-  return [...claims].sort((a, b) => {
-    const dateA = a.submitted_date ? new Date(a.submitted_date) : new Date(0);
-    const dateB = b.submitted_date ? new Date(b.submitted_date) : new Date(0);
-    return ascending
-      ? dateA.getTime() - dateB.getTime()
-      : dateB.getTime() - dateA.getTime();
-  });
+) {
+  if (ascending) {
+      return [...claims].sort((a, b) =>
+        new Date(a.submitted_date).getTime() - new Date(b.submitted_date).getTime()
+      );
+  } else {
+      return [...claims].sort((a, b) =>
+        new Date(b.submitted_date).getTime() - new Date(a.submitted_date).getTime()
+      );
+  }
 }
 
 function sortClaimsByAmount(
@@ -107,10 +109,14 @@ export const useAdminClaimStore = defineStore("adminClaim", {
     getClaimsByStatus: (state) => (status: ClaimStatusType | string) =>
       filterClaimsByStatus(state.claims, status),
 
-    getClaimsSortedByDate: (state) => (ascending: boolean) =>
-      sortClaimsByDate(state.claims, ascending),
-    getClaimsSortedByAmount: (state) => (ascending: boolean) =>
-      sortClaimsByAmount(state.claims, ascending),
+    getClaimsSortedByDate: (state) => (isAscending: boolean) =>
+      sortClaimsByDate(state.claims, isAscending),
+    getClaimsSortedByAmount: (state) => (isAscending: boolean) =>
+      sortClaimsByAmount(state.claims, isAscending),
+    getApprovedClaimsSortedByDate: (state) => (isAscending: boolean) =>
+      sortClaimsByDate(filterClaimsByStatus(state.claims, "approved"), isAscending),
+    getRejectedClaimsSortedByDate: (state) => (isAscending: boolean) =>
+      sortClaimsByDate(filterClaimsByStatus(state.claims, "rejected"), isAscending),
   },
 
   actions: {
