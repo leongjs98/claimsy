@@ -1,7 +1,7 @@
 categories = (
-    "Supplies and Equipment",
-    "Travel Expenses",
-    "Medical Expenses",
-    "Meals & Entertaiment",
-    "Accommodation",
+    'Supplies and Equipment',
+    'Travel Expenses',
+    'Medical Expenses',
+    'Meals and Entertaiment',
+    'Accommodation',
 )

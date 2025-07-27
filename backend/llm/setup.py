@@ -42,7 +42,7 @@ prompt_extract_invoice_info = ChatPromptTemplate.from_messages([
 
             Always return the result in the following JSON format:
 
-            - category: ONLY output in any of these 5 categories: Supplies and Equipment, Travel Expenses, Medical Expenses, Meals & Entertaiment, Accommodation
+            - category: ONLY output in any of these 5 categories: Supplies and Equipment, Travel Expenses, Medical Expenses, Meals and Entertaiment, Accommodation
             - date: In the format of YYYY-MM-DD, e.g. 2023-02-09, 2024-06-29
             - merchant_name
             - merchant_address

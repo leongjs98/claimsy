@@ -29,11 +29,11 @@
               name="category"
               id="categoryID"
               :options="[
-                'Gadget',
+                'Supplies and Equipment',
                 'Travel Expenses',
-                'Meals and Entertainment',
+                'Medical Expenses',
+                'Meals and Entertaiment',
                 'Accommodation',
-                'Communication',
               ]"
               v-model="invoice.category"
             />
@@ -124,7 +124,7 @@
       </div>
 
       <div class="mt-6 flex items-center justify-end gap-x-6">
-        <SecondaryButton> Cancel </SecondaryButton>
+        <SecondaryButton @click="router.back()"> Cancel </SecondaryButton>
         <span class="flex items-center justify-center gap-2">
           <RouterLink to="/employee/claim/all">
             <PrimaryButton>
@@ -196,6 +196,7 @@ const totalAmount = computed(() => {
         throw new Error("Claim not found");
       }
       invoice.value = invoiceData;
+      console.log(invoice.value)
     } catch (e) {
       console.error("Error fetching invoice details", err);
       error.value = "Failed to load invoice details";

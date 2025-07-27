@@ -33,7 +33,7 @@
                 'Supplies and Equipment',
                 'Travel Expenses',
                 'Medical Expenses',
-                'Meals & Entertaiment',
+                'Meals and Entertaiment',
                 'Accommodation',
               ]"
               v-model="formData.category"
