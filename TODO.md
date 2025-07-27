@@ -6,11 +6,11 @@
 - [ ] john: invoice/edit (both first and \[id]) table become input to edit (delete button)
 - [ ] john: invoice/edit (both first and \[id]) unit next to quantity
 
-- [ ] john: submit button in invoice same column as checkbox
-- [ ] chee tat: category in my invoices (make it click)
-
 ### Essentials
 - [ ] Smart Suggest feature
+- [ ] seeder for anomaly
+- [ ] fix unsubmitted invoice 10-15 invoices
+- [ ] invoice/edit connect backend data
 - [ ] seeder for fix employee demo data (using previous mock data)
 - [ ] seeder for employee id 1 name
 - [ ] seeder for fix chat data
@@ -31,6 +31,8 @@
 - [ ] testing
 
 ## Done
+- [x] john: submit button in invoice same column as checkbox
+- [x] chee tat: category in my invoices (make it click)
 - [x] john: upload receipt, show image (a lot = carousell)
 - [x] john: navbar middle and to the sides (absolute and relative)
 - [x] fix claim totalAmount in seeder

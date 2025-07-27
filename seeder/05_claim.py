@@ -9,7 +9,6 @@ import sys
 from typing import List
 import json
 from faker import Faker
-from decimal import Decimal
 import random
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -58,12 +57,13 @@ def seed_claims_for_employee_id_1():
             )
             selected_invoices = List[Invoice]
 
+            status = random.choices(statuses, weights=[10, 60, 30], k=1)[0]
             claim = Claim(
                 claim_number=f"CLM-{fake.unique.random_number(digits=8)}",
                 employee_id=1,
                 claim_type=random.choice(claim_types),
                 reason=fake.text(max_nb_chars=200),
-                status=random.choice(statuses),
+                status=status,
                 submitted_date=fake.date_between(start_date="-1y", end_date="today"),
                 reviewed_date=fake.date_between(start_date="-6m", end_date="today")
                 if random.choice([True, False])
@@ -71,6 +71,7 @@ def seed_claims_for_employee_id_1():
                 resolution=fake.text(max_nb_chars=150)
                 if random.choice([True, False])
                 else None,
+                is_anomaly=random.random() < 0.7 if status == "rejected" else False,
             )
 
             # Randomly assign 1-3 invoices to each claim using actual invoice IDs
@@ -81,12 +82,6 @@ def seed_claims_for_employee_id_1():
                 continue
             selected_invoices = random.sample(invoices, num_invoices_to_assign)
             claim.invoices = selected_invoices
-            total = 0
-            for inv in selected_invoices:
-                data = json.loads(inv.items_services)
-                total = total + data['quantity'] * data['unit_price']
-            claim.claim_amount=Decimal(str(round(random.uniform(1.0, total), 2))),
-            print(num_invoices_to_assign, claim, selected_invoices)
 
             session.add(claim)
 
@@ -95,19 +90,19 @@ def seed_claims_for_employee_id_1():
 
         session.commit()
         print(
-                f"Successfully seeded {MIN_NUM_CLAIM_FOR_EMPLOYEE_ID_1} claims for employee id = 1 {employee_1.name}"
+            f"Successfully seeded {MIN_NUM_CLAIM_FOR_EMPLOYEE_ID_1} claims for employee id = 1 {employee_1.name}"
         )
     except Exception as e:
         session.rollback()
-        print(f"Error seeding claims: {e}")
+        print(f"Error seeding claims for employee 1: {e}")
     finally:
         session.close()
+
 
 def seed_claims():
     """Seed the database with fake claims"""
 
     try:
-
         for i in range(NUM_CLAIMS):
             selected_employee = Employee()
             invoices = []
@@ -115,13 +110,13 @@ def seed_claims():
             while not invoices:
                 selected_employee, invoices = find_invoices_of_random_employee()
 
+            status = random.choices(statuses, weights=[10, 60, 30], k=1)[0]
             claim = Claim(
                 claim_number=f"CLM-{fake.unique.random_number(digits=8)}",
                 employee_id=selected_employee.id,  # Use actual employee ID from DB
                 claim_type=random.choice(claim_types),
-                claim_amount=Decimal(str(round(random.uniform(50.0, 5000.0), 2))),
                 reason=fake.text(max_nb_chars=200),
-                status=random.choice(statuses),
+                status=status,
                 submitted_date=fake.date_between(start_date="-1y", end_date="today"),
                 reviewed_date=fake.date_between(start_date="-6m", end_date="today")
                 if random.choice([True, False])
@@ -129,6 +124,7 @@ def seed_claims():
                 resolution=fake.text(max_nb_chars=150)
                 if random.choice([True, False])
                 else None,
+                is_anomaly=random.random() < 0.7 if status == "rejected" else False,
             )
 
             # Randomly assign 1-3 invoices to each claim using actual invoice IDs

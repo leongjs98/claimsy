@@ -3,7 +3,17 @@ PostgreSQL Table Schemas of Claimsy
 """
 
 from typing import List, Dict, Any
-from sqlalchemy import DECIMAL, JSON, Date, ForeignKey, Integer, Text, Column, String
+from sqlalchemy import (
+    DECIMAL,
+    JSON,
+    Date,
+    ForeignKey,
+    Integer,
+    Text,
+    Column,
+    String,
+    Boolean,
+)
 from .postgresql_setup import TableBase, Base
 from sqlalchemy.orm import relationship
 
@@ -64,7 +74,7 @@ class Invoice(TableBase, Base):
     @property
     def items(self) -> List[Dict[str, Any]]:
         return self.items_services or []
-    
+
     @items.setter
     def items(self, value: List[Dict[str, Any]]):
         self.items_services = value
@@ -79,12 +89,12 @@ class Claim(TableBase, Base):
     claim_number = Column(String(50), unique=True, nullable=False)
     employee_id = Column(Integer, ForeignKey("employees.id"), nullable=False)
     claim_type = Column(String(50))
-    claim_amount = Column(DECIMAL(10, 2))
     reason = Column(Text)
     status = Column(String(20), default="pending")
     submitted_date = Column(Date)
     reviewed_date = Column(Date)
     resolution = Column(Text)
+    is_anomaly = Column(Boolean, default=False)
 
     employee = relationship(
         "Employee",

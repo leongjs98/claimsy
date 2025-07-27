@@ -26,7 +26,7 @@
           />
           <div class="shadow-sm ring-1 ring-black/5 sm:rounded-lg">
             <table class="min-w-full divide-y divide-gray-300 bg-gray-100">
-              <thead class="rounded-lg bg-blue-50 text-theme-300">
+              <thead class="rounded-lg bg-green-50 text-green-700">
                 <tr>
                   <th
                     scope="col"
@@ -55,30 +55,30 @@
                       @click="sortDateAsc = !sortDateAsc"
                     >
                       <span> Date </span>
-                    <svg
-                      v-if="sortDateAsc"
-                      class="h-5 w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="32"
-                      height="32"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M21 17h3l-4 4l-4-4h3V3h2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
-                      />
-                    </svg>
-                    <svg
-                      v-else
-                      class="h-5 w-5"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M19 7h-3l4-4l4 4h-3v14h-2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
-                      />
-                    </svg>
+                      <svg
+                        v-if="sortDateAsc"
+                        class="h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M21 17h3l-4 4l-4-4h3V3h2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
+                        />
+                      </svg>
+                      <svg
+                        v-else
+                        class="h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M19 7h-3l4-4l4 4h-3v14h-2zM8 16h3v-3H8zm5-11h-1V3h-2v2H6V3H4v2H3c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h10c1.11 0 2-.89 2-2V7c0-1.11-.89-2-2-2M3 18v-7h10v7z"
+                        />
+                      </svg>
                     </button>
                   </th>
                   <th
@@ -130,8 +130,7 @@
                   >
                     <div class="flex items-center justify-start gap-2">
                       <StatusBadge :status="capitalizeStatus(claim.status)" />
-                      <StatusBadge v-show="claim.IsAnomaly" status="Anomaly" />
-                      <StatusBadge v-show="claim.IsFraud" status="Fraud" />
+                      <StatusBadge v-show="claim.is_anomaly" status="Anomaly" />
                     </div>
                   </td>
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
@@ -145,7 +144,7 @@
                   <td
                     class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{ formatCurrency(claim.claim_amount) }}
+                    {{ formatCurrency(claim.total) }}
                   </td>
                   <td
                     class="px-4 py-4 text-right text-sm whitespace-nowrap text-theme-300"

@@ -123,6 +123,27 @@ def generate_hire_date() -> date:
     return start_date + timedelta(days=random_days)
 
 
+def create_employee_1_data() -> dict:
+    """Create a single employee's data"""
+    department = random.choice(DEPARTMENTS)
+    job_title = random.choice(JOB_TITLES[department])
+    salary_min, salary_max = SALARY_RANGES[department]
+
+    first_name = "John"
+    last_name = "Doe"
+    email = "john.doe@company.com"
+
+    return {
+        "name": f"{first_name.title()} {last_name.title()}",
+        "email": email,
+        "password_hash": hash_password(EMPLOYEE_PASSWORD),
+        "phone": fake.phone_number()[:20],  # Limit to 20 characters
+        "department": department,
+        "job_title": job_title,
+        "hire_date": generate_hire_date(),
+        "salary": Decimal(str(random.randint(salary_min, salary_max))),
+    }
+
 def create_employee_data(index: int) -> dict:
     """Create a single employee's data"""
     department = random.choice(DEPARTMENTS)
@@ -154,7 +175,11 @@ def seed_employees():
         employees = []
         used_emails = set()
 
-        for i in range(NUM_EMPLOYEES):
+        employee_data = create_employee_1_data()
+        employee = Employee(**employee_data)
+        employees.append(employee)
+
+        for i in range(NUM_EMPLOYEES-1):
             while True:
                 employee_data = create_employee_data(i)
 

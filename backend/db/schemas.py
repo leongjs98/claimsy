@@ -6,21 +6,26 @@ from decimal import Decimal
 from enum import Enum
 from datetime import datetime
 
+from sqlalchemy import Boolean
+
+
 class SubmitClaimRequest(BaseModel):
     invoice_ids: List[int]
     claim_type: str
     reason: str
-    
+
+
 class ItemService(BaseModel):
     item: str
     quantity: int
     unit_price: float
 
-class EmployeeScheme (BaseModel):
+
+class EmployeeScheme(BaseModel):
     employee_id: Optional[str] = None
     name: Optional[str] = None
-    email: Optional[str] = None  
-    department: Optional[str] = None  
+    email: Optional[str] = None
+    department: Optional[str] = None
 
 
 class InvoiceSchema(BaseModel):
@@ -36,8 +41,7 @@ class InvoiceSchema(BaseModel):
     remark: Optional[str] = None
     employee: Optional[EmployeeScheme] = None
 
-
-    @field_validator('items_services', mode='before')
+    @field_validator("items_services", mode="before")
     @classmethod
     def parse_items_services(cls, v):
         if isinstance(v, str):
@@ -51,29 +55,29 @@ class InvoiceSchema(BaseModel):
         from_attributes = True
         populate_by_name = True
 
+
 class ClaimStatus(str, Enum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"
+
 
 class ClaimSchema(BaseModel):
     id: int
     claim_number: str
     employee_id: int
     claim_type: Optional[str] = None
-    claim_amount: Optional[Decimal] = None
     reason: Optional[str] = None
     status: ClaimStatus = ClaimStatus.PENDING
+    is_anomaly: bool = False
     submitted_date: Optional[date] = None
     reviewed_date: Optional[date] = None
     resolution: Optional[str] = None
     created_at: datetime
     updated_at: datetime
-    invoices: List[InvoiceSchema] = [] 
+    invoices: List[InvoiceSchema] = []
     employee: Optional[EmployeeScheme] = None
-    
+
     class Config:
         from_attributes = True
-        json_encoders = {
-            Decimal: float
-        }
+        json_encoders = {Decimal: float}
