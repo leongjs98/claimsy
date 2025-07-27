@@ -33,13 +33,9 @@
 <script setup lang="ts">
   import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
   const claimStore = useEmployeeClaimStore();
-  const {
-    totalCount,
-    approvedCount,
-    rejectedCount,
-  } = storeToRefs(claimStore);
+  const { totalCount, approvedCount, rejectedCount } = storeToRefs(claimStore);
 
-onMounted(async () => {
-  await claimStore.fetchClaimsByEmployee(1);
-});
+  onMounted(async () => {
+    await claimStore.fetchClaimsByEmployee(1);
+  });
 </script>

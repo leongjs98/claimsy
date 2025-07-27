@@ -172,7 +172,7 @@
     try {
       loading.value = true;
       const invoiceId = Number(route.params.id);
-      console.log("Fetching claim ID:", invoiceId);
+      console.log("Fetching invoice ID:", invoiceId);
 
       const invoiceData = await adminClaims.fetchInvoiceDetails(invoiceId);
       console.log("API Response:", invoiceData);
@@ -184,7 +184,7 @@
         staff.value = invoiceData.employee;
       }
     } catch (err) {
-      console.error("Error fetching claim details", err);
+      console.error("Error fetching invoice details", err);
       error.value = "Failed to load invoice details";
     } finally {
       loading.value = false;

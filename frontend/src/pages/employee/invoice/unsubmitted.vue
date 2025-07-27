@@ -3,14 +3,23 @@ Unsubmitted.vue
   <div class="mx-auto my-14 w-full max-w-6xl bg-gray-100">
     <EmployeeClaimsCard />
 
-     <!-- Loading state -->
-    <div v-if="claimStore.loading" class="flex justify-center items-center py-8">
+    <!-- Loading state -->
+    <div
+      v-if="claimStore.loading"
+      class="flex items-center justify-center py-8"
+    >
       <div class="text-lg text-gray-600">Loading claims...</div>
     </div>
     <!-- Error handling -->
-    <div v-if="claimStore.error" class="mx-4 my-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+    <div
+      v-if="claimStore.error"
+      class="mx-4 my-4 rounded border border-red-400 bg-red-100 p-4 text-red-700"
+    >
       <p>{{ claimStore.error }}</p>
-      <button @click="claimStore.clearError()" class="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+      <button
+        @click="claimStore.clearError()"
+        class="mt-2 rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+      >
         Clear Error
       </button>
     </div>
@@ -150,7 +159,9 @@ Unsubmitted.vue
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
-              {{ console.log('sortedInvoices', sortedInvoices) }}
+              {{
+                console.log("sortedInvoices", sortedInvoices)
+              }}
               <tr
                 v-for="(invoice, index) in sortedInvoices"
                 :key="invoice.id"
@@ -175,18 +186,27 @@ Unsubmitted.vue
                     </span> -->
                   </div>
                 </td>
-                <td class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500">
+                <td
+                  class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
+                >
                   {{ formatDate(invoice.invoiceDate) }}
                 </td>
-                <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500">
+                <td
+                  class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
+                >
                   {{ getItemCount(invoice) }}
                 </td>
                 <td class="w-32 px-3 py-4 text-sm text-gray-500">
-                  <span class="block w-48 truncate overflow-hidden text-ellipsis" :title="invoice.remark">
-                    {{ invoice.remark || 'No remark' }}
+                  <span
+                    class="block w-48 truncate overflow-hidden text-ellipsis"
+                    :title="invoice.remark"
+                  >
+                    {{ invoice.remark || "No remark" }}
                   </span>
                 </td>
-                <td class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500">
+                <td
+                  class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
+                >
                   {{ formatCurrency(getTotalPrice(invoice)) }}
                 </td>
                 <td
@@ -222,7 +242,7 @@ Unsubmitted.vue
     </div>
     <div class="flex justify-end px-4 sm:px-8 lg:px-14">
       <button
-        class="hover:bg-theme-200 z-25 mt-5 rounded outline-2 bg-theme-300 px-13 py-2 text-white disabled:bg-gray-400 disabled:cursor-not-allowed  focus:bg-theme-200 focus:outline-theme-300"
+        class="z-25 mt-5 rounded bg-theme-300 px-13 py-2 text-white outline-2 hover:bg-theme-200 focus:bg-theme-200 focus:outline-theme-300 disabled:cursor-not-allowed disabled:bg-gray-400"
         :disabled="selectedInvoices.length === 0 || isSubmitting"
         @click="submitSelectedInvoices"
       >
@@ -236,171 +256,173 @@ Unsubmitted.vue
       <template #header>Submission successful</template>
 
       <template #default>
-          Successfully submitted {{ submittedInvoicesCount }} invoices for approval.
+        Successfully submitted {{ submittedInvoicesCount }} invoices for
+        approval.
       </template>
     </SuccessDialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
-import { storeToRefs } from "pinia";
+  import { ref, computed, onMounted } from "vue";
+  import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
+  import { storeToRefs } from "pinia";
 
-// Pinia store
-const claimStore = useEmployeeClaimStore();
+  // Pinia store
+  const claimStore = useEmployeeClaimStore();
 
-console.log("success")
-// Reactive data
-const sortKey = ref("Date");
-const sortAsc = ref(false);
-const showCategoryDropdown = ref(false);
-const selectedCategory = ref("All");
-const selectedInvoices = ref([]);
-const openDialog = ref(false);
-const isSubmitting = ref(false);
-const submittedInvoicesCount = ref(0);
+  console.log("success");
+  // Reactive data
+  const sortKey = ref("Date");
+  const sortAsc = ref(false);
+  const showCategoryDropdown = ref(false);
+  const selectedCategory = ref("All");
+  const selectedInvoices = ref([]);
+  const openDialog = ref(false);
+  const isSubmitting = ref(false);
+  const submittedInvoicesCount = ref(0);
 
-// sho - calling this action on mount to initialize the store
-onMounted(async () => {
-  const employeeId = 1; // or get from auth/route
-  await claimStore.fetchUnsubmittedInvoices(employeeId);
-});
-
-// Helper functions (keep all your existing helper functions)
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-GB');
-}
-
-function formatCurrency(amount) {
-  return new Intl.NumberFormat('en-MY', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(amount);
-}
-
-function getCategoryFromType(claimType) {
-  const categoryMap = {
-    'Travel': 'Travel Expenses',
-    'Accommodation': 'Accommodation',
-    'Meals': 'Meals and Entertainment',
-    'Office': 'Office Supplies and Equipment',
-    'Medical': 'Medical Claim'
-  };
-  return categoryMap[claimType] || 'Other';
-}
-
-const allInvoices = computed(() => claimStore.invoices);
-
-const filteredInvoices = computed(() => {
-  const invoices = allInvoices.value;
-  if (selectedCategory.value === "All") {
-    return invoices;
-  }
-  return invoices.filter(invoice => {
-    return invoice.category.toLowerCase() === selectedCategory.value.toLowerCase();
+  // sho - calling this action on mount to initialize the store
+  onMounted(async () => {
+    const employeeId = 1; // or get from auth/route
+    await claimStore.fetchUnsubmittedInvoices(employeeId);
   });
-});
 
-const sortedInvoices = computed(() => {
-  const invoices = filteredInvoices.value;
-  if (sortKey.value === "Date") {
-    return invoices.slice().sort((a, b) => {
-      const dateA = new Date(a.invoiceDate);
-      const dateB = new Date(b.invoiceDate);
-      return sortAsc.value ? dateA - dateB : dateB - dateA;
+  // Helper functions (keep all your existing helper functions)
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB");
+  }
+
+  function formatCurrency(amount) {
+    return new Intl.NumberFormat("en-MY", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  }
+
+  function getCategoryFromType(claimType) {
+    const categoryMap = {
+      Travel: "Travel Expenses",
+      Accommodation: "Accommodation",
+      Meals: "Meals and Entertainment",
+      Office: "Office Supplies and Equipment",
+      Medical: "Medical Claim",
+    };
+    return categoryMap[claimType] || "Other";
+  }
+
+  const allInvoices = computed(() => claimStore.invoices);
+
+  const filteredInvoices = computed(() => {
+    const invoices = allInvoices.value;
+    if (selectedCategory.value === "All") {
+      return invoices;
+    }
+    return invoices.filter((invoice) => {
+      return (
+        invoice.category.toLowerCase() === selectedCategory.value.toLowerCase()
+      );
     });
+  });
+
+  const sortedInvoices = computed(() => {
+    const invoices = filteredInvoices.value;
+    if (sortKey.value === "Date") {
+      return invoices.slice().sort((a, b) => {
+        const dateA = new Date(a.invoiceDate);
+        const dateB = new Date(b.invoiceDate);
+        return sortAsc.value ? dateA - dateB : dateB - dateA;
+      });
+    }
+    return invoices;
+  });
+
+  function getClaimNumber(claimId) {
+    const claim = claimStore.claims.find((c) => c.id === claimId);
+    return claim ? claim.claim_number : "Unknown";
   }
-  return invoices;
-});
 
-function getClaimNumber(claimId) {
-  const claim = claimStore.claims.find(c => c.id === claimId);
-  return claim ? claim.claim_number : 'Unknown';
-}
-
-function truncateString(str, maxLength = 30) {
-  if (!str) return '';
-  if (str.length > maxLength) {
-    return str.substring(0, maxLength - 3) + "...";
+  function truncateString(str, maxLength = 30) {
+    if (!str) return "";
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength - 3) + "...";
+    }
+    return str;
   }
-  return str;
-}
 
-function getItemCount(invoice) {
-  const items = invoice.itemsServices;
-  return items.length;
-}
+  function getItemCount(invoice) {
+    const items = invoice.itemsServices;
+    return items.length;
+  }
 
-function getTotalPrice(invoice) {
-  const items = invoice.itemsServices;
-  return items
-    .map(item => (item.quantity || 0) * (item.unit_price || 0))
-    .reduce((sum, val) => sum + val, 0);
-}
+  function getTotalPrice(invoice) {
+    const items = invoice.itemsServices;
+    return items
+      .map((item) => (item.quantity || 0) * (item.unit_price || 0))
+      .reduce((sum, val) => sum + val, 0);
+  }
 
-function setSort(key) {
-  if (key === "Date") {
-    if (sortKey.value === key) {
-      sortAsc.value = !sortAsc.value;
-    } else {
-      sortKey.value = key;
-      sortAsc.value = true;
+  function setSort(key) {
+    if (key === "Date") {
+      if (sortKey.value === key) {
+        sortAsc.value = !sortAsc.value;
+      } else {
+        sortKey.value = key;
+        sortAsc.value = true;
+      }
     }
   }
-}
 
-function handleDialogClose() {
-  openDialog.value = false;
-  selectedInvoices.value = [];
-}
-
-async function refreshClaims() {
-  await claimStore.refreshClaims();
-}
-
-// aisya - Submit selected invoices function
-async function submitSelectedInvoices() {
-  if (selectedInvoices.value.length === 0) {
-    alert('Please select at least one invoice to submit.');
-    return;
+  function handleDialogClose() {
+    openDialog.value = false;
+    selectedInvoices.value = [];
   }
 
-  try {
-    const employeeId = 1;
-    const invoiceIds = selectedInvoices.value.map(invoice => invoice.id);
-
-    // Store the count BEFORE clearing the array
-    const submittedCount = selectedInvoices.value.length;
-
-    // Use the store action instead of direct fetch
-    const newClaim = await claimStore.submitInvoicesIntoClaim(
-      employeeId,
-      invoiceIds,
-      "travel", // or make this dynamic
-      "Business expense reimbursement"
-    );
-
-    console.log('Claim created successfully:', newClaim);
-
-    // Clear selections BEFORE showing dialog
-    selectedInvoices.value = [];
-
-    // Store the count for the dialog
-    submittedInvoicesCount.value = submittedCount;
-
-    // Show success dialog
-    openDialog.value = true;
-
-    // Clear selections
-    selectedInvoices.value = [];
-
-  } catch (error) {
-    console.error('Failed to submit invoices:', error);
-    alert(`Failed to submit invoices: ${error.message}`);
+  async function refreshClaims() {
+    await claimStore.refreshClaims();
   }
-}
+
+  // aisya - Submit selected invoices function
+  async function submitSelectedInvoices() {
+    if (selectedInvoices.value.length === 0) {
+      alert("Please select at least one invoice to submit.");
+      return;
+    }
+
+    try {
+      const employeeId = 1;
+      const invoiceIds = selectedInvoices.value.map((invoice) => invoice.id);
+
+      // Store the count BEFORE clearing the array
+      const submittedCount = selectedInvoices.value.length;
+
+      // Use the store action instead of direct fetch
+      const newClaim = await claimStore.submitInvoicesIntoClaim(
+        employeeId,
+        invoiceIds,
+        "travel", // or make this dynamic
+        "Business expense reimbursement",
+      );
+
+      console.log("Claim created successfully:", newClaim);
+
+      // Clear selections BEFORE showing dialog
+      selectedInvoices.value = [];
+
+      // Store the count for the dialog
+      submittedInvoicesCount.value = submittedCount;
+
+      // Show success dialog
+      openDialog.value = true;
+
+      // Clear selections
+      selectedInvoices.value = [];
+    } catch (error) {
+      console.error("Failed to submit invoices:", error);
+      alert(`Failed to submit invoices: ${error.message}`);
+    }
+  }
 </script>
 
 <style scoped>

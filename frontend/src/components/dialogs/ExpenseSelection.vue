@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    class="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black"
     @click.self="$emit('close')"
   >
     <div class="w-full max-w-2xl rounded-lg bg-white p-6 shadow-xl">
@@ -8,7 +8,7 @@
         Confirm Your Selected Expenses
       </h2>
 
-      <ul class="mb-4 max-h-60 overflow-y-auto space-y-2 text-sm text-gray-700">
+      <ul class="mb-4 max-h-60 space-y-2 overflow-y-auto text-sm text-gray-700">
         <li
           v-for="(item, index) in selected"
           :key="index"
@@ -29,7 +29,7 @@
           Cancel
         </button>
         <button
-          class="rounded bg-theme-300 px-4 py-2 text-sm text-white hover:bg-theme-400"
+          class="hover:bg-theme-400 rounded bg-theme-300 px-4 py-2 text-sm text-white"
           @click="$emit('confirm', selected)"
         >
           Confirm Submission
@@ -40,11 +40,11 @@
 </template>
 
 <script setup>
-defineProps({
-  selected: {
-    type: Array,
-    required: true,
-  },
-});
-defineEmits(['close', 'confirm']);
+  defineProps({
+    selected: {
+      type: Array,
+      required: true,
+    },
+  });
+  defineEmits(["close", "confirm"]);
 </script>

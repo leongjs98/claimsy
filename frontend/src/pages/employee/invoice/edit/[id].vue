@@ -35,7 +35,7 @@
                 'Accommodation',
                 'Communication',
               ]"
-              v-model="category"
+              v-model="invoice.category"
             />
           </div>
 
@@ -44,7 +44,7 @@
               label="Date (YYYY-MM-DD)"
               name="date"
               id="date"
-              v-model="date"
+              v-model="invoice.invoiceDate"
             />
           </div>
 
@@ -54,7 +54,7 @@
               name="merchantName"
               id="MerchantnameID"
               autocomplete="name"
-              v-model="merchantName"
+              v-model="invoice.merchantName"
             />
           </div>
           <div class="sm:col-span-full">
@@ -63,7 +63,7 @@
               name="merchantAddress"
               id="MerchanaddressID"
               autocomplete="street-address"
-              v-model="merchantAddress"
+              v-model="invoice.merchantAddress"
             />
           </div>
           <div class="sm:col-span-full">
@@ -71,7 +71,7 @@
               label="Remark"
               name="remark"
               id="RemarkID"
-              v-model="remark"
+              v-model="invoice.remark"
             />
           </div>
         </div>
@@ -100,15 +100,15 @@
             <!-- TODO: add delete button on the side of each items -->
             <tbody>
               <tr
-                v-for="item in itemsSerivices"
+                v-for="item in invoice.itemsServices"
                 class="bg-gray-200 text-theme-300 shadow-md"
               >
-                <td class="rounded-l-lg px-4 py-3">{{ item.description }}</td>
+                <td class="rounded-l-lg px-4 py-3">{{ item.item }}</td>
                 <td class="px-4 py-3 text-right">
-                  {{ item.quantity }} {{ item.unit }}
+                  {{ item.quantity }}
                 </td>
                 <td class="rounded-r-lg px-4 py-3 text-right">
-                  {{ item.unitPrice }}
+                  {{ formatCurrency(item.unit_price) }}
                 </td>
               </tr>
               <tr class="text-right font-semibold text-theme-300">
@@ -162,46 +162,66 @@
 </template>
 
 <script setup>
+  import { useRouter, useRoute } from "vue-router";
   import { ref, onMounted } from "vue";
-  import { useRouter } from "vue-router";
+  import { useAdminClaimStore } from "@/stores/admin-claims.ts";
+  import { storeToRefs } from "pinia";
 
+  const adminClaims = useAdminClaimStore();
   const router = useRouter();
+  const route = useRoute();
 
-  const category = ref("");
-  const date = ref("");
-  const merchantName = ref("");
-  const merchantAddress = ref("");
-  const remark = ref("");
-  const itemsSerivices = ref([]);
-  const isLoading = ref(false);
+  const invoice = ref("");
   const error = ref("");
 
-  const totalAmount = computed(() =>
-    itemsSerivices.value
-      .reduce((sum, item) => sum + item.unitPrice * item.quantity, 0)
-      .toFixed(2),
-  );
+  const isLoading = ref(false);
+
+const totalAmount = computed(() => {
+  if (!invoice.value || !invoice.value.itemsServices) {
+    return 0.00;
+  }
+
+  return invoice.value.itemsServices.reduce((total, item) => {
+    return total + (item.quantity * item.unit_price);
+  }, 0).toFixed(2);
+});
 
   onMounted(async () => {
     isLoading.value = true;
     try {
-      category.value = "Travel Expenses";
-      date.value = "2025-05-19";
-      merchantName.value = "SHELL";
-      merchantAddress.value = "LOT 19086 TAMING JAYA BALAKONG, 43300 SELANGOR";
-      remark.value = "Fuel purchase for company vehicle.";
-      itemsSerivices.value = [
-        {
-          unit: "L",
-          description: "FuelSave 95 24.390",
-          quantity: 24.39,
-          unitPrice: 2.05,
-        },
-      ];
+      const invoiceId = Number(route.params.id);
+
+      const invoiceData = await adminClaims.fetchInvoiceDetails(invoiceId);
+      if (!invoiceData) {
+        throw new Error("Claim not found");
+      }
+      invoice.value = invoiceData;
     } catch (e) {
-      error.value = "Failed to load data.";
+      console.error("Error fetching invoice details", err);
+      error.value = "Failed to load invoice details";
     } finally {
       isLoading.value = false;
     }
   });
+
+  const formatDate = (dateString) => {
+    if (!dateString) {
+      return "";
+    }
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      console.error("Invalid date string provided:", dateString);
+      return "";
+    }
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const formatCurrency = (amount) => {
+    if (amount === null || amount === undefined) return "0.00";
+    return `${amount.toFixed(2)}`;
+  };
+
 </script>

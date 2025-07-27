@@ -7,7 +7,10 @@
     </div>
 
     <!-- Error State -->
-    <div v-if="claimStore.error" class="mx-4 p-4 bg-red-100 text-red-700 rounded">
+    <div
+      v-if="claimStore.error"
+      class="mx-4 rounded bg-red-100 p-4 text-red-700"
+    >
       {{ claimStore.error }}
     </div>
 
@@ -30,8 +33,15 @@
                   >
                     #
                   </th>
-                  <th class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold">
+                  <th
+                    class="py-3.5 pr-3 pl-3.5 text-left text-sm font-semibold"
+                  >
                     Claim ID
+                  </th>
+                  <th
+                    class="w-48 px-3 py-3.5 text-left text-sm font-semibold"
+                  >
+                    Status
                   </th>
                   <th
                     class="flex justify-center px-3 py-3.5 text-sm font-semibold"
@@ -73,9 +83,6 @@
                   <th class="px-3 py-3.5 text-right text-sm font-semibold">
                     Total (RM)
                   </th>
-                  <th class="w-48 px-3 py-3.5 text-center text-sm font-semibold">
-                    Status
-                  </th>
                   <!-- <th class="w-48 px-3 py-3.5 text-center text-sm font-semibold">
                     Approved Date
                   </th> -->
@@ -89,13 +96,30 @@
               <tbody class="divide-y divide-gray-200 bg-white">
                 <!-- No Approved Claims Row -->
                 <tr v-if="sortedApprovedClaims.length === 0" class="shadow-md">
-                  <td colspan="7" class="py-8 text-center text-gray-500 rounded-b-lg">
+                  <td
+                    colspan="7"
+                    class="rounded-b-lg py-8 text-center text-gray-500"
+                  >
                     <div class="flex flex-col items-center space-y-2">
-                      <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      <svg
+                        class="h-12 w-12 text-gray-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        ></path>
                       </svg>
-                      <p class="text-lg font-medium">No approved claims found</p>
-                      <p class="text-sm">Submit claims to see them here once approved.</p>
+                      <p class="text-lg font-medium">
+                        No approved claims found
+                      </p>
+                      <p class="text-sm">
+                        Submit claims to see them here once approved.
+                      </p>
                     </div>
                   </td>
                 </tr>
@@ -109,7 +133,9 @@
                   <td
                     :class="[
                       'py-4 pr-3 pl-4 text-right text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6',
-                      index === sortedApprovedClaims.length - 1 ? 'rounded-bl-lg' : '',
+                      index === sortedApprovedClaims.length - 1
+                        ? 'rounded-bl-lg'
+                        : '',
                     ]"
                   >
                     {{ index + 1 }}
@@ -117,6 +143,15 @@
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                     {{ claim.claim_number }}
                   </td>
+                  <td
+                    class="w-fit px-3 py-4 text-sm font-semibold whitespace-nowrap"
+                  >
+                    <div class="flex items-center justify-start gap-2">
+                      <StatusBadge :status="claim.status" />
+                      <StatusBadge v-show="claim.is_anomaly" status="Anomaly" />
+                    </div>
+                  </td>
+
                   <td
                     class="px-3 py-4 text-center text-sm whitespace-nowrap text-gray-500"
                   >
@@ -130,24 +165,16 @@
                   <td
                     class="px-4 py-4 text-right text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{
-                        claim.claim_amount.toLocaleString("en-US", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })
-                    }}
+                    {{ formatCurrency(claim.total) }}
                   </td>
 
-                  <td
-                    class="px-4 py-4 text-center text-sm font-semibold whitespace-nowrap"
-                  >
-                    <StatusBadge :status="claim.status" />
-                  </td>
 
                   <td
                     :class="[
                       'px-4 py-4 text-center text-sm whitespace-nowrap text-theme-300',
-                      index === sortedApprovedClaims.length - 1 ? 'rounded-br-lg' : '',
+                      index === sortedApprovedClaims.length - 1
+                        ? 'rounded-br-lg'
+                        : '',
                     ]"
                   >
                     <button
@@ -170,46 +197,47 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { storeToRefs } from "pinia";
-import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
+  import { ref, computed, onMounted } from "vue";
+  import { storeToRefs } from "pinia";
+  import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
 
-const showDialog = ref(false);
-const selectedClaim = ref();
-const sortDateAsc = ref(false);
-const claimStore = useEmployeeClaimStore();
+  const showDialog = ref(false);
+  const selectedClaim = ref();
+  const sortDateAsc = ref(false);
+  const claimStore = useEmployeeClaimStore();
 
-const {
-  totalCount,
-  approvedCount,
-  rejectedCount,
-  approvedClaims
-} = storeToRefs(claimStore);
+  const { totalCount, approvedCount, rejectedCount, approvedClaims } =
+    storeToRefs(claimStore);
 
-// Filter and sort only approved claims
-const sortedApprovedClaims = computed(() => {
-  const approved = claimStore.approvedClaims; // Get approved claims from store
+  // Filter and sort only approved claims
+  const sortedApprovedClaims = computed(() => {
+    const approved = claimStore.approvedClaims; // Get approved claims from store
 
-  return approved.slice().sort((a, b) => {
-    const dateA = new Date(a.submitted_date);
-    const dateB = new Date(b.submitted_date);
-    return sortDateAsc.value ? dateA - dateB : dateB - dateA;
+    return approved.slice().sort((a, b) => {
+      const dateA = new Date(a.submitted_date);
+      const dateB = new Date(b.submitted_date);
+      return sortDateAsc.value ? dateA - dateB : dateB - dateA;
+    });
   });
-});
 
-// Helper function
-const formatDate = (dateString) => {
-  if (!dateString) return '';
-  return new Date(dateString).toLocaleDateString('en-GB'); // DD/MM/YYYY format
-};
+  // Helper function
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString("en-GB"); // DD/MM/YYYY format
+  };
 
-onMounted(async () => {
-  const employeeId = 1; // Get this from your auth system
-  await claimStore.initStore(employeeId); // Pass employee ID
-});
+  onMounted(async () => {
+    const employeeId = 1; // Get this from your auth system
+    await claimStore.initStore(employeeId); // Pass employee ID
+  });
 
-const openDetails = (claim) => {
-  selectedClaim.value = claim;
-  showDialog.value = true;
-};
+  const openDetails = (claim) => {
+    selectedClaim.value = claim;
+    showDialog.value = true;
+  };
+
+  const formatCurrency = (amount) => {
+    if (amount === null || amount === undefined) return "0.00";
+    return `${amount.toFixed(2)}`;
+  };
 </script>

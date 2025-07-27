@@ -277,7 +277,7 @@
   const isDragging = ref(false);
   const selectedFiles = ref([]);
   const claimStore = useEmployeeClaimStore();
-  const {isLoading} = storeToRefs(claimStore)
+  const { isLoading } = storeToRefs(claimStore);
 
   // State for the modal
   const showModal = ref(false);

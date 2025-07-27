@@ -36,7 +36,6 @@ interface ClaimResponseSchema {
   claim_number: string; //
   employee_id: number;
   claim_type?: string;
-  claim_amount?: number;
   reason?: string;
   status: ClaimStatusType;
   submitted_date?: string;
@@ -46,7 +45,8 @@ interface ClaimResponseSchema {
   updated_at: string;
   invoices: InvoiceResponseSchema[];
   employee?: EmployeeScheme;
-  // is_anomaly?: boolean; // Uncomment if added to backend ClaimSchema
+  is_anomaly: boolean;
+  total: number;
   // is_fraud?: boolean;   // Uncomment if added to backend ClaimSchema
 }
 
@@ -59,19 +59,19 @@ function filterClaimsByStatus(
   );
 }
 
-// TODO: make sort claim by date works with backend
-function sortClaimsByDate(
-  claims: ClaimResponseSchema[],
-  ascending: boolean,
-) {
+function sortClaimsByDate(claims: ClaimResponseSchema[], ascending: boolean) {
   if (ascending) {
-      return [...claims].sort((a, b) =>
-        new Date(a.submitted_date).getTime() - new Date(b.submitted_date).getTime()
-      );
+    return [...claims].sort(
+      (a, b) =>
+        new Date(a.submitted_date).getTime() -
+        new Date(b.submitted_date).getTime(),
+    );
   } else {
-      return [...claims].sort((a, b) =>
-        new Date(b.submitted_date).getTime() - new Date(a.submitted_date).getTime()
-      );
+    return [...claims].sort(
+      (a, b) =>
+        new Date(b.submitted_date).getTime() -
+        new Date(a.submitted_date).getTime(),
+    );
   }
 }
 
@@ -114,9 +114,15 @@ export const useAdminClaimStore = defineStore("adminClaim", {
     getClaimsSortedByAmount: (state) => (isAscending: boolean) =>
       sortClaimsByAmount(state.claims, isAscending),
     getApprovedClaimsSortedByDate: (state) => (isAscending: boolean) =>
-      sortClaimsByDate(filterClaimsByStatus(state.claims, "approved"), isAscending),
+      sortClaimsByDate(
+        filterClaimsByStatus(state.claims, "approved"),
+        isAscending,
+      ),
     getRejectedClaimsSortedByDate: (state) => (isAscending: boolean) =>
-      sortClaimsByDate(filterClaimsByStatus(state.claims, "rejected"), isAscending),
+      sortClaimsByDate(
+        filterClaimsByStatus(state.claims, "rejected"),
+        isAscending,
+      ),
   },
 
   actions: {
@@ -126,6 +132,22 @@ export const useAdminClaimStore = defineStore("adminClaim", {
           "http://localhost:8000/admin/claim/all",
         );
         this.claims = response.data;
+        for (const claim of this.claims) {
+          let claimTotal = 0;
+
+          for (const invoice of claim.invoices) {
+            let invoiceTotal = 0;
+
+            for (const item of invoice.itemsServices) {
+              invoiceTotal += item.quantity * item.unit_price;
+            }
+
+            claimTotal += invoiceTotal;
+          }
+
+          // Add the total to the claim object
+          claim.total = claimTotal;
+        }
       } catch (error) {
         console.error("Failed to fetch all admin claims:", error);
         this.claims = [];

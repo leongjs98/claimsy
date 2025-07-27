@@ -4,7 +4,9 @@
       <div
         class="flex items-center justify-between rounded-t-xl bg-theme-300 px-6 py-4 text-white"
       >
-        <h2 class="text-xl font-semibold">Claim ID: #{{ data?.claim_number }}</h2>
+        <h2 class="text-xl font-semibold">
+          Claim ID: #{{ data?.claim_number }}
+        </h2>
         <button
           @click="isOpen = false"
           class="rounded-full p-1 text-white hover:bg-blue-800"
@@ -28,7 +30,7 @@
 
       <div class="p-6">
         <!-- Loading State -->
-        <div v-if="loading" class="text-center py-8">
+        <div v-if="loading" class="py-8 text-center">
           <div class="text-lg">Loading invoices...</div>
         </div>
 
@@ -74,14 +76,19 @@
               <td class="px-4 py-6 text-center text-gray-700">
                 {{ invoice.itemsServices?.length || 0 }}
               </td>
-                <td class="py-6 text-right font-semibold text-blue-600">
-                  {{
-                    (invoice.itemsServices?.reduce((sum, item) => sum + (item.unit_price * item.quantity), 0) || 0).toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  }}
-                </td>
+              <td class="py-6 text-right font-semibold text-blue-600">
+                {{
+                  (
+                    invoice.itemsServices?.reduce(
+                      (sum, item) => sum + item.unit_price * item.quantity,
+                      0,
+                    ) || 0
+                  ).toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })
+                }}
+              </td>
               <td class="px-4 py-6 text-theme-300 hover:underline">
                 <div class="text-right">
                   <RouterLink :to="`/employee/invoice/edit/${invoice.id}`">
@@ -90,7 +97,7 @@
                 </div>
               </td>
             </tr>
-            
+
             <!-- Total Row -->
             <tr class="border-b border-gray-100 py-3 text-sm last:border-b-0">
               <td class="px-4 py-6 font-bold text-gray-800">Total</td>
@@ -109,7 +116,7 @@
             </tr>
           </tbody>
         </table>
-        
+
         <!-- No Invoices -->
         <div v-else class="py-4 text-center text-gray-500">
           No invoices found for this claim.
@@ -130,62 +137,64 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
-import { storeToRefs } from "pinia"; // ADD THIS IMPORT
-import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
+  import { ref, watch, computed } from "vue";
+  import { storeToRefs } from "pinia"; // ADD THIS IMPORT
+  import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
 
-const props = defineProps({
-  modelValue: Boolean,
-  data: Object,
-});
+  const props = defineProps({
+    modelValue: Boolean,
+    data: Object,
+  });
 
-const emit = defineEmits(["update:modelValue"]);
-const claimStore = useEmployeeClaimStore();
+  const emit = defineEmits(["update:modelValue"]);
+  const claimStore = useEmployeeClaimStore();
 
-// ADD THIS LINE - Use storeToRefs for reactivity
-const { claimInvoices, loading } = storeToRefs(claimStore);
+  // ADD THIS LINE - Use storeToRefs for reactivity
+  const { claimInvoices, loading } = storeToRefs(claimStore);
 
-const isOpen = ref(props.modelValue);
+  const isOpen = ref(props.modelValue);
 
-watch(
-  () => props.modelValue,
-  (val) => {
-    isOpen.value = val;
-  },
-);
+  watch(
+    () => props.modelValue,
+    (val) => {
+      isOpen.value = val;
+    },
+  );
 
-watch(isOpen, (val) => {
-  if (!val) {
-    emit("update:modelValue", false);
+  watch(isOpen, (val) => {
+    if (!val) {
+      emit("update:modelValue", false);
+    }
+  });
+
+  // CHANGE THIS - Use the reactive reference
+  const invoices = computed(() => {
+    console.log("Dialog - claimInvoices.value:", claimInvoices.value); // Debug log
+    return claimInvoices.value || [];
+  });
+
+  const totalAmount = computed(() => {
+    return invoices.value.reduce((sum, invoice) => {
+      const invoiceTotal =
+        invoice.itemsServices?.reduce(
+          (itemSum, item) => itemSum + item.quantity * item.unit_price,
+          0,
+        ) || 0;
+      return sum + invoiceTotal;
+    }, 0);
+  });
+
+  function truncateString(str, maxLength = 30) {
+    if (!str) return "";
+    if (str.length > maxLength) {
+      return str.substring(0, maxLength - 3) + "...";
+    } else {
+      return str;
+    }
   }
-});
 
-// CHANGE THIS - Use the reactive reference
-const invoices = computed(() => {
-  console.log('Dialog - claimInvoices.value:', claimInvoices.value); // Debug log
-  return claimInvoices.value || [];
-});
-
-const totalAmount = computed(() => {
-  return invoices.value.reduce((sum, invoice) => {
-    const invoiceTotal = invoice.itemsServices?.reduce(
-      (itemSum, item) => itemSum + (item.quantity * item.unit_price), 0
-    ) || 0;
-    return sum + invoiceTotal;
-  }, 0);
-});
-
-function truncateString(str, maxLength = 30) {
-  if (!str) return '';
-  if (str.length > maxLength) {
-    return str.substring(0, maxLength - 3) + "...";
-  } else {
-    return str;
+  function formatDate(dateString) {
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString("en-GB");
   }
-}
-
-function formatDate(dateString) {
-  if (!dateString) return '';
-  return new Date(dateString).toLocaleDateString('en-GB');
-}
 </script>

@@ -89,7 +89,9 @@
                 </td>
 
                 <!-- Item/Service Column -->
-                <td class="max-w-80 px-4 py-6 text-nowrap text-gray-700">
+                <td
+                  class="max-w-80 overflow-hidden px-4 py-6 text-nowrap text-gray-700"
+                >
                   {{ item.item }}
                 </td>
 
@@ -119,7 +121,7 @@
               <td class="px-4 py-6 text-gray-700"></td>
               <td class="px-4 py-6 text-gray-700"></td>
               <td class="py-6 text-right font-bold text-blue-600">
-                {{ formatCurrency(data.claim_amount) }}
+                {{ formatCurrency(claimTotal) }}
               </td>
               <td class="px-4 py-6 text-right text-gray-700"></td>
             </tr>
@@ -245,4 +247,17 @@
       console.error("Failed to resolve claim:", error);
     }
   };
+
+  const invoiceTotal = computed(() =>
+    props.data.invoices.map((invoice) =>
+      invoice.itemsServices.reduce(
+        (total, item) => total + item.quantity * item.unit_price,
+        0,
+      ),
+    ),
+  );
+
+  const claimTotal = computed(() =>
+    invoiceTotal.value.reduce((total, amount) => total + amount, 0),
+  );
 </script>
