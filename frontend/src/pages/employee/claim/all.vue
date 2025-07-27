@@ -78,7 +78,7 @@
                     </button>
                   </th>
                   <th class="px-3 py-3.5 text-center text-sm font-semibold">
-                    Quantity
+                    Invoices No.
                   </th>
                   <th class="px-3 py-3.5 text-right text-sm font-semibold">
                     Total (RM)
