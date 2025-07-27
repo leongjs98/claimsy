@@ -8,11 +8,7 @@
 
 ### Essentials
 - [ ] Smart Suggest feature
-- [ ] seeder for anomaly
-- [ ] fix unsubmitted invoice 10-15 invoices
-- [ ] invoice/edit connect backend data
 - [ ] seeder for fix employee demo data (using previous mock data)
-- [ ] seeder for employee id 1 name
 - [ ] seeder for fix chat data
 - [ ] Chatbot feature
     - connect with backend, use fake data
@@ -31,6 +27,10 @@
 - [ ] testing
 
 ## Done
+- [x] invoice/edit connect backend data
+- [x] seeder for employee id 1 name
+- [x] fix unsubmitted invoice 10-15 invoices
+- [x] seeder for anomaly
 - [x] john: submit button in invoice same column as checkbox
 - [x] chee tat: category in my invoices (make it click)
 - [x] john: upload receipt, show image (a lot = carousell)
