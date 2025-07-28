@@ -289,13 +289,15 @@
                       <div
                         class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6"
                       >
-                        <button
-                          type="button"
-                          class="inline-flex w-full justify-center rounded-md bg-blue-900 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                          @click="open = false"
-                        >
-                          Thank You
-                        </button>
+                        <RouterLink to="/admin/claim/all">
+                          <button
+                            type="button"
+                            class="inline-flex w-full justify-center rounded-md bg-blue-900 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                            @click="open = false"
+                          >
+                            Thank You
+                          </button>
+                        </RouterLink>
                       </div>
                     </DialogPanel>
                   </TransitionChild>
@@ -310,27 +312,27 @@
 </template>
 
 <script setup>
-  import { ref, onMounted, computed, watch, onUnmounted } from "vue";
-  import { useRouter } from "vue-router";
-  import { usePolicyDetails } from "@/stores/policy";
-  import axios from "axios";
+import { ref, onMounted, computed, watch, onUnmounted } from "vue";
+import { useRouter } from "vue-router";
+import { usePolicyDetails } from "@/stores/policy";
+import axios from "axios";
 
-  const showDialog = ref(false);
-  import {
-    Dialog,
-    DialogPanel,
-    DialogTitle,
-    TransitionChild,
-    TransitionRoot,
-  } from "@headlessui/vue";
-  import { CheckCircleIcon } from "@heroicons/vue/24/solid";
+const showDialog = ref(false);
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
+import { CheckCircleIcon } from "@heroicons/vue/24/solid";
 
-  const open = ref(false);
+const open = ref(false);
 
-  const router = useRouter();
-  const policyStore = usePolicyDetails();
+const router = useRouter();
+const policyStore = usePolicyDetails();
 
-  const validClaimCriteria = ref(`- Must fall under eligible categories
+const validClaimCriteria = ref(`- Must fall under eligible categories
 - Medical, Supplies/Equipment, Travel, Meals/Entertainment, Accommodation
 - Submitted within required timeframes (30 days general, 60 days medical)
 - Include original receipts and completed expense forms
@@ -338,154 +340,152 @@
 - Stay within spending limits (Medical: RM500, Meals: RM50/day travel, RM25/person business)
 - Medical claims require medical certificates
   `);
-  const fraudulentClaimsIndicators =
-    ref(`- False or altered receipts and signatures
+const fraudulentClaimsIndicators =
+  ref(`- False or altered receipts and signatures
 - Double claiming same expense
 - Personal expenses claimed as business
 - Deliberately inflated amounts
 - Claims for non-existent expenses
 - Fake medical certificates
   `);
-  const inappropriateClaimsCharacteristics =
-    ref(`- Exceeding spending limits or standards
+const inappropriateClaimsCharacteristics =
+  ref(`- Exceeding spending limits or standards
 - Unauthorized purchases without approval
 - Policy guideline violations
 - Poor business judgment in spending
 - Missing or incomplete documentation
 - Claims submitted past deadlines
 `);
-  const documentationRequirements = ref(`- Original receipts (digital accepted)
+const documentationRequirements = ref(`- Original receipts (digital accepted)
 - Completed expense claim form
 - Business purpose explanation
 - Manager approval signature
 - Medical certificates for medical claims
 - Project or client codes
 `);
-  const spendingLimitViolations = ref(`- Medical over RM500 per incident
+const spendingLimitViolations = ref(`- Medical over RM500 per incident
 - Equipment over RM200 without approval
 - Non-economy flights
 - Meals over RM50/day or RM25/person
 - Accommodation over RM300/night
 - Tips over 20%
 `);
-  const nonReimbursableExpenses = ref(`- Personal medical expenses
+const nonReimbursableExpenses = ref(`- Personal medical expenses
 - Personal meals, travel, accommodation
 - Personal supplies and equipment
 - Traffic fines and penalties
 - Family members' expenses
 - Client or conference-paid expenses
 `);
-  const approvalProcessViolations = ref(`- Missing manager approval
+const approvalProcessViolations = ref(`- Missing manager approval
 - No HR review for medical claims
 - Bypassing approval thresholds
 - Self-approval of expenses
 - Missing documentation review
 `);
 
-  // const approvalLimitations1 = ref("");
-  // const claimDenial1 = ref("");
-  // const approvalLimitations2 = ref("");
-  // const claimDenial2 = ref("");
+// const approvalLimitations1 = ref("");
+// const claimDenial1 = ref("");
+// const approvalLimitations2 = ref("");
+// const claimDenial2 = ref("");
 
-  const originalValues = ref({});
+const originalValues = ref({});
 
-  const hasChanges = computed(() => {
-    if (!originalValues.value.validClaimCriteria) return false;
-    return (
-      validClaimCriteria.value !== originalValues.value.validClaimCriteria ||
-      approvalLimitations1.value !==
-        originalValues.value.approvalLimitations1 ||
-      claimDenial1.value !== originalValues.value.claimDenial1 ||
-      approvalLimitations2.value !==
-        originalValues.value.approvalLimitations2 ||
-      claimDenial2.value !== originalValues.value.claimDenial2
-    );
-  });
+const hasChanges = computed(() => {
+  if (!originalValues.value.validClaimCriteria) return false;
+  return (
+    validClaimCriteria.value !== originalValues.value.validClaimCriteria ||
+    approvalLimitations1.value !== originalValues.value.approvalLimitations1 ||
+    claimDenial1.value !== originalValues.value.claimDenial1 ||
+    approvalLimitations2.value !== originalValues.value.approvalLimitations2 ||
+    claimDenial2.value !== originalValues.value.claimDenial2
+  );
+});
 
-  //   onMounted(async () => {
-  //     try {
-  //       await policyStore.fetchPolicies();
-  //
-  //       const defaultEligibility = `- Conditions under which a claim is considered valid.
-  // - Timeframe in which a claim must be filled after the incident or purchase.
-  // - Required documentation (e.g., receipts, proof of damage, photos, police reports).`;
-  //
-  //       const defaultApproval1 = `- Criteria for approval or rejection.
-  // - Forms of compensation(e.g., payment, replacement, repair).
-  // - Settlement process (e.g., bank transfer, in-store credit`;
-  //
-  //       const defaultDenial1 = `- Grounds for denial (e.g., lack of documentation, excluded events).
-  // - Right to appeal or request re-evaluation.
-  // - Rejection communication process.`;
-  //
-  //       const defaultApproval2 = `- Steps to contest a denied claim.
-  // - Timeframe for appeals and final decisions.`;
-  //
-  //       const defaultDenial2 = `- Scenarios not covered by the policy.
-  // - Specific exceptions (e.g., acts of war, intentional damage, expired warranties).`;
-  //
-  //       validClaimCriteria.value =
-  //         policyStore.validClaimCriteriaText || defaultEligibility;
-  //       approvalLimitations1.value =
-  //         policyStore.approvalLimitations1Text || defaultApproval1;
-  //       claimDenial1.value = policyStore.claimDenial1Text || defaultDenial1;
-  //       approvalLimitations2.value =
-  //         policyStore.approvalLimitations2Text || defaultApproval2;
-  //       claimDenial2.value = policyStore.claimDenial2Text || defaultDenial2;
-  //
-  //       originalValues.value = {
-  //         validClaimCriteria: validClaimCriteria.value,
-  //         approvalLimitations1: approvalLimitations1.value,
-  //         claimDenial1: claimDenial1.value,
-  //         approvalLimitations2: approvalLimitations2.value,
-  //         claimDenial2: claimDenial2.value,
-  //       };
-  //     } catch (error) {
-  //       console.error("Failed to load policies:", error);
-  //     }
-  //   });
+//   onMounted(async () => {
+//     try {
+//       await policyStore.fetchPolicies();
+//
+//       const defaultEligibility = `- Conditions under which a claim is considered valid.
+// - Timeframe in which a claim must be filled after the incident or purchase.
+// - Required documentation (e.g., receipts, proof of damage, photos, police reports).`;
+//
+//       const defaultApproval1 = `- Criteria for approval or rejection.
+// - Forms of compensation(e.g., payment, replacement, repair).
+// - Settlement process (e.g., bank transfer, in-store credit`;
+//
+//       const defaultDenial1 = `- Grounds for denial (e.g., lack of documentation, excluded events).
+// - Right to appeal or request re-evaluation.
+// - Rejection communication process.`;
+//
+//       const defaultApproval2 = `- Steps to contest a denied claim.
+// - Timeframe for appeals and final decisions.`;
+//
+//       const defaultDenial2 = `- Scenarios not covered by the policy.
+// - Specific exceptions (e.g., acts of war, intentional damage, expired warranties).`;
+//
+//       validClaimCriteria.value =
+//         policyStore.validClaimCriteriaText || defaultEligibility;
+//       approvalLimitations1.value =
+//         policyStore.approvalLimitations1Text || defaultApproval1;
+//       claimDenial1.value = policyStore.claimDenial1Text || defaultDenial1;
+//       approvalLimitations2.value =
+//         policyStore.approvalLimitations2Text || defaultApproval2;
+//       claimDenial2.value = policyStore.claimDenial2Text || defaultDenial2;
+//
+//       originalValues.value = {
+//         validClaimCriteria: validClaimCriteria.value,
+//         approvalLimitations1: approvalLimitations1.value,
+//         claimDenial1: claimDenial1.value,
+//         approvalLimitations2: approvalLimitations2.value,
+//         claimDenial2: claimDenial2.value,
+//       };
+//     } catch (error) {
+//       console.error("Failed to load policies:", error);
+//     }
+//   });
 
-  const handleSubmit = async () => {
-    try {
-      window.removeEventListener("beforeunload", beforeUnloadHandler);
-      const response = await axios.get("http://127.0.0.1:8000/admin/policy");
-      const data = await response.data();
-
-      validClaimCriteria.value = data.claim_eligibility_criteria.join("\n");
-      const approval =
-        data.claim_approval_limitations?.[0]?.points?.join("\n") || "";
-      const denial = data.claim_denial?.[0]?.points?.join("\n") || "";
-
-      approvalLimitations1.value = approval;
-      approvalLimitations2.value = approval;
-      claimDenial1.value = denial;
-      claimDenial2.value = denial;
-
-      alert("Policy data loaded from backend!");
-
-      showDialog.value = true;
-    } catch (error) {
-      console.error("Failed to fetch policy data:", error);
-    }
-  };
-
-  const handleCancel = () => {
-    if (hasChanges.value) {
-      const confirmLeave = confirm(
-        "You have unsaved changes. Are you sure you want to leave?",
-      );
-      if (!confirmLeave) return;
-    }
+const handleSubmit = async () => {
+  try {
     window.removeEventListener("beforeunload", beforeUnloadHandler);
-    policyStore.clearError();
-    router.back();
-  };
+    const response = await axios.get("http://127.0.0.1:8000/admin/policy");
+    const data = await response.data();
 
-  watch(hasChanges, (newValue) => {
-    console.log("Has changes:", newValue);
-  });
+    validClaimCriteria.value = data.claim_eligibility_criteria.join("\n");
+    const approval =
+      data.claim_approval_limitations?.[0]?.points?.join("\n") || "";
+    const denial = data.claim_denial?.[0]?.points?.join("\n") || "";
 
-  // onUnmounted(() => {
-  //   policyStore.setError("Error");
-  // });
+    approvalLimitations1.value = approval;
+    approvalLimitations2.value = approval;
+    claimDenial1.value = denial;
+    claimDenial2.value = denial;
+
+    alert("Policy data loaded from backend!");
+
+    showDialog.value = true;
+  } catch (error) {
+    console.error("Failed to fetch policy data:", error);
+  }
+};
+
+const handleCancel = () => {
+  if (hasChanges.value) {
+    const confirmLeave = confirm(
+      "You have unsaved changes. Are you sure you want to leave?",
+    );
+    if (!confirmLeave) return;
+  }
+  window.removeEventListener("beforeunload", beforeUnloadHandler);
+  policyStore.clearError();
+  router.back();
+};
+
+watch(hasChanges, (newValue) => {
+  console.log("Has changes:", newValue);
+});
+
+// onUnmounted(() => {
+//   policyStore.setError("Error");
+// });
 </script>
