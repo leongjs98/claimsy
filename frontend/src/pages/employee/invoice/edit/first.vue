@@ -95,6 +95,9 @@
                 <th class="rounded-r-lg px-4 py-2 text-right">
                   Unit Price (RM)
                 </th>
+                <th class="rounded-r-lg px-4 py-2 text-right">
+                  Subtotal (RM)
+                </th>
               </tr>
             </thead>
             <!-- TODO: change the table rows into label + input tags -->
@@ -108,10 +111,14 @@
                 <td class="rounded-l-lg px-4 py-3">{{ item.description }}</td>
                 <td class="px-4 py-3 text-right">{{ item.quantity }}</td>
                 <td class="rounded-r-lg px-4 py-3 text-right">
-                  {{ item.unit_price.toFixed(2) }}
+                  {{ formatCurrency(item.unit_price) }}
+                </td>
+                <td class="rounded-r-lg px-4 py-3 text-right">
+                  {{ formatCurrency(item.quantity*item.unit_price) }}
                 </td>
               </tr>
               <tr class="text-right font-semibold text-theme-300">
+                <td></td>
                 <td></td>
                 <td class="rounded-l-lg bg-gray-200 px-4 py-3">Total</td>
                 <td class="rounded-r-lg bg-gray-200 px-4 py-3">
@@ -274,5 +281,10 @@
       alert(`Error: ${JSON.stringify(error.response?.data?.detail, null, 2)}`);
     } finally {
     }
+  };
+
+  const formatCurrency = (amount) => {
+    if (amount === null || amount === undefined) return "0.00";
+    return `${amount.toFixed(2)}`;
   };
 </script>

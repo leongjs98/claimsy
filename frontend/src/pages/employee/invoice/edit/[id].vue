@@ -91,8 +91,9 @@
               <tr class="">
                 <th class="rounded-l-lg px-4 py-2 text-left">Description</th>
                 <th class="px-4 py-2 text-right">Quantity</th>
+                <th class="px-4 py-2 text-right">Unit Price (RM)</th>
                 <th class="rounded-r-lg px-4 py-2 text-right">
-                  Unit Price (RM)
+                  Subtotal
                 </th>
               </tr>
             </thead>
@@ -107,11 +108,15 @@
                 <td class="px-4 py-3 text-right">
                   {{ item.quantity }}
                 </td>
-                <td class="rounded-r-lg px-4 py-3 text-right">
+                <td class="px-4 py-3 text-right">
                   {{ formatCurrency(item.unit_price) }}
+                </td>
+                <td class="rounded-r-lg px-4 py-3 text-right">
+                  {{ formatCurrency(item.quantity*item.unit_price) }}
                 </td>
               </tr>
               <tr class="text-right font-semibold text-theme-300">
+                <td></td>
                 <td></td>
                 <td class="rounded-l-lg bg-gray-200 px-4 py-3">Total</td>
                 <td class="rounded-r-lg bg-gray-200 px-4 py-3">

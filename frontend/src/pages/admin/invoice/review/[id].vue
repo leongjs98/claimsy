@@ -104,7 +104,8 @@
                 <th class="rounded-l-lg px-4 py-2 text-left">Description</th>
                 <th class="px-4 py-2 text-left">Category</th>
                 <th class="px-4 py-2 text-right">Quantity</th>
-                <th class="rounded-r-lg px-4 py-2 text-right">Total (RM)</th>
+                <th class="rounded-r-lg px-4 py-2 text-right">Unit Price (RM)</th>
+                <th class="rounded-r-lg px-4 py-2 text-right">Subtotal (RM)</th>
               </tr>
             </thead>
 
@@ -125,8 +126,17 @@
                     })
                   }}
                 </td>
+                <td class="rounded-r-lg px-4 py-3 text-right">
+                  {{
+                    (item.unit_price*item.quantity).toLocaleString("en-MY", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })
+                  }}
+                </td>
               </tr>
               <tr class="text-right text-sm font-bold text-theme-300">
+                <td></td>
                 <td></td>
                 <td></td>
                 <td class="rounded-l-lg bg-gray-200 px-4 py-3">Total</td>

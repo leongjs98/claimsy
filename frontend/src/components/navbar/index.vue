@@ -35,16 +35,17 @@
               v-if="route.path.includes('admin')"
             >
             </NavLink>
+
             <NavLink
-              name="My Claims"
-              link="/employee/claim/all"
+              name="Upload Receipt"
+              link="/employee/invoice/upload"
               v-if="!route.path.includes('admin')"
             >
             </NavLink>
 
             <NavLink
-              name="Upload Receipt"
-              link="/employee/invoice/upload"
+              name="My Claims"
+              link="/employee/claim/all"
               v-if="!route.path.includes('admin')"
             >
             </NavLink>
@@ -100,6 +101,6 @@
 </template>
 
 <script setup>
-  import { useRoute } from "vue-router";
-  const route = useRoute();
+import { useRoute } from "vue-router";
+const route = useRoute();
 </script>

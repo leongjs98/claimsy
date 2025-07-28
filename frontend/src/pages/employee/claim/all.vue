@@ -38,9 +38,7 @@
                   >
                     Claim ID
                   </th>
-                  <th
-                    class="w-48 px-3 py-3.5 text-left text-sm font-semibold"
-                  >
+                  <th class="w-48 px-3 py-3.5 text-left text-sm font-semibold">
                     Status
                   </th>
                   <th
@@ -99,9 +97,7 @@
                   <td
                     :class="[
                       'py-4 pr-3 pl-4 text-right text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6',
-                      index === sortedClaims.length - 1
-                        ? 'rounded-bl-lg'
-                        : '',
+                      index === sortedClaims.length - 1 ? 'rounded-bl-lg' : '',
                     ]"
                   >
                     {{ index + 1 }}
@@ -115,7 +111,6 @@
                   >
                     <div class="flex items-center justify-start gap-2">
                       <StatusBadge :status="claim.status" />
-                      <StatusBadge v-show="claim.is_anomaly" status="Anomaly" />
                     </div>
                   </td>
                   <td
@@ -137,9 +132,7 @@
                   <td
                     :class="[
                       'px-4 py-4 text-center text-sm whitespace-nowrap text-theme-300',
-                      index === sortedClaims.length - 1
-                        ? 'rounded-br-lg'
-                        : '',
+                      index === sortedClaims.length - 1 ? 'rounded-br-lg' : '',
                     ]"
                   >
                     <button
@@ -167,49 +160,49 @@
 </template>
 
 <script setup>
-  import { ref, computed, onMounted } from "vue";
-  import { storeToRefs } from "pinia";
-  import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
+import { ref, computed, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
 
-  const showDialog = ref(false);
-  const selectedClaim = ref();
-  const sortDateAsc = ref(false);
-  const claimStore = useEmployeeClaimStore();
-  // const { getClaimsByDateAsc, getClaimsByDateDesc } = storeToRefs(claimStore);
+const showDialog = ref(false);
+const selectedClaim = ref();
+const sortDateAsc = ref(false);
+const claimStore = useEmployeeClaimStore();
+// const { getClaimsByDateAsc, getClaimsByDateDesc } = storeToRefs(claimStore);
 
-  const sortedClaims = computed(() => {
-    return sortDateAsc.value
-      ? claimStore.getClaimsSortedByDate(true)
-      : claimStore.getClaimsSortedByDate(false);
-  });
+const sortedClaims = computed(() => {
+  return sortDateAsc.value
+    ? claimStore.getClaimsSortedByDate(true)
+    : claimStore.getClaimsSortedByDate(false);
+});
 
-  // helper function
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("en-GB"); // DD/MM/YYYY format
-  };
+// helper function
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  return new Date(dateString).toLocaleDateString("en-GB"); // DD/MM/YYYY format
+};
 
-  onMounted(async () => {
-    const employeeId = 1; // Get this from your auth system
-    await claimStore.initStore(employeeId); // Pass employee ID
-  });
+onMounted(async () => {
+  const employeeId = 1; // Get this from your auth system
+  await claimStore.initStore(employeeId); // Pass employee ID
+});
 
-  const openDetails = async (claim) => {
-    selectedClaim.value = claim;
+const openDetails = async (claim) => {
+  selectedClaim.value = claim;
 
-    // Fetch invoices for this claim
-    try {
-      await claimStore.fetchInvoicesByClaimId(claim.id);
-      showDialog.value = true;
-    } catch (error) {
-      console.error("Failed to load claim invoices:", error);
-      // Still show dialog even if invoices fail to load
-      showDialog.value = true;
-    }
-  };
+  // Fetch invoices for this claim
+  try {
+    await claimStore.fetchInvoicesByClaimId(claim.id);
+    showDialog.value = true;
+  } catch (error) {
+    console.error("Failed to load claim invoices:", error);
+    // Still show dialog even if invoices fail to load
+    showDialog.value = true;
+  }
+};
 
-  const formatCurrency = (amount) => {
-    if (amount === null || amount === undefined) return "0.00";
-    return `${amount.toFixed(2)}`;
-  };
+const formatCurrency = (amount) => {
+  if (amount === null || amount === undefined) return "0.00";
+  return `${amount.toFixed(2)}`;
+};
 </script>
