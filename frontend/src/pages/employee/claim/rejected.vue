@@ -38,9 +38,7 @@
                   >
                     Claim ID
                   </th>
-                  <th
-                    class="w-48 px-3 py-3.5 text-left text-sm font-semibold"
-                  >
+                  <th class="w-48 px-3 py-3.5 text-left text-sm font-semibold">
                     Status
                   </th>
                   <th
@@ -141,12 +139,11 @@
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                     {{ claim.claim_number }}
                   </td>
-                 <td
+                  <td
                     class="w-fit px-3 py-4 text-sm font-semibold whitespace-nowrap"
                   >
                     <div class="flex items-center justify-start gap-2">
                       <StatusBadge :status="claim.status" />
-                      <StatusBadge v-show="claim.is_anomaly" status="Anomaly" />
                     </div>
                   </td>
                   <td
@@ -192,47 +189,47 @@
 </template>
 
 <script setup>
-  import { ref, computed, onMounted } from "vue";
-  import { storeToRefs } from "pinia";
-  import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
+import { ref, computed, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useEmployeeClaimStore } from "@/stores/employee-claims.ts";
 
-  const showDialog = ref(false);
-  const selectedClaim = ref();
-  const sortDateAsc = ref(false);
-  const claimStore = useEmployeeClaimStore();
+const showDialog = ref(false);
+const selectedClaim = ref();
+const sortDateAsc = ref(false);
+const claimStore = useEmployeeClaimStore();
 
-  const { totalCount, approvedCount, rejectedCount, rejectedClaims } =
-    storeToRefs(claimStore);
+const { totalCount, approvedCount, rejectedCount, rejectedClaims } =
+  storeToRefs(claimStore);
 
-  // Filter and sort only rejected claims
-  const sortedRejectedClaims = computed(() => {
-    const rejected = claimStore.rejectedClaims; // Get rejected claims from store
+// Filter and sort only rejected claims
+const sortedRejectedClaims = computed(() => {
+  const rejected = claimStore.rejectedClaims; // Get rejected claims from store
 
-    return rejected.slice().sort((a, b) => {
-      const dateA = new Date(a.submitted_date);
-      const dateB = new Date(b.submitted_date);
-      return sortDateAsc.value ? dateA - dateB : dateB - dateA;
-    });
+  return rejected.slice().sort((a, b) => {
+    const dateA = new Date(a.submitted_date);
+    const dateB = new Date(b.submitted_date);
+    return sortDateAsc.value ? dateA - dateB : dateB - dateA;
   });
+});
 
-  // Helper function
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    return new Date(dateString).toLocaleDateString("en-GB"); // DD/MM/YYYY format
-  };
+// Helper function
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  return new Date(dateString).toLocaleDateString("en-GB"); // DD/MM/YYYY format
+};
 
-  onMounted(async () => {
-    const employeeId = 1; // Get this from your auth system
-    await claimStore.initStore(employeeId); // Pass employee ID
-  });
+onMounted(async () => {
+  const employeeId = 1; // Get this from your auth system
+  await claimStore.initStore(employeeId); // Pass employee ID
+});
 
-  const openDetails = (claim) => {
-    selectedClaim.value = claim;
-    showDialog.value = true;
-  };
+const openDetails = (claim) => {
+  selectedClaim.value = claim;
+  showDialog.value = true;
+};
 
-  const formatCurrency = (amount) => {
-    if (amount === null || amount === undefined) return "0.00";
-    return `${amount.toFixed(2)}`;
-  };
+const formatCurrency = (amount) => {
+  if (amount === null || amount === undefined) return "0.00";
+  return `${amount.toFixed(2)}`;
+};
 </script>
