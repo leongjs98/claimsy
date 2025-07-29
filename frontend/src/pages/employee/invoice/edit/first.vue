@@ -1,6 +1,5 @@
 <template>
   <form @submit.prevent="submitInvoice">
-      <TransitionGroup name="fade-slide" tag="ul">
     <li
       v-for="(formData, i) in formDatas"
       key="i"
@@ -167,7 +166,6 @@
         </span>
       </div>
     </li>
-      </TransitionGroup>
 
   </form>
   <SuccessDialog v-model="showSuccessDialog">
