@@ -44,7 +44,7 @@
                     scope="col"
                     class="w-fit px-3 py-3.5 text-left text-sm font-semibold"
                   >
-                    Email
+                    Type
                   </th>
                   <th class="w-48 px-3 py-3.5 text-left text-sm font-semibold">
                     Status
@@ -116,14 +116,14 @@
                         {{ claim.employee?.name }}
                       </span>
                       <span class="text-xs text-gray-500">
-                        {{ claim.claim_type }}
+                    {{ claim.employee?.email }}
                       </span>
                     </div>
                   </td>
                   <td
                     class="w-fit px-3 py-4 text-sm whitespace-nowrap text-gray-500"
                   >
-                    {{ claim.employee?.email }}
+                        {{ claim.claim_type }}
                   </td>
                   <td
                     class="w-fit px-3 py-4 text-sm font-semibold whitespace-nowrap"
