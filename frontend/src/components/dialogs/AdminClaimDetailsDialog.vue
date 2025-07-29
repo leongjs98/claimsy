@@ -7,7 +7,7 @@
         <h2 class="flex items-center gap-4 text-xl font-semibold">
           <span> Claim ID: #{{ data.claim_number }} </span>
           <span
-            class="flex w-fit items-center rounded-md px-2 py-1 text-base font-medium"
+            class="capitalize flex w-fit items-center rounded-md px-2 py-1 text-base font-medium"
             :class="{
               'bg-emerald-100 text-emerald-600':
                 data.status.toLowerCase() === 'approved',
@@ -18,6 +18,12 @@
             }"
           >
             {{ data.status }}
+          </span>
+          <span
+            v-show="data.is_anomaly"
+            class="capitalize flex w-fit items-center rounded-md px-2 py-1 text-base font-medium bg-orange-100 text-orange-600"
+          >
+          Anomaly
           </span>
         </h2>
         <button

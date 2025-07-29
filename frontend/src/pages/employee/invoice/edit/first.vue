@@ -5,6 +5,7 @@
       v-for="(formData, i) in formDatas"
       key="i"
       class="mx-auto mt-15 max-w-4xl rounded-2xl border border-gray-200 bg-white px-15 py-10 shadow-lg"
+      :class="i <= formDatas.length - 1 ? 'mb-8' : ''"
     >
       <div class="space-y-1 border-b border-gray-900/10 pb-12">
         <div class="relative flex items-center justify-center">

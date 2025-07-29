@@ -4,8 +4,21 @@
       <div
         class="flex items-center justify-between rounded-t-xl bg-theme-300 px-6 py-4 text-white"
       >
-        <h2 class="text-xl font-semibold">
-          Claim ID: #{{ data?.claim_number }}
+        <h2 class="flex items-center gap-4 text-xl font-semibold">
+          <span> Claim ID: #{{ data.claim_number }} </span>
+          <span
+            class="capitalize flex w-fit items-center rounded-md px-2 py-1 text-base font-medium"
+            :class="{
+              'bg-emerald-100 text-emerald-600':
+                data.status.toLowerCase() === 'approved',
+              'bg-red-100 text-red-600':
+                data.status.toLowerCase() === 'rejected',
+              'bg-yellow-100 text-yellow-600':
+                data.status.toLowerCase() === 'pending',
+            }"
+          >
+            {{ data.status }}
+          </span>
         </h2>
         <button
           @click="isOpen = false"
