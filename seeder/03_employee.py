@@ -4,6 +4,8 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from faker import Faker
+from datetime import datetime
+import json
 import random
 from datetime import date, timedelta
 from decimal import Decimal
@@ -168,36 +170,50 @@ def create_employee_data(index: int) -> dict:
 
 
 def seed_employees():
-    """Seed the database with employee data"""
+    """Seed the database with employee data from JSON file"""
     try:
-        print(f"Creating {NUM_EMPLOYEES} employees...")
+        # Load employee data from JSON file
+        with open('./seeder/data/employees.json', 'r') as file:
+            employee_data_list = json.load(file)
+        
+        print(f"Loading {len(employee_data_list)} employees from employee.json...")
 
         employees = []
         used_emails = set()
 
-        employee_data = create_employee_1_data()
-        employee = Employee(**employee_data)
-        employees.append(employee)
-
-        for i in range(NUM_EMPLOYEES-1):
-            while True:
-                employee_data = create_employee_data(i)
-
-                # Ensure unique email
-                if (employee_data["email"] not in used_emails):
-                    used_emails.add(employee_data["email"])
-                    break
-
+        for i, employee_data in enumerate(employee_data_list):
+            # Ensure unique email (skip if duplicate)
+            if employee_data["email"] in used_emails:
+                print(f"Skipping duplicate email: {employee_data['email']}")
+                continue
+            
+            used_emails.add(employee_data["email"])
+            
+            # Convert hire_date string to date object if it's a string
+            if isinstance(employee_data.get("hire_date"), str):
+                employee_data["hire_date"] = datetime.strptime(
+                    employee_data["hire_date"], "%Y-%m-%d"
+                ).date()
+            
+            # Create Employee object
             employee = Employee(**employee_data)
             employees.append(employee)
 
             if (i + 1) % 10 == 0:
-                print(f"Generated {i + 1} employees...")
+                print(f"Processed {i + 1} employees...")
 
+        # Add all employees to session
         session.add_all(employees)
         session.commit()
 
-        print(f"Successfully seeded {NUM_EMPLOYEES} employees!")
+        print(f"Successfully seeded {len(employees)} employees!")
+        
+    except FileNotFoundError:
+        print("Error: employee.json file not found!")
+        session.rollback()
+    except json.JSONDecodeError as e:
+        print(f"Error parsing JSON file: {e}")
+        session.rollback()
     except Exception as e:
         session.rollback()
         print(f"Error seeding employees: {e}")

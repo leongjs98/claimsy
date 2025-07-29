@@ -1,0 +1,152 @@
+[
+  {
+    "name": "John Smith",
+    "email": "john.smith@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0101",
+    "department": "Engineering",
+    "job_title": "Senior Software Engineer",
+    "hire_date": "2022-03-15",
+    "salary": 85000.00
+  },
+  {
+    "name": "Sarah Johnson",
+    "email": "sarah.johnson@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0102",
+    "department": "Marketing",
+    "job_title": "Marketing Manager",
+    "hire_date": "2021-08-22",
+    "salary": 72000.00
+  },
+  {
+    "name": "Michael Chen",
+    "email": "michael.chen@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0103",
+    "department": "Finance",
+    "job_title": "Financial Analyst",
+    "hire_date": "2023-01-10",
+    "salary": 68000.00
+  },
+  {
+    "name": "Emily Davis",
+    "email": "emily.davis@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0104",
+    "department": "Human Resources",
+    "job_title": "HR Specialist",
+    "hire_date": "2022-06-05",
+    "salary": 58000.00
+  },
+  {
+    "name": "David Wilson",
+    "email": "david.wilson@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0105",
+    "department": "Engineering",
+    "job_title": "DevOps Engineer",
+    "hire_date": "2021-11-18",
+    "salary": 82000.00
+  },
+  {
+    "name": "Lisa Rodriguez",
+    "email": "lisa.rodriguez@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0106",
+    "department": "Sales",
+    "job_title": "Sales Representative",
+    "hire_date": "2023-04-12",
+    "salary": 55000.00
+  },
+  {
+    "name": "Robert Brown",
+    "email": "robert.brown@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0107",
+    "department": "Operations",
+    "job_title": "Operations Manager",
+    "hire_date": "2020-09-30",
+    "salary": 78000.00
+  },
+  {
+    "name": "Jennifer Lee",
+    "email": "jennifer.lee@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0108",
+    "department": "Engineering",
+    "job_title": "Frontend Developer",
+    "hire_date": "2022-12-01",
+    "salary": 75000.00
+  },
+  {
+    "name": "James Taylor",
+    "email": "james.taylor@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0109",
+    "department": "Customer Support",
+    "job_title": "Support Specialist",
+    "hire_date": "2023-02-14",
+    "salary": 48000.00
+  },
+  {
+    "name": "Amanda White",
+    "email": "amanda.white@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0110",
+    "department": "Marketing",
+    "job_title": "Content Creator",
+    "hire_date": "2022-07-20",
+    "salary": 52000.00
+  },
+  {
+    "name": "Christopher Garcia",
+    "email": "christopher.garcia@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0111",
+    "department": "Engineering",
+    "job_title": "Backend Developer",
+    "hire_date": "2021-05-08",
+    "salary": 80000.00
+  },
+  {
+    "name": "Michelle Martinez",
+    "email": "michelle.martinez@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0112",
+    "department": "Finance",
+    "job_title": "Accountant",
+    "hire_date": "2023-03-25",
+    "salary": 62000.00
+  },
+  {
+    "name": "Kevin Anderson",
+    "email": "kevin.anderson@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0113",
+    "department": "Sales",
+    "job_title": "Sales Manager",
+    "hire_date": "2020-12-03",
+    "salary": 88000.00
+  },
+  {
+    "name": "Rachel Thompson",
+    "email": "rachel.thompson@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0114",
+    "department": "Human Resources",
+    "job_title": "HR Manager",
+    "hire_date": "2019-10-15",
+    "salary": 75000.00
+  },
+  {
+    "name": "Daniel Moore",
+    "email": "daniel.moore@company.com",
+    "password_hash": "$2b$12$LQv3c1yqBwEHxv03kHQQhOUkEHNpbWqvteNIg.NZUQ8YvdgHQ7ZqG",
+    "phone": "6012-555-0115",
+    "department": "Engineering",
+    "job_title": "QA Engineer",
+    "hire_date": "2022-09-12",
+    "salary": 70000.00
+  }
+]

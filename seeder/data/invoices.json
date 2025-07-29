@@ -1,0 +1,1426 @@
+[
+  {
+    "invoice_number": "INV-2024-075",
+    "claim_id": null,
+    "employee_id": 1,
+    "invoice_date": "2024-03-29",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Office Depot Business Center",
+    "merchant_address": "123 Supply Street, Business District, NY 10001",
+    "items_services": [
+      {"description": "Wireless Keyboard", "quantity": 3, "unit_price": 45.99},
+      {"description": "Optical Mouse", "quantity": 3, "unit_price": 25.50},
+      {"description": "USB Hub", "quantity": 2, "unit_price": 35.00}
+    ],
+    "remark": "New employee workstation setup equipment"
+  },
+  {
+    "invoice_number": "INV-2024-076",
+    "claim_id": null,
+    "employee_id": 2,
+    "invoice_date": "2024-03-30",
+    "category": "Travel Expenses",
+    "merchant_name": "American Airlines Business",
+    "merchant_address": "4333 Amon Carter Blvd, Fort Worth, TX 76155",
+    "items_services": [
+      {"description": "Round Trip Flight - Business Class", "quantity": 1, "unit_price": 1250.00},
+      {"description": "Seat Upgrade", "quantity": 1, "unit_price": 150.00},
+      {"description": "Extra Baggage", "quantity": 1, "unit_price": 75.00}
+    ],
+    "remark": "Client presentation trip to Los Angeles"
+  },
+  {
+    "invoice_number": "INV-2024-077",
+    "claim_id": null,
+    "employee_id": 3,
+    "invoice_date": "2024-03-31",
+    "category": "Medical Expenses",
+    "merchant_name": "HealthFirst Medical Center",
+    "merchant_address": "789 Medical Plaza, Healthcare District, FL 33101",
+    "items_services": [
+      {"description": "Annual Health Checkup", "quantity": 1, "unit_price": 350.00},
+      {"description": "Blood Work Panel", "quantity": 1, "unit_price": 125.00},
+      {"description": "Vision Screening", "quantity": 1, "unit_price": 85.00}
+    ],
+    "remark": "Mandatory employee health screening"
+  },
+  {
+    "invoice_number": "INV-2024-078",
+    "claim_id": null,
+    "employee_id": 4,
+    "invoice_date": "2024-04-01",
+    "category": "Meals and Entertainment",
+    "merchant_name": "The Capital Grille",
+    "merchant_address": "456 Fine Dining Avenue, Upscale District, DC 20001",
+    "items_services": [
+      {"description": "Executive Dinner for 6", "quantity": 1, "unit_price": 480.00},
+      {"description": "Wine Pairing", "quantity": 3, "unit_price": 65.00},
+      {"description": "Dessert Course", "quantity": 6, "unit_price": 18.00}
+    ],
+    "remark": "Board of directors quarterly dinner meeting"
+  },
+  {
+    "invoice_number": "INV-2024-079",
+    "claim_id": null,
+    "employee_id": 5,
+    "invoice_date": "2024-04-02",
+    "category": "Accommodation",
+    "merchant_name": "Grand Hyatt Business Hotel",
+    "merchant_address": "1000 H Street NW, Washington, DC 20001",
+    "items_services": [
+      {"description": "Executive Suite - 3 nights", "quantity": 1, "unit_price": 750.00},
+      {"description": "Room Service", "quantity": 3, "unit_price": 45.00},
+      {"description": "Valet Parking", "quantity": 3, "unit_price": 35.00}
+    ],
+    "remark": "Government contract negotiation accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-080",
+    "claim_id": null,
+    "employee_id": 6,
+    "invoice_date": "2024-04-03",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Best Buy Business Solutions",
+    "merchant_address": "7601 Penn Avenue South, Richfield, MN 55423",
+    "items_services": [
+      {"description": "Laser Printer - Color", "quantity": 1, "unit_price": 450.00},
+      {"description": "Printer Stand", "quantity": 1, "unit_price": 125.00},
+      {"description": "Toner Cartridges Set", "quantity": 1, "unit_price": 180.00}
+    ],
+    "remark": "Marketing department printer upgrade"
+  },
+  {
+    "invoice_number": "INV-2024-081",
+    "claim_id": null,
+    "employee_id": 7,
+    "invoice_date": "2024-04-04",
+    "category": "Travel Expenses",
+    "merchant_name": "Enterprise Rent-A-Car",
+    "merchant_address": "600 Corporate Park Drive, St. Louis, MO 63105",
+    "items_services": [
+      {"description": "Full-size Car Rental - 7 days", "quantity": 1, "unit_price": 420.00},
+      {"description": "GPS Navigation System", "quantity": 1, "unit_price": 49.00},
+      {"description": "Additional Driver Fee", "quantity": 1, "unit_price": 65.00}
+    ],
+    "remark": "Regional sales territory coverage vehicle"
+  },
+  {
+    "invoice_number": "INV-2024-082",
+    "claim_id": null,
+    "employee_id": 8,
+    "invoice_date": "2024-04-05",
+    "category": "Medical Expenses",
+    "merchant_name": "Wellness Corporate Clinic",
+    "merchant_address": "234 Health Boulevard, Medical Center, CA 90210",
+    "items_services": [
+      {"description": "Occupational Health Assessment", "quantity": 1, "unit_price": 275.00},
+      {"description": "Ergonomic Evaluation", "quantity": 1, "unit_price": 150.00}
+    ],
+    "remark": "Workplace injury prevention assessment"
+  },
+  {
+    "invoice_number": "INV-2024-083",
+    "claim_id": null,
+    "employee_id": 9,
+    "invoice_date": "2024-04-06",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Olive Garden Business Catering",
+    "merchant_address": "1000 Darden Center Drive, Orlando, FL 32837",
+    "items_services": [
+      {"description": "Team Lunch Catering - 25 people", "quantity": 1, "unit_price": 375.00},
+      {"description": "Beverage Package", "quantity": 1, "unit_price": 85.00},
+      {"description": "Delivery and Setup", "quantity": 1, "unit_price": 50.00}
+    ],
+    "remark": "Monthly all-hands meeting lunch"
+  },
+  {
+    "invoice_number": "INV-2024-084",
+    "claim_id": null,
+    "employee_id": 10,
+    "invoice_date": "2024-04-07",
+    "category": "Accommodation",
+    "merchant_name": "Sheraton Business Hotel",
+    "merchant_address": "801 North Quincy Street, Arlington, VA 22203",
+    "items_services": [
+      {"description": "Standard Business Room - 2 nights", "quantity": 1, "unit_price": 280.00},
+      {"description": "Business Center Access", "quantity": 2, "unit_price": 15.00},
+      {"description": "High-Speed Internet", "quantity": 2, "unit_price": 12.99}
+    ],
+    "remark": "Industry conference attendance accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-085",
+    "claim_id": null,
+    "employee_id": 11,
+    "invoice_date": "2024-04-08",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Staples Business Advantage",
+    "merchant_address": "500 Staples Drive, Framingham, MA 01702",
+    "items_services": [
+      {"description": "Ergonomic Office Chair", "quantity": 2, "unit_price": 325.00},
+      {"description": "Adjustable Desk Lamp", "quantity": 4, "unit_price": 65.00},
+      {"description": "Document Shredder", "quantity": 1, "unit_price": 185.00}
+    ],
+    "remark": "New hire office furniture and equipment"
+  },
+  {
+    "invoice_number": "INV-2024-086",
+    "claim_id": null,
+    "employee_id": 12,
+    "invoice_date": "2024-04-09",
+    "category": "Travel Expenses",
+    "merchant_name": "United Airlines Business",
+    "merchant_address": "233 S Wacker Drive, Chicago, IL 60606",
+    "items_services": [
+      {"description": "International Flight - Economy Plus", "quantity": 1, "unit_price": 1850.00},
+      {"description": "Checked Baggage", "quantity": 2, "unit_price": 70.00},
+      {"description": "Travel Insurance", "quantity": 1, "unit_price": 125.00}
+    ],
+    "remark": "International client meeting in London"
+  },
+  {
+    "invoice_number": "INV-2024-087",
+    "claim_id": null,
+    "employee_id": 13,
+    "invoice_date": "2024-04-10",
+    "category": "Medical Expenses",
+    "merchant_name": "Executive Health Services",
+    "merchant_address": "567 Executive Plaza, Premium Healthcare, TX 75201",
+    "items_services": [
+      {"description": "Executive Physical Exam", "quantity": 1, "unit_price": 650.00},
+      {"description": "Cardiac Stress Test", "quantity": 1, "unit_price": 300.00},
+      {"description": "Comprehensive Lab Panel", "quantity": 1, "unit_price": 225.00}
+    ],
+    "remark": "Annual executive health program"
+  },
+  {
+    "invoice_number": "INV-2024-088",
+    "claim_id": null,
+    "employee_id": 14,
+    "invoice_date": "2024-04-11",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Morton's The Steakhouse",
+    "merchant_address": "1050 Connecticut Avenue NW, Washington, DC 20036",
+    "items_services": [
+      {"description": "Client Dinner for 4", "quantity": 1, "unit_price": 320.00},
+      {"description": "Premium Wine Selection", "quantity": 2, "unit_price": 85.00},
+      {"description": "Private Dining Room", "quantity": 1, "unit_price": 150.00}
+    ],
+    "remark": "High-value client relationship building dinner"
+  },
+  {
+    "invoice_number": "INV-2024-089",
+    "claim_id": null,
+    "employee_id": 15,
+    "invoice_date": "2024-04-12",
+    "category": "Accommodation",
+    "merchant_name": "Ritz-Carlton Business Center",
+    "merchant_address": "1150 22nd Street NW, Washington, DC 20037",
+    "items_services": [
+      {"description": "Club Level Suite - 1 night", "quantity": 1, "unit_price": 850.00},
+      {"description": "Club Lounge Access", "quantity": 1, "unit_price": 75.00},
+      {"description": "Concierge Services", "quantity": 1, "unit_price": 100.00}
+    ],
+    "remark": "VIP client entertainment accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-090",
+    "claim_id": null,
+    "employee_id": 1,
+    "invoice_date": "2024-04-13",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Amazon Business",
+    "merchant_address": "410 Terry Avenue North, Seattle, WA 98109",
+    "items_services": [
+      {"description": "Conference Room Webcam", "quantity": 3, "unit_price": 199.99},
+      {"description": "Wireless Presentation Remote", "quantity": 5, "unit_price": 45.00},
+      {"description": "Cable Management System", "quantity": 2, "unit_price": 85.00}
+    ],
+    "remark": "Conference room technology upgrade"
+  },
+  {
+    "invoice_number": "INV-2024-091",
+    "claim_id": null,
+    "employee_id": 2,
+    "invoice_date": "2024-04-14",
+    "category": "Travel Expenses",
+    "merchant_name": "Lyft Business",
+    "merchant_address": "185 Berry Street, San Francisco, CA 94107",
+    "items_services": [
+      {"description": "Airport Transfer", "quantity": 4, "unit_price": 45.00},
+      {"description": "City Business Rides", "quantity": 12, "unit_price": 18.50},
+      {"description": "Premium Vehicle Upgrade", "quantity": 2, "unit_price": 25.00}
+    ],
+    "remark": "Business trip local transportation"
+  },
+  {
+    "invoice_number": "INV-2024-092",
+    "claim_id": null,
+    "employee_id": 3,
+    "invoice_date": "2024-04-15",
+    "category": "Medical Expenses",
+    "merchant_name": "Urgent Care Business Health",
+    "merchant_address": "890 Medical Center Drive, Health Plaza, GA 30309",
+    "items_services": [
+      {"description": "Work-related Injury Treatment", "quantity": 1, "unit_price": 185.00},
+      {"description": "X-ray Examination", "quantity": 1, "unit_price": 125.00},
+      {"description": "Physical Therapy Session", "quantity": 3, "unit_price": 95.00}
+    ],
+    "remark": "Workplace injury medical treatment"
+  },
+  {
+    "invoice_number": "INV-2024-093",
+    "claim_id": null,
+    "employee_id": 4,
+    "invoice_date": "2024-04-16",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Seasons 52 Business Dining",
+    "merchant_address": "4410 PGA Boulevard, Palm Beach Gardens, FL 33410",
+    "items_services": [
+      {"description": "Business Lunch for 8", "quantity": 1, "unit_price": 280.00},
+      {"description": "Wine Service", "quantity": 1, "unit_price": 120.00},
+      {"description": "Private Dining Fee", "quantity": 1, "unit_price": 75.00}
+    ],
+    "remark": "Quarterly team leadership lunch meeting"
+  },
+    {
+    "invoice_number": "INV-2024-095",
+    "claim_id": null,
+    "employee_id": 6,
+    "invoice_date": "2024-04-18",
+    "category": "Supplies and Equipment",
+    "merchant_name": "HP Business Store",
+    "merchant_address": "1501 Page Mill Road, Palo Alto, CA 94304",
+    "items_services": [
+      {"description": "All-in-One Printer", "quantity": 2, "unit_price": 299.99},
+      {"description": "Paper Tray Extension", "quantity": 2, "unit_price": 65.00},
+      {"description": "Maintenance Kit", "quantity": 1, "unit_price": 125.00}
+    ],
+    "remark": "Department printer replacement and setup"
+  },
+  {
+    "invoice_number": "INV-2024-096",
+    "claim_id": null,
+    "employee_id": 7,
+    "invoice_date": "2024-04-19",
+    "category": "Travel Expenses",
+    "merchant_name": "Southwest Airlines Business",
+    "merchant_address": "2702 Love Field Drive, Dallas, TX 75235",
+    "items_services": [
+      {"description": "Business Select Flight", "quantity": 1, "unit_price": 385.00},
+      {"description": "EarlyBird Check-in", "quantity": 1, "unit_price": 25.00},
+      {"description": "WiFi Service", "quantity": 1, "unit_price": 8.00}
+    ],
+    "remark": "Regional sales conference attendance"
+  },
+  {
+    "invoice_number": "INV-2024-097",
+    "claim_id": null,
+    "employee_id": 8,
+    "invoice_date": "2024-04-20",
+    "category": "Medical Expenses",
+    "merchant_name": "Corporate Wellness Center",
+    "merchant_address": "1234 Wellness Way, Health District, AZ 85001",
+    "items_services": [
+      {"description": "Flu Vaccination", "quantity": 1, "unit_price": 35.00},
+      {"description": "Health Screening", "quantity": 1, "unit_price": 125.00},
+      {"description": "Wellness Consultation", "quantity": 1, "unit_price": 85.00}
+    ],
+    "remark": "Annual employee wellness program"
+  },
+  {
+    "invoice_number": "INV-2024-098",
+    "claim_id": null,
+    "employee_id": 9,
+    "invoice_date": "2024-04-21",
+    "category": "Meals and Entertainment",
+    "merchant_name": "P.F. Chang's Business Catering",
+    "merchant_address": "7676 Hazard Center Drive, San Diego, CA 92108",
+    "items_services": [
+      {"description": "Team Building Dinner - 15 people", "quantity": 1, "unit_price": 450.00},
+      {"description": "Appetizer Platters", "quantity": 3, "unit_price": 35.00},
+      {"description": "Beverage Service", "quantity": 1, "unit_price": 125.00}
+    ],
+    "remark": "Quarterly team building event dinner"
+  },
+  {
+    "invoice_number": "INV-2024-099",
+    "claim_id": null,
+    "employee_id": 10,
+    "invoice_date": "2024-04-22",
+    "category": "Accommodation",
+    "merchant_name": "DoubleTree Business Hotel",
+    "merchant_address": "300 Army Navy Drive, Arlington, VA 22202",
+    "items_services": [
+      {"description": "Deluxe Room - 3 nights", "quantity": 1, "unit_price": 375.00},
+      {"description": "Executive Lounge Access", "quantity": 3, "unit_price": 25.00},
+      {"description": "Late Checkout", "quantity": 1, "unit_price": 50.00}
+    ],
+    "remark": "Training seminar accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-100",
+    "claim_id": null,
+    "employee_id": 11,
+    "invoice_date": "2024-04-23",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Lenovo Business Solutions",
+    "merchant_address": "1009 Think Place, Morrisville, NC 27560",
+    "items_services": [
+      {"description": "ThinkPad Laptop", "quantity": 1, "unit_price": 1299.00},
+      {"description": "Laptop Bag", "quantity": 1, "unit_price": 89.99},
+      {"description": "Extended Warranty", "quantity": 1, "unit_price": 199.00}
+    ],
+    "remark": "New employee laptop setup"
+  },
+  {
+    "invoice_number": "INV-2024-101",
+    "claim_id": null,
+    "employee_id": 12,
+    "invoice_date": "2024-04-24",
+    "category": "Travel Expenses",
+    "merchant_name": "Avis Car Rental Business",
+    "merchant_address": "6 Sylvan Way, Parsippany, NJ 07054",
+    "items_services": [
+      {"description": "Premium Car Rental - 4 days", "quantity": 1, "unit_price": 320.00},
+      {"description": "Fuel Service Option", "quantity": 1, "unit_price": 45.00},
+      {"description": "Roadside Assistance", "quantity": 1, "unit_price": 25.00}
+    ],
+    "remark": "Client site visit transportation"
+  },
+  {
+    "invoice_number": "INV-2024-102",
+    "claim_id": null,
+    "employee_id": 13,
+    "invoice_date": "2024-04-25",
+    "category": "Medical Expenses",
+    "merchant_name": "Occupational Health Partners",
+    "merchant_address": "5678 Medical Plaza, Healthcare Hub, OR 97201",
+    "items_services": [
+      {"description": "Drug Screening Test", "quantity": 1, "unit_price": 65.00},
+      {"description": "Hearing Test", "quantity": 1, "unit_price": 85.00},
+      {"description": "Vision Exam", "quantity": 1, "unit_price": 95.00}
+    ],
+    "remark": "Pre-employment medical screening"
+  },
+  {
+    "invoice_number": "INV-2024-103",
+    "claim_id": null,
+    "employee_id": 14,
+    "invoice_date": "2024-04-26",
+    "category": "Meals and Entertainment",
+    "merchant_name": "The Cheesecake Factory Business",
+    "merchant_address": "26901 Agoura Road, Calabasas Hills, CA 91301",
+    "items_services": [
+      {"description": "Client Lunch for 6", "quantity": 1, "unit_price": 185.00},
+      {"description": "Dessert Selection", "quantity": 6, "unit_price": 12.50},
+      {"description": "Coffee Service", "quantity": 6, "unit_price": 4.50}
+    ],
+    "remark": "New client welcome lunch meeting"
+  },
+  {
+    "invoice_number": "INV-2024-104",
+    "claim_id": null,
+    "employee_id": 15,
+    "invoice_date": "2024-04-27",
+    "category": "Accommodation",
+    "merchant_name": "Westin Business Hotel",
+    "merchant_address": "2350 M Street NW, Washington, DC 20037",
+    "items_services": [
+      {"description": "Executive Floor Room - 2 nights", "quantity": 1, "unit_price": 450.00},
+      {"description": "Club Level Benefits", "quantity": 2, "unit_price": 35.00},
+      {"description": "Spa Services", "quantity": 1, "unit_price": 150.00}
+    ],
+    "remark": "Executive retreat accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-105",
+    "claim_id": null,
+    "employee_id": 1,
+    "invoice_date": "2024-04-28",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Microsoft Surface Business",
+    "merchant_address": "One Microsoft Way, Redmond, WA 98052",
+    "items_services": [
+      {"description": "Surface Pro Tablet", "quantity": 2, "unit_price": 899.00},
+      {"description": "Type Cover", "quantity": 2, "unit_price": 129.99},
+      {"description": "Surface Pen", "quantity": 2, "unit_price": 99.99}
+    ],
+    "remark": "Mobile presentation equipment for sales team"
+  },
+  {
+    "invoice_number": "INV-2024-106",
+    "claim_id": null,
+    "employee_id": 2,
+    "invoice_date": "2024-04-29",
+    "category": "Travel Expenses",
+    "merchant_name": "JetBlue Airways Business",
+    "merchant_address": "27-01 Queens Plaza North, Long Island City, NY 11101",
+    "items_services": [
+      {"description": "Mint Class Flight", "quantity": 1, "unit_price": 650.00},
+      {"description": "Even More Space Seat", "quantity": 1, "unit_price": 85.00},
+      {"description": "Priority Boarding", "quantity": 1, "unit_price": 15.00}
+    ],
+    "remark": "West coast client meeting travel"
+  },
+  {
+    "invoice_number": "INV-2024-107",
+    "claim_id": null,
+    "employee_id": 3,
+    "invoice_date": "2024-04-30",
+    "category": "Medical Expenses",
+    "merchant_name": "Premier Medical Group",
+    "merchant_address": "9012 Health Center Boulevard, Medical District, CO 80202",
+    "items_services": [
+      {"description": "Specialist Consultation", "quantity": 1, "unit_price": 285.00},
+      {"description": "Diagnostic Imaging", "quantity": 1, "unit_price": 195.00},
+      {"description": "Follow-up Appointment", "quantity": 1, "unit_price": 125.00}
+    ],
+    "remark": "Work-related health issue consultation"
+  },
+  {
+    "invoice_number": "INV-2024-108",
+    "claim_id": null,
+    "employee_id": 4,
+    "invoice_date": "2024-05-01",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Fleming's Prime Steakhouse",
+    "merchant_address": "25 E Washington Street, Indianapolis, IN 46204",
+    "items_services": [
+      {"description": "Executive Dinner for 5", "quantity": 1, "unit_price": 425.00},
+      {"description": "Wine Tasting Menu", "quantity": 5, "unit_price": 45.00},
+      {"description": "Private Dining Room", "quantity": 1, "unit_price": 125.00}
+    ],
+    "remark": "Strategic partnership celebration dinner"
+  },
+  {
+    "invoice_number": "INV-2024-109",
+    "claim_id": null,
+    "employee_id": 5,
+    "invoice_date": "2024-05-02",
+    "category": "Accommodation",
+    "merchant_name": "Omni Business Hotel",
+    "merchant_address": "401 Chestnut Street, Nashville, TN 37203",
+    "items_services": [
+      {"description": "Junior Suite - 4 nights", "quantity": 1, "unit_price": 680.00},
+      {"description": "Fitness Center Access", "quantity": 4, "unit_price": 15.00},
+      {"description": "Business Services", "quantity": 1, "unit_price": 45.00}
+    ],
+    "remark": "Extended business trip accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-110",
+    "claim_id": null,
+    "employee_id": 6,
+    "invoice_date": "2024-05-03",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Canon Business Solutions",
+    "merchant_address": "One Canon Park, Melville, NY 11747",
+    "items_services": [
+      {"description": "Professional Scanner", "quantity": 1, "unit_price": 425.00},
+      {"description": "Document Feeder", "quantity": 1, "unit_price": 185.00},
+      {"description": "Software License", "quantity": 1, "unit_price": 99.00}
+    ],
+    "remark": "Document digitization equipment"
+  },
+  {
+    "invoice_number": "INV-2024-111",
+    "claim_id": null,
+    "employee_id": 7,
+    "invoice_date": "2024-05-04",
+    "category": "Travel Expenses",
+    "merchant_name": "Budget Car Rental Business",
+    "merchant_address": "6 Sylvan Way, Parsippany, NJ 07054",
+    "items_services": [
+      {"description": "Economy Car Rental - 6 days", "quantity": 1, "unit_price": 285.00},
+      {"description": "GPS Rental", "quantity": 1, "unit_price": 42.00},
+      {"description": "Additional Insurance", "quantity": 1, "unit_price": 78.00}
+    ],
+    "remark": "Multi-city sales territory coverage"
+  },
+  {
+    "invoice_number": "INV-2024-112",
+    "claim_id": null,
+    "employee_id": 8,
+    "invoice_date": "2024-05-05",
+    "category": "Medical Expenses",
+    "merchant_name": "Express Care Medical",
+    "merchant_address": "3456 Urgent Care Drive, Quick Health Plaza, NV 89101",
+    "items_services": [
+      {"description": "Minor Injury Treatment", "quantity": 1, "unit_price": 145.00},
+      {"description": "Prescription Medication", "quantity": 1, "unit_price": 35.00},
+      {"description": "Follow-up Care", "quantity": 1, "unit_price": 85.00}
+    ],
+    "remark": "Minor workplace accident treatment"
+  },
+  {
+    "invoice_number": "INV-2024-113",
+    "claim_id": null,
+    "employee_id": 9,
+    "invoice_date": "2024-05-06",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Yard House Business Events",
+    "merchant_address": "1875 S Bascom Avenue, Campbell, CA 95008",
+    "items_services": [
+      {"description": "Team Happy Hour - 20 people", "quantity": 1, "unit_price": 385.00},
+      {"description": "Appetizer Package", "quantity": 4, "unit_price": 28.00},
+      {"description": "Reserved Seating Area", "quantity": 1, "unit_price": 75.00}
+    ],
+    "remark": "Project completion celebration event"
+  },
+    {
+    "invoice_number": "INV-2024-114",
+    "claim_id": null,
+    "employee_id": 10,
+    "invoice_date": "2024-05-07",
+    "category": "Accommodation",
+    "merchant_name": "Fairfield Inn Business Suites",
+    "merchant_address": "10400 Fernwood Road, Bethesda, MD 20817",
+    "items_services": [
+      {"description": "Business Suite - 2 nights", "quantity": 1, "unit_price": 240.00},
+      {"description": "Complimentary Breakfast", "quantity": 2, "unit_price": 0.00},
+      {"description": "Parking Fee", "quantity": 2, "unit_price": 12.00}
+    ],
+    "remark": "Training workshop accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-115",
+    "claim_id": null,
+    "employee_id": 11,
+    "invoice_date": "2024-05-08",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Dell Technologies Business",
+    "merchant_address": "One Dell Way, Round Rock, TX 78682",
+    "items_services": [
+      {"description": "UltraSharp Monitor 27-inch", "quantity": 3, "unit_price": 349.99},
+      {"description": "Monitor Stand Dual Arm", "quantity": 2, "unit_price": 125.00},
+      {"description": "USB-C Docking Station", "quantity": 3, "unit_price": 199.99}
+    ],
+    "remark": "Developer workstation monitor upgrade"
+  },
+  {
+    "invoice_number": "INV-2024-116",
+    "claim_id": null,
+    "employee_id": 12,
+    "invoice_date": "2024-05-09",
+    "category": "Travel Expenses",
+    "merchant_name": "Alaska Airlines Business",
+    "merchant_address": "19300 International Boulevard, Seattle, WA 98188",
+    "items_services": [
+      {"description": "First Class Flight", "quantity": 1, "unit_price": 1150.00},
+      {"description": "Premium Seat Selection", "quantity": 1, "unit_price": 75.00},
+      {"description": "Priority Check-in", "quantity": 1, "unit_price": 25.00}
+    ],
+    "remark": "Executive board meeting travel to Seattle"
+  },
+  {
+    "invoice_number": "INV-2024-117",
+    "claim_id": null,
+    "employee_id": 13,
+    "invoice_date": "2024-05-10",
+    "category": "Medical Expenses",
+    "merchant_name": "Advanced Medical Diagnostics",
+    "merchant_address": "7890 Diagnostic Drive, Medical Center, UT 84101",
+    "items_services": [
+      {"description": "MRI Scan", "quantity": 1, "unit_price": 850.00},
+      {"description": "Radiologist Consultation", "quantity": 1, "unit_price": 275.00},
+      {"description": "Medical Report", "quantity": 1, "unit_price": 45.00}
+    ],
+    "remark": "Work-related injury diagnostic imaging"
+  },
+  {
+    "invoice_number": "INV-2024-118",
+    "claim_id": null,
+    "employee_id": 14,
+    "invoice_date": "2024-05-11",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Capital One Cafe Business",
+    "merchant_address": "1201 Wilson Boulevard, Arlington, VA 22209",
+    "items_services": [
+      {"description": "Business Meeting Coffee - 8 people", "quantity": 1, "unit_price": 65.00},
+      {"description": "Pastry Selection", "quantity": 8, "unit_price": 6.50},
+      {"description": "Meeting Room Rental", "quantity": 2, "unit_price": 25.00}
+    ],
+    "remark": "Client strategy meeting refreshments"
+  },
+  {
+    "invoice_number": "INV-2024-119",
+    "claim_id": null,
+    "employee_id": 15,
+    "invoice_date": "2024-05-12",
+    "category": "Accommodation",
+    "merchant_name": "Residence Inn Business Extended Stay",
+    "merchant_address": "1456 Research Boulevard, Rockville, MD 20850",
+    "items_services": [
+      {"description": "Studio Suite - 7 nights", "quantity": 1, "unit_price": 1050.00},
+      {"description": "Grocery Shopping Service", "quantity": 1, "unit_price": 35.00},
+      {"description": "Laundry Service", "quantity": 2, "unit_price": 25.00}
+    ],
+    "remark": "Extended project assignment accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-120",
+    "claim_id": null,
+    "employee_id": 1,
+    "invoice_date": "2024-05-13",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Cisco Business Equipment",
+    "merchant_address": "170 West Tasman Drive, San Jose, CA 95134",
+    "items_services": [
+      {"description": "Video Conference System", "quantity": 1, "unit_price": 2500.00},
+      {"description": "Wireless Microphone Set", "quantity": 2, "unit_price": 185.00},
+      {"description": "Installation Service", "quantity": 1, "unit_price": 350.00}
+    ],
+    "remark": "Conference room AV system upgrade"
+  },
+  {
+    "invoice_number": "INV-2024-121",
+    "claim_id": null,
+    "employee_id": 2,
+    "invoice_date": "2024-05-14",
+    "category": "Travel Expenses",
+    "merchant_name": "Uber Business Travel",
+    "merchant_address": "1455 Market Street, San Francisco, CA 94103",
+    "items_services": [
+      {"description": "Airport Transfers", "quantity": 6, "unit_price": 42.00},
+      {"description": "Business Rides", "quantity": 15, "unit_price": 22.50},
+      {"description": "Premium Vehicle Service", "quantity": 3, "unit_price": 35.00}
+    ],
+    "remark": "Business trip ground transportation"
+  },
+  {
+    "invoice_number": "INV-2024-122",
+    "claim_id": null,
+    "employee_id": 3,
+    "invoice_date": "2024-05-15",
+    "category": "Medical Expenses",
+    "merchant_name": "Sports Medicine Clinic",
+    "merchant_address": "2468 Athletic Avenue, Sports District, FL 33102",
+    "items_services": [
+      {"description": "Physical Therapy Session", "quantity": 6, "unit_price": 125.00},
+      {"description": "Therapeutic Massage", "quantity": 3, "unit_price": 95.00},
+      {"description": "Exercise Equipment", "quantity": 1, "unit_price": 185.00}
+    ],
+    "remark": "Workplace ergonomic injury rehabilitation"
+  },
+  {
+    "invoice_number": "INV-2024-123",
+    "claim_id": null,
+    "employee_id": 4,
+    "invoice_date": "2024-05-16",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Maggiano's Business Events",
+    "merchant_address": "10455 NE 8th Street, Bellevue, WA 98004",
+    "items_services": [
+      {"description": "Team Dinner - 18 people", "quantity": 1, "unit_price": 540.00},
+      {"description": "Wine Service", "quantity": 3, "unit_price": 45.00},
+      {"description": "Private Dining Room", "quantity": 1, "unit_price": 150.00}
+    ],
+    "remark": "Annual team appreciation dinner"
+  },
+  {
+    "invoice_number": "INV-2024-124",
+    "claim_id": null,
+    "employee_id": 5,
+    "invoice_date": "2024-05-17",
+    "category": "Accommodation",
+    "merchant_name": "Hyatt House Business Suites",
+    "merchant_address": "2233 Corporate Circle, Henderson, NV 89074",
+    "items_services": [
+      {"description": "One Bedroom Suite - 5 nights", "quantity": 1, "unit_price": 750.00},
+      {"description": "Kitchenette Supplies", "quantity": 1, "unit_price": 45.00},
+      {"description": "Gym Access", "quantity": 5, "unit_price": 12.00}
+    ],
+    "remark": "Trade show extended stay accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-125",
+    "claim_id": null,
+    "employee_id": 6,
+    "invoice_date": "2024-05-18",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Steelcase Business Furniture",
+    "merchant_address": "901 44th Street SE, Grand Rapids, MI 49508",
+    "items_services": [
+      {"description": "Height Adjustable Desk", "quantity": 4, "unit_price": 650.00},
+      {"description": "Ergonomic Task Chair", "quantity": 4, "unit_price": 385.00},
+      {"description": "Mobile Pedestal", "quantity": 4, "unit_price": 225.00}
+    ],
+    "remark": "New office space furniture setup"
+  },
+  {
+    "invoice_number": "INV-2024-126",
+    "claim_id": null,
+    "employee_id": 7,
+    "invoice_date": "2024-05-19",
+    "category": "Travel Expenses",
+    "merchant_name": "Spirit Airlines Business",
+    "merchant_address": "2800 Executive Way, Miramar, FL 33025",
+    "items_services": [
+      {"description": "Business Flight", "quantity": 1, "unit_price": 285.00},
+      {"description": "Carry-on Bag", "quantity": 1, "unit_price": 45.00},
+      {"description": "Seat Selection", "quantity": 1, "unit_price": 25.00}
+    ],
+    "remark": "Regional training seminar attendance"
+  },
+  {
+    "invoice_number": "INV-2024-127",
+    "claim_id": null,
+    "employee_id": 8,
+    "invoice_date": "2024-05-20",
+    "category": "Medical Expenses",
+    "merchant_name": "Vision Care Associates",
+    "merchant_address": "1357 Eye Care Lane, Vision Plaza, OH 44101",
+    "items_services": [
+      {"description": "Comprehensive Eye Exam", "quantity": 1, "unit_price": 165.00},
+      {"description": "Computer Vision Assessment", "quantity": 1, "unit_price": 85.00},
+      {"description": "Blue Light Glasses", "quantity": 1, "unit_price": 125.00}
+    ],
+    "remark": "Computer work-related vision care"
+  },
+  {
+    "invoice_number": "INV-2024-128",
+    "claim_id": null,
+    "employee_id": 9,
+    "invoice_date": "2024-05-21",
+    "category": "Meals and Entertainment",
+    "merchant_name": "BJ's Restaurant Business",
+    "merchant_address": "7755 Center Avenue, Huntington Beach, CA 92647",
+    "items_services": [
+      {"description": "Lunch Meeting for 10", "quantity": 1, "unit_price": 285.00},
+      {"description": "Appetizer Sampler", "quantity": 2, "unit_price": 18.50},
+      {"description": "Beverage Package", "quantity": 1, "unit_price": 65.00}
+    ],
+    "remark": "Department monthly meeting lunch"
+  },
+  {
+    "invoice_number": "INV-2024-129",
+    "claim_id": null,
+    "employee_id": 10,
+    "invoice_date": "2024-05-22",
+    "category": "Accommodation",
+    "merchant_name": "SpringHill Suites Business",
+    "merchant_address": "1000 Westside Parkway, Alpharetta, GA 30009",
+    "items_services": [
+      {"description": "King Suite - 3 nights", "quantity": 1, "unit_price": 345.00},
+      {"description": "Business Center Usage", "quantity": 3, "unit_price": 15.00},
+      {"description": "Airport Shuttle", "quantity": 2, "unit_price": 0.00}
+    ],
+    "remark": "Client onsite project accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-130",
+    "claim_id": null,
+    "employee_id": 11,
+    "invoice_date": "2024-05-23",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Brother Business Solutions",
+    "merchant_address": "200 Crossing Boulevard, Bridgewater, NJ 08807",
+    "items_services": [
+      {"description": "Label Printer", "quantity": 2, "unit_price": 185.00},
+      {"description": "Label Rolls", "quantity": 20, "unit_price": 12.50},
+      {"description": "Printer Software", "quantity": 1, "unit_price": 89.00}
+    ],
+    "remark": "Shipping department equipment upgrade"
+  },
+  {
+    "invoice_number": "INV-2024-131",
+    "claim_id": null,
+    "employee_id": 12,
+    "invoice_date": "2024-05-24",
+    "category": "Travel Expenses",
+    "merchant_name": "Frontier Airlines Business",
+    "merchant_address": "4545 Airport Way, Denver, CO 80239",
+    "items_services": [
+      {"description": "Economy Flight", "quantity": 1, "unit_price": 195.00},
+      {"description": "Stretch Seating", "quantity": 1, "unit_price": 35.00},
+      {"description": "Priority Boarding", "quantity": 1, "unit_price": 15.00}
+    ],
+    "remark": "Cost-effective regional business travel"
+  },
+  {
+    "invoice_number": "INV-2024-132",
+    "claim_id": null,
+    "employee_id": 13,
+    "invoice_date": "2024-05-25",
+    "category": "Medical Expenses",
+    "merchant_name": "Dental Care Business Center",
+    "merchant_address": "9876 Dental Drive, Oral Health Plaza, WA 98101",
+    "items_services": [
+      {"description": "Dental Cleaning", "quantity": 1, "unit_price": 125.00},
+      {"description": "Dental X-rays", "quantity": 1, "unit_price": 85.00},
+      {"description": "Fluoride Treatment", "quantity": 1, "unit_price": 45.00}
+    ],
+    "remark": "Annual dental health maintenance"
+  },
+    {
+    "invoice_number": "INV-2024-133",
+    "claim_id": null,
+    "employee_id": 14,
+    "invoice_date": "2024-05-26",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Texas Roadhouse Business",
+    "merchant_address": "6040 Dutchmans Lane, Louisville, KY 40205",
+    "items_services": [
+      {"description": "Team Celebration Dinner - 12 people", "quantity": 1, "unit_price": 365.00},
+      {"description": "Appetizer Combo", "quantity": 3, "unit_price": 22.00},
+      {"description": "Dessert Platter", "quantity": 2, "unit_price": 28.00}
+    ],
+    "remark": "Project milestone celebration dinner"
+  },
+  {
+    "invoice_number": "INV-2024-134",
+    "claim_id": null,
+    "employee_id": 15,
+    "invoice_date": "2024-05-27",
+    "category": "Accommodation",
+    "merchant_name": "Aloft Business Hotel",
+    "merchant_address": "900 W Olympic Boulevard, Los Angeles, CA 90015",
+    "items_services": [
+      {"description": "Loft Room - 2 nights", "quantity": 1, "unit_price": 320.00},
+      {"description": "Pet Fee", "quantity": 1, "unit_price": 75.00},
+      {"description": "Valet Parking", "quantity": 2, "unit_price": 45.00}
+    ],
+    "remark": "West coast client meeting accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-135",
+    "claim_id": null,
+    "employee_id": 1,
+    "invoice_date": "2024-05-28",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Epson Business Solutions",
+    "merchant_address": "3840 Kilroy Airport Way, Long Beach, CA 90806",
+    "items_services": [
+      {"description": "Projector 4K Ultra HD", "quantity": 1, "unit_price": 1299.00},
+      {"description": "Projection Screen", "quantity": 1, "unit_price": 285.00},
+      {"description": "Wireless Presenter", "quantity": 2, "unit_price": 89.99}
+    ],
+    "remark": "Conference room presentation equipment"
+  },
+  {
+    "invoice_number": "INV-2024-136",
+    "claim_id": null,
+    "employee_id": 2,
+    "invoice_date": "2024-05-29",
+    "category": "Travel Expenses",
+    "merchant_name": "Allegiant Air Business",
+    "merchant_address": "1201 North Town Center Drive, Las Vegas, NV 89144",
+    "items_services": [
+      {"description": "Direct Flight", "quantity": 1, "unit_price": 165.00},
+      {"description": "Priority Access", "quantity": 1, "unit_price": 9.99},
+      {"description": "Checked Bag", "quantity": 1, "unit_price": 50.00}
+    ],
+    "remark": "Regional sales meeting attendance"
+  },
+  {
+    "invoice_number": "INV-2024-137",
+    "claim_id": null,
+    "employee_id": 3,
+    "invoice_date": "2024-05-30",
+    "category": "Medical Expenses",
+    "merchant_name": "Orthopedic Specialists Group",
+    "merchant_address": "4321 Bone & Joint Boulevard, Medical Center, TX 77001",
+    "items_services": [
+      {"description": "Orthopedic Consultation", "quantity": 1, "unit_price": 385.00},
+      {"description": "Joint Injection", "quantity": 1, "unit_price": 225.00},
+      {"description": "Physical Therapy Referral", "quantity": 1, "unit_price": 65.00}
+    ],
+    "remark": "Work-related repetitive strain injury treatment"
+  },
+  {
+    "invoice_number": "INV-2024-138",
+    "claim_id": null,
+    "employee_id": 4,
+    "invoice_date": "2024-05-31",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Red Lobster Business Dining",
+    "merchant_address": "1601 Belvedere Road, West Palm Beach, FL 33406",
+    "items_services": [
+      {"description": "Client Dinner for 8", "quantity": 1, "unit_price": 285.00},
+      {"description": "Wine Selection", "quantity": 2, "unit_price": 38.00},
+      {"description": "Dessert Course", "quantity": 8, "unit_price": 9.50}
+    ],
+    "remark": "Quarterly client appreciation dinner"
+  },
+  {
+    "invoice_number": "INV-2024-139",
+    "claim_id": null,
+    "employee_id": 5,
+    "invoice_date": "2024-06-01",
+    "category": "Accommodation",
+    "merchant_name": "Element Business Hotel",
+    "merchant_address": "311 Arsenal Street, Watertown, MA 02472",
+    "items_services": [
+      {"description": "Studio Suite - 4 nights", "quantity": 1, "unit_price": 520.00},
+      {"description": "Bike Rental", "quantity": 2, "unit_price": 25.00},
+      {"description": "Healthy Breakfast", "quantity": 4, "unit_price": 18.00}
+    ],
+    "remark": "Wellness conference accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-140",
+    "claim_id": null,
+    "employee_id": 6,
+    "invoice_date": "2024-06-02",
+    "category": "Supplies and Equipment",
+    "merchant_name": "3M Business Solutions",
+    "merchant_address": "3M Center, St. Paul, MN 55144",
+    "items_services": [
+      {"description": "Whiteboard Film Sheets", "quantity": 10, "unit_price": 45.00},
+      {"description": "Post-it Easel Pads", "quantity": 15, "unit_price": 28.50},
+      {"description": "Flip Chart Markers", "quantity": 8, "unit_price": 12.99}
+    ],
+    "remark": "Creative workshop supplies"
+  },
+  {
+    "invoice_number": "INV-2024-141",
+    "claim_id": null,
+    "employee_id": 7,
+    "invoice_date": "2024-06-03",
+    "category": "Travel Expenses",
+    "merchant_name": "National Car Rental Business",
+    "merchant_address": "600 Corporate Park Drive, St. Louis, MO 63105",
+    "items_services": [
+      {"description": "Luxury Car Rental - 3 days", "quantity": 1, "unit_price": 385.00},
+      {"description": "Premium Protection", "quantity": 1, "unit_price": 95.00},
+      {"description": "One-Way Fee", "quantity": 1, "unit_price": 125.00}
+    ],
+    "remark": "Executive client transportation"
+  },
+  {
+    "invoice_number": "INV-2024-142",
+    "claim_id": null,
+    "employee_id": 8,
+    "invoice_date": "2024-06-04",
+    "category": "Medical Expenses",
+    "merchant_name": "Cardiology Associates",
+    "merchant_address": "5555 Heart Health Drive, Cardiac Center, GA 30309",
+    "items_services": [
+      {"description": "Cardiac Stress Test", "quantity": 1, "unit_price": 485.00},
+      {"description": "EKG Monitoring", "quantity": 1, "unit_price": 165.00},
+      {"description": "Cardiologist Consultation", "quantity": 1, "unit_price": 295.00}
+    ],
+    "remark": "Executive health screening program"
+  },
+  {
+    "invoice_number": "INV-2024-143",
+    "claim_id": null,
+    "employee_id": 9,
+    "invoice_date": "2024-06-05",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Outback Steakhouse Business",
+    "merchant_address": "2202 North West Shore Boulevard, Tampa, FL 33607",
+    "items_services": [
+      {"description": "Team Lunch - 14 people", "quantity": 1, "unit_price": 325.00},
+      {"description": "Bloomin' Onion Appetizers", "quantity": 3, "unit_price": 9.99},
+      {"description": "Soft Drinks", "quantity": 14, "unit_price": 3.50}
+    ],
+    "remark": "New employee welcome lunch"
+  },
+  {
+    "invoice_number": "INV-2024-144",
+    "claim_id": null,
+    "employee_id": 10,
+    "invoice_date": "2024-06-06",
+    "category": "Accommodation",
+    "merchant_name": "AC Hotel Business",
+    "merchant_address": "100 Technology Square, Cambridge, MA 02139",
+    "items_services": [
+      {"description": "Premium Room - 1 night", "quantity": 1, "unit_price": 285.00},
+      {"description": "AC Lounge Access", "quantity": 1, "unit_price": 45.00},
+      {"description": "Express Checkout", "quantity": 1, "unit_price": 0.00}
+    ],
+    "remark": "Tech conference accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-145",
+    "claim_id": null,
+    "employee_id": 11,
+    "invoice_date": "2024-06-07",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Xerox Business Services",
+    "merchant_address": "201 Merritt 7, Norwalk, CT 06851",
+    "items_services": [
+      {"description": "Multifunction Printer", "quantity": 1, "unit_price": 1850.00},
+      {"description": "Finisher Unit", "quantity": 1, "unit_price": 485.00},
+      {"description": "Service Contract", "quantity": 1, "unit_price": 350.00}
+    ],
+    "remark": "High-volume printing solution"
+  },
+  {
+    "invoice_number": "INV-2024-146",
+    "claim_id": null,
+    "employee_id": 12,
+    "invoice_date": "2024-06-08",
+    "category": "Travel Expenses",
+    "merchant_name": "Hawaiian Airlines Business",
+    "merchant_address": "3375 Koapaka Street, Honolulu, HI 96819",
+    "items_services": [
+      {"description": "First Class Flight", "quantity": 1, "unit_price": 2250.00},
+      {"description": "Extra Comfort Seat", "quantity": 1, "unit_price": 125.00},
+      {"description": "Priority Boarding", "quantity": 1, "unit_price": 30.00}
+    ],
+    "remark": "Pacific region expansion meeting"
+  },
+  {
+    "invoice_number": "INV-2024-147",
+    "claim_id": null,
+    "employee_id": 13,
+    "invoice_date": "2024-06-09",
+    "category": "Medical Expenses",
+    "merchant_name": "Dermatology Clinic Associates",
+    "merchant_address": "6789 Skin Care Street, Dermatology District, CA 90210",
+    "items_services": [
+      {"description": "Skin Cancer Screening", "quantity": 1, "unit_price": 185.00},
+      {"description": "Mole Biopsy", "quantity": 2, "unit_price": 125.00},
+      {"description": "Dermatologist Consultation", "quantity": 1, "unit_price": 225.00}
+    ],
+    "remark": "Annual preventive skin health screening"
+  },
+  {
+    "invoice_number": "INV-2024-148",
+    "claim_id": null,
+    "employee_id": 14,
+    "invoice_date": "2024-06-10",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Applebee's Business Catering",
+    "merchant_address": "450 N Brand Boulevard, Glendale, CA 91203",
+    "items_services": [
+      {"description": "Lunch Catering - 22 people", "quantity": 1, "unit_price": 385.00},
+      {"description": "Appetizer Platters", "quantity": 4, "unit_price": 25.00},
+      {"description": "Delivery Service", "quantity": 1, "unit_price": 45.00}
+    ],
+    "remark": "Training session lunch catering"
+  },
+  {
+    "invoice_number": "INV-2024-149",
+    "claim_id": null,
+    "employee_id": 15,
+    "invoice_date": "2024-06-11",
+    "category": "Accommodation",
+    "merchant_name": "Moxy Business Hotel",
+    "merchant_address": "1011 3rd Avenue, New York, NY 10065",
+    "items_services": [
+      {"description": "Queen Room - 3 nights", "quantity": 1, "unit_price": 465.00},
+      {"description": "Grab & Go Breakfast", "quantity": 3, "unit_price": 15.00},
+      {"description": "Fitness Center Access", "quantity": 3, "unit_price": 0.00}
+    ],
+    "remark": "NYC business development trip"
+  },
+  {
+    "invoice_number": "INV-2024-150",
+    "claim_id": null,
+    "employee_id": 1,
+    "invoice_date": "2024-06-12",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Plantronics Business Audio",
+    "merchant_address": "345 Encinal Street, Santa Cruz, CA 95060",
+    "items_services": [
+      {"description": "Wireless Headset System", "quantity": 12, "unit_price": 185.00},
+      {"description": "Charging Base Station", "quantity": 3, "unit_price": 125.00},
+      {"description": "Replacement Ear Cushions", "quantity": 24, "unit_price": 15.00}
+    ],
+    "remark": "Call center equipment upgrade"
+  },
+  {
+    "invoice_number": "INV-2024-151",
+    "claim_id": null,
+    "employee_id": 2,
+    "invoice_date": "2024-06-13",
+    "category": "Travel Expenses",
+    "merchant_name": "Sun Country Airlines Business",
+    "merchant_address": "2005 Cargo Road, Minneapolis, MN 55450",
+    "items_services": [
+      {"description": "Business Class Flight", "quantity": 1, "unit_price": 485.00},
+      {"description": "First Class Upgrade", "quantity": 1, "unit_price": 125.00},
+      {"description": "Priority Security", "quantity": 1, "unit_price": 25.00}
+    ],
+    "remark": "Midwest regional office visit"
+  },
+    {
+    "invoice_number": "INV-2024-152",
+    "claim_id": null,
+    "employee_id": 14,
+    "invoice_date": "2024-05-26",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Texas Roadhouse Business",
+    "merchant_address": "6040 Dutchmans Lane, Louisville, KY 40205",
+    "items_services": [
+      {"description": "Team Celebration Dinner - 12 people", "quantity": 1, "unit_price": 365.00},
+      {"description": "Appetizer Combo", "quantity": 3, "unit_price": 22.00},
+      {"description": "Dessert Platter", "quantity": 2, "unit_price": 28.00}
+    ],
+    "remark": "Project milestone celebration dinner"
+  },
+  {
+    "invoice_number": "INV-2024-153",
+    "claim_id": null,
+    "employee_id": 15,
+    "invoice_date": "2024-05-27",
+    "category": "Accommodation",
+    "merchant_name": "Aloft Business Hotel",
+    "merchant_address": "900 W Olympic Boulevard, Los Angeles, CA 90015",
+    "items_services": [
+      {"description": "Loft Room - 2 nights", "quantity": 1, "unit_price": 320.00},
+      {"description": "Pet Fee", "quantity": 1, "unit_price": 75.00},
+      {"description": "Valet Parking", "quantity": 2, "unit_price": 45.00}
+    ],
+    "remark": "West coast client meeting accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-154",
+    "claim_id": null,
+    "employee_id": 1,
+    "invoice_date": "2024-05-28",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Epson Business Solutions",
+    "merchant_address": "3840 Kilroy Airport Way, Long Beach, CA 90806",
+    "items_services": [
+      {"description": "Projector 4K Ultra HD", "quantity": 1, "unit_price": 1299.00},
+      {"description": "Projection Screen", "quantity": 1, "unit_price": 285.00},
+      {"description": "Wireless Presenter", "quantity": 2, "unit_price": 89.99}
+    ],
+    "remark": "Conference room presentation equipment"
+  },
+  {
+    "invoice_number": "INV-2024-155",
+    "claim_id": null,
+    "employee_id": 2,
+    "invoice_date": "2024-05-29",
+    "category": "Travel Expenses",
+    "merchant_name": "Allegiant Air Business",
+    "merchant_address": "1201 North Town Center Drive, Las Vegas, NV 89144",
+    "items_services": [
+      {"description": "Direct Flight", "quantity": 1, "unit_price": 165.00},
+      {"description": "Priority Access", "quantity": 1, "unit_price": 9.99},
+      {"description": "Checked Bag", "quantity": 1, "unit_price": 50.00}
+    ],
+    "remark": "Regional sales meeting attendance"
+  },
+  {
+    "invoice_number": "INV-2024-156",
+    "claim_id": null,
+    "employee_id": 3,
+    "invoice_date": "2024-05-30",
+    "category": "Medical Expenses",
+    "merchant_name": "Orthopedic Specialists Group",
+    "merchant_address": "4321 Bone & Joint Boulevard, Medical Center, TX 77001",
+    "items_services": [
+      {"description": "Orthopedic Consultation", "quantity": 1, "unit_price": 385.00},
+      {"description": "Joint Injection", "quantity": 1, "unit_price": 225.00},
+      {"description": "Physical Therapy Referral", "quantity": 1, "unit_price": 65.00}
+    ],
+    "remark": "Work-related repetitive strain injury treatment"
+  },
+  {
+    "invoice_number": "INV-2024-157",
+    "claim_id": null,
+    "employee_id": 4,
+    "invoice_date": "2024-05-31",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Red Lobster Business Dining",
+    "merchant_address": "1601 Belvedere Road, West Palm Beach, FL 33406",
+    "items_services": [
+      {"description": "Client Dinner for 8", "quantity": 1, "unit_price": 285.00},
+      {"description": "Wine Selection", "quantity": 2, "unit_price": 38.00},
+      {"description": "Dessert Course", "quantity": 8, "unit_price": 9.50}
+    ],
+    "remark": "Quarterly client appreciation dinner"
+  },
+  {
+    "invoice_number": "INV-2024-158",
+    "claim_id": null,
+    "employee_id": 5,
+    "invoice_date": "2024-06-01",
+    "category": "Accommodation",
+    "merchant_name": "Element Business Hotel",
+    "merchant_address": "311 Arsenal Street, Watertown, MA 02472",
+    "items_services": [
+      {"description": "Studio Suite - 4 nights", "quantity": 1, "unit_price": 520.00},
+      {"description": "Bike Rental", "quantity": 2, "unit_price": 25.00},
+      {"description": "Healthy Breakfast", "quantity": 4, "unit_price": 18.00}
+    ],
+    "remark": "Wellness conference accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-159",
+    "claim_id": null,
+    "employee_id": 6,
+    "invoice_date": "2024-06-02",
+    "category": "Supplies and Equipment",
+    "merchant_name": "3M Business Solutions",
+    "merchant_address": "3M Center, St. Paul, MN 55144",
+    "items_services": [
+      {"description": "Whiteboard Film Sheets", "quantity": 10, "unit_price": 45.00},
+      {"description": "Post-it Easel Pads", "quantity": 15, "unit_price": 28.50},
+      {"description": "Flip Chart Markers", "quantity": 8, "unit_price": 12.99}
+    ],
+    "remark": "Creative workshop supplies"
+  },
+  {
+    "invoice_number": "INV-2024-160",
+    "claim_id": null,
+    "employee_id": 7,
+    "invoice_date": "2024-06-03",
+    "category": "Travel Expenses",
+    "merchant_name": "National Car Rental Business",
+    "merchant_address": "600 Corporate Park Drive, St. Louis, MO 63105",
+    "items_services": [
+      {"description": "Luxury Car Rental - 3 days", "quantity": 1, "unit_price": 385.00},
+      {"description": "Premium Protection", "quantity": 1, "unit_price": 95.00},
+      {"description": "One-Way Fee", "quantity": 1, "unit_price": 125.00}
+    ],
+    "remark": "Executive client transportation"
+  },
+  {
+    "invoice_number": "INV-2024-161",
+    "claim_id": null,
+    "employee_id": 8,
+    "invoice_date": "2024-06-04",
+    "category": "Medical Expenses",
+    "merchant_name": "Cardiology Associates",
+    "merchant_address": "5555 Heart Health Drive, Cardiac Center, GA 30309",
+    "items_services": [
+      {"description": "Cardiac Stress Test", "quantity": 1, "unit_price": 485.00},
+      {"description": "EKG Monitoring", "quantity": 1, "unit_price": 165.00},
+      {"description": "Cardiologist Consultation", "quantity": 1, "unit_price": 295.00}
+    ],
+    "remark": "Executive health screening program"
+  },
+  {
+    "invoice_number": "INV-2024-162",
+    "claim_id": null,
+    "employee_id": 9,
+    "invoice_date": "2024-06-05",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Outback Steakhouse Business",
+    "merchant_address": "2202 North West Shore Boulevard, Tampa, FL 33607",
+    "items_services": [
+      {"description": "Team Lunch - 14 people", "quantity": 1, "unit_price": 325.00},
+      {"description": "Bloomin' Onion Appetizers", "quantity": 3, "unit_price": 9.99},
+      {"description": "Soft Drinks", "quantity": 14, "unit_price": 3.50}
+    ],
+    "remark": "New employee welcome lunch"
+  },
+  {
+    "invoice_number": "INV-2024-163",
+    "claim_id": null,
+    "employee_id": 10,
+    "invoice_date": "2024-06-06",
+    "category": "Accommodation",
+    "merchant_name": "AC Hotel Business",
+    "merchant_address": "100 Technology Square, Cambridge, MA 02139",
+    "items_services": [
+      {"description": "Premium Room - 1 night", "quantity": 1, "unit_price": 285.00},
+      {"description": "AC Lounge Access", "quantity": 1, "unit_price": 45.00},
+      {"description": "Express Checkout", "quantity": 1, "unit_price": 0.00}
+    ],
+    "remark": "Tech conference accommodation"
+  },
+  {
+    "invoice_number": "INV-2024-164",
+    "claim_id": null,
+    "employee_id": 11,
+    "invoice_date": "2024-06-07",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Xerox Business Services",
+    "merchant_address": "201 Merritt 7, Norwalk, CT 06851",
+    "items_services": [
+      {"description": "Multifunction Printer", "quantity": 1, "unit_price": 1850.00},
+      {"description": "Finisher Unit", "quantity": 1, "unit_price": 485.00},
+      {"description": "Service Contract", "quantity": 1, "unit_price": 350.00}
+    ],
+    "remark": "High-volume printing solution"
+  },
+  {
+    "invoice_number": "INV-2024-165",
+    "claim_id": null,
+    "employee_id": 12,
+    "invoice_date": "2024-06-08",
+    "category": "Travel Expenses",
+    "merchant_name": "Hawaiian Airlines Business",
+    "merchant_address": "3375 Koapaka Street, Honolulu, HI 96819",
+    "items_services": [
+      {"description": "First Class Flight", "quantity": 1, "unit_price": 2250.00},
+      {"description": "Extra Comfort Seat", "quantity": 1, "unit_price": 125.00},
+      {"description": "Priority Boarding", "quantity": 1, "unit_price": 30.00}
+    ],
+    "remark": "Pacific region expansion meeting"
+  },
+  {
+    "invoice_number": "INV-2024-166",
+    "claim_id": null,
+    "employee_id": 13,
+    "invoice_date": "2024-06-09",
+    "category": "Medical Expenses",
+    "merchant_name": "Dermatology Clinic Associates",
+    "merchant_address": "6789 Skin Care Street, Dermatology District, CA 90210",
+    "items_services": [
+      {"description": "Skin Cancer Screening", "quantity": 1, "unit_price": 185.00},
+      {"description": "Mole Biopsy", "quantity": 2, "unit_price": 125.00},
+      {"description": "Dermatologist Consultation", "quantity": 1, "unit_price": 225.00}
+    ],
+    "remark": "Annual preventive skin health screening"
+  },
+  {
+    "invoice_number": "INV-2024-167",
+    "claim_id": null,
+    "employee_id": 14,
+    "invoice_date": "2024-06-10",
+    "category": "Meals and Entertainment",
+    "merchant_name": "Applebee's Business Catering",
+    "merchant_address": "450 N Brand Boulevard, Glendale, CA 91203",
+    "items_services": [
+      {"description": "Lunch Catering - 22 people", "quantity": 1, "unit_price": 385.00},
+      {"description": "Appetizer Platters", "quantity": 4, "unit_price": 25.00},
+      {"description": "Delivery Service", "quantity": 1, "unit_price": 45.00}
+    ],
+    "remark": "Training session lunch catering"
+  },
+  {
+    "invoice_number": "INV-2024-168",
+    "claim_id": null,
+    "employee_id": 15,
+    "invoice_date": "2024-06-11",
+    "category": "Accommodation",
+    "merchant_name": "Moxy Business Hotel",
+    "merchant_address": "1011 3rd Avenue, New York, NY 10065",
+    "items_services": [
+      {"description": "Queen Room - 3 nights", "quantity": 1, "unit_price": 465.00},
+      {"description": "Grab & Go Breakfast", "quantity": 3, "unit_price": 15.00},
+      {"description": "Fitness Center Access", "quantity": 3, "unit_price": 0.00}
+    ],
+    "remark": "NYC business development trip"
+  },
+  {
+    "invoice_number": "INV-2023-169",
+    "claim_id": null,
+    "employee_id": 2,
+    "invoice_date": "2025-06-12",
+    "category": "Supplies and Equipment",
+    "merchant_name": "Plantronics Business Audio",
+    "merchant_address": "346 Encinal Street, Santa Cruz, CA 95060",
+    "items_services": [
+      {"description": "Wireless Headset System", "quantity": 13, "unit_price": 185.00},
+      {"description": "Charging Base Station", "quantity": 4, "unit_price": 125.00},
+      {"description": "Replacement Ear Cushions", "quantity": 25, "unit_price": 15.00}
+    ],
+    "remark": "Call center equipment upgrade"
+  },
+  {
+    "invoice_number": "INV-2024-170",
+    "claim_id": null,
+    "employee_id": 2,
+    "invoice_date": "2024-06-13",
+    "category": "Travel Expenses",
+    "merchant_name": "Sun Country Airlines Business",
+    "merchant_address": "2005 Cargo Road, Minneapolis, MN 55450",
+    "items_services": [
+      {"description": "Business Class Flight", "quantity": 1, "unit_price": 485.00},
+      {"description": "First Class Upgrade", "quantity": 1, "unit_price": 125.00},
+      {"description": "Priority Security", "quantity": 1, "unit_price": 25.00}
+    ],
+    "remark": "Midwest regional office visit"
+  }
+]

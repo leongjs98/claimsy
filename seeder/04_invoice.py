@@ -7,6 +7,7 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from datetime import datetime
 from faker import Faker
 import random
 import json
@@ -79,7 +80,7 @@ def seed_invoices_for_employee_id_1():
 
 
 def seed_invoices():
-    """Seed the database with invoice data"""
+    """Seed the database with invoice data from JSON file"""
     try:
         # Get existing employee IDs from database
         employee_ids = [emp.id for emp in session.query(Employee.id).all()]
@@ -88,33 +89,67 @@ def seed_invoices():
             print("No employees found in database. Please seed employees first.")
             return
 
-        print(f"Creating {NUM_INVOICES} invoices...")
+        # Load invoice data from JSON file
+        with open('./seeder/data/invoices.json', 'r') as file:
+            invoice_data_list = json.load(file)
+        
+        print(f"Loading {len(invoice_data_list)} invoices from invoices.json...")
 
         invoices = []
         used_invoice_numbers = set()
+        skipped_count = 0
 
-        for i in range(NUM_INVOICES):
-            while True:
-                invoice_data = create_invoice_data(employee_ids)
-
+        for i, invoice_data in enumerate(invoice_data_list):
+            try:
                 # Ensure unique invoice number
-                if invoice_data["invoice_number"] not in used_invoice_numbers:
-                    used_invoice_numbers.add(invoice_data["invoice_number"])
-                    break
+                if invoice_data["invoice_number"] in used_invoice_numbers:
+                    print(f"Skipping duplicate invoice number: {invoice_data['invoice_number']}")
+                    skipped_count += 1
+                    continue
+                
+                used_invoice_numbers.add(invoice_data["invoice_number"])
+                
+                # Validate employee_id exists
+                if invoice_data["employee_id"] not in employee_ids:
+                    print(f"Skipping invoice {invoice_data['invoice_number']}: employee_id {invoice_data['employee_id']} not found")
+                    skipped_count += 1
+                    continue
+                
+                # Convert invoice_date string to date object if needed
+                if isinstance(invoice_data.get("invoice_date"), str):
+                    invoice_data["invoice_date"] = datetime.strptime(
+                        invoice_data["invoice_date"], "%Y-%m-%d"
+                    ).date()
+                
+                # Create Invoice object
+                invoice = Invoice(**invoice_data)
+                invoices.append(invoice)
 
-            invoice = Invoice(**invoice_data)
-            invoices.append(invoice)
+                if len(invoices) % 10 == 0:
+                    print(f"Processed {len(invoices)} invoices...")
+                    
+            except Exception as e:
+                print(f"Error processing invoice {i+1}: {e}")
+                skipped_count += 1
+                continue
 
-            if (i + 1) % 10 == 0:
-                print(f"Generated {i + 1} invoices...")
-
-        session.add_all(invoices)
-        session.commit()
-
-        print(f"Successfully seeded {NUM_INVOICES} invoices!")
+        # Add all valid invoices to session
+        if invoices:
+            session.add_all(invoices)
+            session.commit()
+            print(f"Successfully seeded {len(invoices)} invoices!")
+            if skipped_count > 0:
+                print(f"Skipped {skipped_count} invalid records.")
+        else:
+            print("No valid invoice records found to seed.")
+        
+    except FileNotFoundError:
+        print("Error: invoices.json file not found!")
+    except json.JSONDecodeError as e:
+        print(f"Error parsing JSON file: {e}")
     except Exception as e:
-        session.rollback()
         print(f"Error seeding invoices: {e}")
+        session.rollback()
     finally:
         session.close()
 
@@ -143,7 +178,7 @@ if __name__ == "__main__":
         try:
             NUM_INVOICES = int(sys.argv[2])
             seed_invoices()
-            seed_invoices_for_employee_id_1()
+            # seed_invoices_for_employee_id_1()
         except ValueError:
             print("Error: Please provide a valid number")
             show_help()

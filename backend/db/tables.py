@@ -95,6 +95,7 @@ class Claim(TableBase, Base):
     reviewed_date = Column(Date)
     resolution = Column(Text)
     is_anomaly = Column(Boolean, default=False)
+    anomalyReason = Column(Text, nullable=False)
 
     employee = relationship(
         "Employee",

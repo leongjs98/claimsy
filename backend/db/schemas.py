@@ -6,8 +6,6 @@ from decimal import Decimal
 from enum import Enum
 from datetime import datetime
 
-from sqlalchemy import Boolean
-
 
 class SubmitClaimRequest(BaseModel):
     invoice_ids: List[int]
@@ -16,7 +14,7 @@ class SubmitClaimRequest(BaseModel):
 
 
 class ItemService(BaseModel):
-    item: str
+    description: str
     quantity: int
     unit_price: float
 
@@ -70,6 +68,7 @@ class ClaimSchema(BaseModel):
     reason: Optional[str] = None
     status: ClaimStatus = ClaimStatus.PENDING
     is_anomaly: bool = False
+    anomalyReason: Optional[str] = None
     submitted_date: Optional[date] = None
     reviewed_date: Optional[date] = None
     resolution: Optional[str] = None
