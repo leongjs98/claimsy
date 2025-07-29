@@ -242,7 +242,7 @@ Unsubmitted.vue
     </div>
     <div class="flex justify-end px-4 sm:px-8 lg:px-14">
       <button
-        class="z-25 mt-5 rounded bg-theme-300 px-13 py-2 text-white outline-2 hover:bg-theme-200 focus:bg-theme-200 focus:outline-theme-300 disabled:cursor-not-allowed disabled:bg-gray-400"
+        class="mt-5 rounded bg-theme-300 px-13 py-2 text-white outline-2 hover:bg-theme-200 focus:bg-theme-200 focus:outline-theme-300 disabled:cursor-not-allowed disabled:bg-gray-400"
         :disabled="selectedInvoices.length === 0 || isSubmitting"
         @click="submitSelectedInvoices"
       >

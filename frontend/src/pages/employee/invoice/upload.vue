@@ -408,47 +408,14 @@
       );
 
       console.log("Raw answers:", data.answers);
-      const itemsServices = [];
-      let firstValid = null;
 
-      let merchant_Names = [];
-      let merchant_Addresses = [];
-      let remarks = [];
-
-      for (const result of data.answers) {
-        if (!result || result.error || !result.items) continue;
-
-        if (result.merchant_name) merchant_Names.push(result.merchant_name);
-        if (result.merchant_address)
-          merchant_Addresses.push(result.merchant_address);
-        if (result.remark) remarks.push(result.remark);
-
-        if (!firstValid) {
-          firstValid = result;
-        }
-
-        const mergedNames = merchant_Names.join(" | ");
-        const mergedAddresses = merchant_Addresses.join(" | ");
-        const mergedremarks = remarks.join(" | ");
-        itemsServices.push(...result.items);
-
-        // Ensure firstValid exists before navigating
-        if (firstValid) {
           router.push({
             path: "/employee/invoice/edit/first",
             query: {
-              category: firstValid.category,
-              date: firstValid.date,
-              merchantName: mergedNames,
-              merchantAddress: mergedAddresses,
-              remark: mergedremarks,
-              items: JSON.stringify(itemsServices),
+              data: JSON.stringify(data)
             },
           });
-        } else {
-          alert("No valid invoice data was extracted from the uploaded files.");
-        }
-      }
+
     } catch (err) {
       console.error("Upload failed:", err);
       alert(

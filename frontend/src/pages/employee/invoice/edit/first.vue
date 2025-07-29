@@ -1,6 +1,9 @@
 <template>
   <form @submit.prevent="submitInvoice">
-    <div
+      <TransitionGroup name="fade-slide" tag="ul">
+    <li
+      v-for="(formData, i) in formDatas"
+      key="i"
       class="mx-auto mt-15 max-w-4xl rounded-2xl border border-gray-200 bg-white px-15 py-10 shadow-lg"
     >
       <div class="space-y-1 border-b border-gray-900/10 pb-12">
@@ -55,7 +58,7 @@
               name="merchantName"
               id="MerchantnameID"
               autocomplete="name"
-              v-model="formData.merchantName"
+              v-model="formData.merchant_name"
             />
           </div>
           <div class="sm:col-span-full">
@@ -64,7 +67,7 @@
               name="merchantAddress"
               id="MerchanaddressID"
               autocomplete="street-address"
-              v-model="formData.merchantAddress"
+              v-model="formData.merchant_address"
             />
           </div>
           <div class="sm:col-span-full">
@@ -104,8 +107,8 @@
             <!-- TODO: add delete button on the side of each items -->
             <tbody>
               <tr
-                v-for="(item, index) in formData.items"
-                :key="index"
+                v-for="(item, j) in formData.items"
+                :key="j"
                 class="bg-gray-200 text-theme-300 shadow-md"
               >
                 <td class="rounded-l-lg px-4 py-3">{{ item.description }}</td>
@@ -122,7 +125,7 @@
                 <td></td>
                 <td class="rounded-l-lg bg-gray-200 px-4 py-3">Total</td>
                 <td class="rounded-r-lg bg-gray-200 px-4 py-3">
-                  {{ totalAmount }}
+                  {{ totalAmount(formData.items) }}
                 </td>
               </tr>
             </tbody>
@@ -133,7 +136,7 @@
       <div class="mt-6 flex items-center justify-end gap-x-6">
         <SecondaryButton> Cancel </SecondaryButton>
         <span class="flex items-center justify-center gap-2">
-          <PrimaryButton @click="submitInvoice">
+          <PrimaryButton @click="submitInvoice($event, i)">
             <span v-if="isSubmitting"> Processing... </span>
             <span v-else> Upload </span>
           </PrimaryButton>
@@ -162,7 +165,9 @@
           </svg>
         </span>
       </div>
-    </div>
+    </li>
+      </TransitionGroup>
+
   </form>
   <SuccessDialog v-model="showSuccessDialog">
     <template #header> Invoice Uploaded </template>
@@ -171,14 +176,13 @@
       <p>Remember to submit it as a claim!</p>
     </template>
     <template #button>
-      <RouterLink to="/employee/invoice/unsubmitted">
         <button
           type="button"
+          @click="showSuccessDialog = false; removeFormData()"
           class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           OK
         </button>
-      </RouterLink>
     </template>
   </SuccessDialog>
 </template>
@@ -188,42 +192,36 @@
   import { computed, ref, onMounted } from "vue";
   import axios from "axios";
 
-  const totalAmount = computed(() =>
-    formData.value.items
-      .reduce((sum, item) => sum + item.unit_price * item.quantity, 0)
-      .toFixed(2),
-  );
+  const totalAmount = (items) => {
+  return items
+    .reduce((sum, item) => sum + item.unit_price * item.quantity, 0)
+    .toFixed(2);
+};
 
   const router = useRouter();
   const route = useRoute();
   const isSubmitting = ref(false);
   const showSuccessDialog = ref(false);
   const invoiceNumber = ref("");
+  const indexToRemove = ref("");
 
-  const formData = ref({
-    invoiceNumber: route.query.invoiceNumber || "",
-    category: route.query.category || "",
-    date: route.query.date || "",
-    merchantName: route.query.merchantName || "",
-    merchantAddress: route.query.merchantAddress || "",
-    remark: route.query.remark || "",
-    items: [],
-  });
+  const formDatas = ref({});
 
   onMounted(() => {
-    try {
-      const parsedItems = JSON.parse(route.query.items || "[]");
-      formData.value.items = parsedItems;
-    } catch (e) {
-      console.warn("Failed to parse items", e);
+      formDatas.value = JSON.parse(route.query.data || "[]").answers;
+      console.log(formDatas.value[0].category)
+  });
+
+const removeFormData = () => {
+    formDatas.value.splice(indexToRemove, 1);
+    if (formDatas.value.length <= 0 ) {
+          router.push({
+            path: "/employee/invoice/unsubmitted",
+            });
     }
-  });
+};
 
-  const claimId = computed(() => {
-    return route.params.id || route.query.claimId;
-  });
-
-  const submitInvoice = async (event) => {
+  const submitInvoice = async (event, i) => {
     event.preventDefault();
 
     if (isSubmitting.value) return;
@@ -232,19 +230,18 @@
 
     try {
       const invoiceData = {
-        invoiceNumber: formData.value.invoiceNumber || `INV-${Date.now()}`,
-        claimId: claimId.value,
+        invoiceNumber: formDatas.value[i].invoiceNumber || `INV-${Date.now()}`,
         employeeId: 1, // Update this if you're using auth
-        invoiceDate: formData.value.date,
-        category: formData.value.category,
-        merchantName: formData.value.merchantName,
-        merchantAddress: formData.value.merchantAddress,
-        itemsServices: formData.value.items.map((item) => ({
+        invoiceDate: formDatas.value[i].date,
+        category: formDatas.value[i].category,
+        merchantName: formDatas.value[i].merchantName,
+        merchantAddress: formDatas.value[i].merchantAddress,
+        itemsServices: formDatas.value[i].items.map((item) => ({
           item: item.description,
           quantity: parseInt(item.quantity),
           unit_price: parseFloat(item.unit_price),
         })),
-        remark: formData.value.remark,
+        remark: formDatas.value[i].remark,
       };
 
       console.log("=== FRONTEND DEBUG ===");
@@ -264,6 +261,7 @@
       isSubmitting.value = false;
       showSuccessDialog.value = true;
       invoiceNumber.value = invoiceData.invoiceNumber;
+      indexToRemove.value = i;
       // router.push("/employee/claim/all");
     } catch (error) {
       console.error("=== ERROR DEBUG ===");
@@ -288,3 +286,16 @@
     return `${amount.toFixed(2)}`;
   };
 </script>
+
+<style scoped>
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: all 0.5s ease;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+</style>
