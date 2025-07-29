@@ -258,7 +258,7 @@
   const md = new MarkdownIt();
 
   const showChat = ref(true);
-  const showDetails = ref(true);
+  const showDetails = ref(false);
   const showAnswer = ref(false);
   const router = useRouter();
   const isOpen = ref(false);
@@ -451,7 +451,7 @@ Which option interests you most? I can book immediately and send confirmations t
           conversation.value.push(message);
           scrollToBottom();
         },
-        (index + 1) * 0,
+        (index + 1) * 500,
       );
     });
   });
