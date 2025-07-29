@@ -233,10 +233,10 @@ const removeFormData = () => {
         employeeId: 1, // Update this if you're using auth
         invoiceDate: formDatas.value[i].date,
         category: formDatas.value[i].category,
-        merchantName: formDatas.value[i].merchantName,
-        merchantAddress: formDatas.value[i].merchantAddress,
+        merchantName: formDatas.value[i].merchant_name,
+        merchantAddress: formDatas.value[i].merchant_address,
         itemsServices: formDatas.value[i].items.map((item) => ({
-          item: item.description,
+          description: item.description,
           quantity: parseInt(item.quantity),
           unit_price: parseFloat(item.unit_price),
         })),

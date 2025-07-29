@@ -190,11 +190,10 @@
       : adminClaims.getApprovedClaimsSortedByDate(false);
   });
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const options = { year: "numeric", month: "short", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  return new Date(dateString).toLocaleDateString("en-GB"); // DD/MM/YYYY format
+};
 
   const capitalizeStatus = (status) => {
     if (!status) return "";

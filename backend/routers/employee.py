@@ -146,6 +146,7 @@ def submit_invoices_into_claims(
             )
             .all()
         )
+        print("submit_invoices_into_claims", invoices)
 
         if len(invoices) != len(request.invoice_ids):
             raise HTTPException(
@@ -164,8 +165,7 @@ def submit_invoices_into_claims(
                     continue
 
         # Generate claim number
-        random_number = f"{random.randint(10000000, 99999999)}"
-        claim_number = f"CLM-{random_number}"
+        claim_number = f"CLM-{random.randint(10000000, 99999999)}"
 
         # Create new claim
         current_datetime = datetime.now()
@@ -180,6 +180,8 @@ def submit_invoices_into_claims(
             created_at=current_datetime,
             updated_at=current_datetime,
         )
+        print("new_claim", new_claim)
+        print("request.invoice_ids", request.invoice_ids)
 
         # Save claim and update invoices
         db.add(new_claim)
@@ -200,9 +202,11 @@ def submit_invoices_into_claims(
         raise
     except SQLAlchemyError as e:
         db.rollback()
+        print("SQLAlchemyError" ,e)
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     except Exception as e:
         db.rollback()
+        print("Exception", e)
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 

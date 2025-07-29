@@ -131,7 +131,7 @@
                   >
                     <div class="flex items-center justify-start gap-2">
                       <StatusBadge :status="claim.status" />
-                      <StatusBadge v-show="claim.is_anomaly" status="Anomaly" />
+                      <StatusBadge v-show="claim.is_anomaly" status="Anomaly" :anomalyReason="claim.anomalyReason"/>
                     </div>
                   </td>
                   <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
@@ -191,11 +191,10 @@
       : adminClaims.getRejectedClaimsSortedByDate(false);
   });
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const options = { year: "numeric", month: "short", day: "numeric" };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  return new Date(dateString).toLocaleDateString("en-GB"); // DD/MM/YYYY format
+};
 
   const countItems = (claim) => {
     if (!claim.invoices) return 0;

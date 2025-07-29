@@ -101,13 +101,13 @@ def seed_invoices():
 
         for i, invoice_data in enumerate(invoice_data_list):
             try:
-                # Ensure unique invoice number
-                if invoice_data["invoice_number"] in used_invoice_numbers:
-                    print(f"Skipping duplicate invoice number: {invoice_data['invoice_number']}")
-                    skipped_count += 1
-                    continue
+                # # Ensure unique invoice number
+                # if invoice_data["invoice_number"] in used_invoice_numbers:
+                #     print(f"Skipping duplicate invoice number: {invoice_data['invoice_number']}")
+                #     skipped_count += 1
+                #     continue
                 
-                used_invoice_numbers.add(invoice_data["invoice_number"])
+                # used_invoice_numbers.add(invoice_data["invoice_number"])
                 
                 # Validate employee_id exists
                 if invoice_data["employee_id"] not in employee_ids:

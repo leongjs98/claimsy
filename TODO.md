@@ -3,19 +3,18 @@
 ### Feedbacks
 - [ ] john: smart suggest get it done to impress
 
-- [ ] john: invoice/edit (both first and \[id]) table become input to edit (delete button)
-- [ ] john: invoice/edit (both first and \[id]) unit next to quantity
-
 ### Essentials
-- [ ] Smart Suggest feature
+- [ ] data from kul to sin, all related to nearby
 - [ ] seeder for fix employee demo data (using previous mock data)
+
+### Nice to have
+- [ ] tax for receipts
+- [ ] fuzzy search button
 - [ ] seeder for fix chat data
 - [ ] Chatbot feature
     - connect with backend, use fake data
     - just for employee 1
-
-### Nice to have
-- [ ] fuzzy search button
+- [ ] Smart Suggest feature
 - [ ] Pagination
     - [ ] Claim center (10 claims per page)
     - [ ] Receipt upload (support multiple invoices at once)
@@ -25,8 +24,12 @@
     - [ ] pending status in all claims
     - [ ] Total (RM)
 - [ ] testing
+- [ ] john: invoice/edit (both first and \[id]) unit next to quantity
+- [ ] john: invoice/edit (both first and \[id]) table become input to edit (delete button)
 
 ## Done
+- [x] multiple receipt save merchant address, merchant name
+- [x] multiple receipts, long receipt
 - [x] invoice/edit connect backend data
 - [x] seeder for employee id 1 name
 - [x] fix unsubmitted invoice 10-15 invoices

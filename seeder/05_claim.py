@@ -83,6 +83,7 @@ def seed_claims_for_employee_id_1():
                 continue
             selected_invoices = random.sample(invoices, num_invoices_to_assign)
             claim.invoices = selected_invoices
+            print(claim.claim_number, claim.invoices)
 
             session.add(claim)
 
@@ -122,17 +123,28 @@ def seed_claims():
 
         for i, claim_data in enumerate(claims_data_list):
             try:
-                # Ensure unique claim number
-                if claim_data["claim_number"] in used_claim_numbers:
-                    print(f"Skipping duplicate claim number: {claim_data['claim_number']}")
-                    skipped_count += 1
-                    continue
-                
-                used_claim_numbers.add(claim_data["claim_number"])
+                # # Ensure unique claim number
+                # if claim_data["claim_number"] in used_claim_numbers:
+                #     print(f"Skipping duplicate claim number: {claim_data['claim_number']}")
+                #     skipped_count += 1
+                #     continue
+                # 
+                # used_claim_numbers.add(claim_data["claim_number"])
                 
                 # Validate employee_id exists
                 if claim_data["employee_id"] not in employee_ids:
                     print(f"Skipping claim {claim_data['claim_number']}: employee_id {claim_data['employee_id']} not found")
+                    skipped_count += 1
+                    continue
+                
+                # Check if there are available invoices for this employee BEFORE creating the claim
+                available_invoices = session.query(Invoice).filter(
+                    Invoice.employee_id == claim_data["employee_id"],
+                    Invoice.claim_id.is_(None)
+                ).all()
+                
+                if not available_invoices:
+                    print(f"Skipping claim {claim_data['claim_number']}: no available invoices for employee_id {claim_data['employee_id']}")
                     skipped_count += 1
                     continue
                 
@@ -165,6 +177,7 @@ def seed_claims():
             session.flush()  # Flush to get claim IDs without committing
             
             # Now assign random invoices to each claim
+            claims_with_invoices = []
             for claim in claims:
                 try:
                     # Get invoices with null claim_id for this employee
@@ -182,14 +195,26 @@ def seed_claims():
                         for invoice in selected_invoices:
                             invoice.claim_id = claim.id
                             
+                        claims_with_invoices.append(claim)
                         print(f"Assigned {num_invoices_to_assign} invoices to claim {claim.claim_number}")
+                    else:
+                        # Remove claim from session if no invoices available
+                        session.expunge(claim)
+                        print(f"Removed claim {claim.claim_number}: no invoices available")
                     
                 except Exception as e:
                     print(f"Error assigning invoices to claim {claim.claim_number}: {e}")
+                    # Remove claim from session if error occurs
+                    session.expunge(claim)
                     continue
             
             session.commit()
-            print(f"Successfully seeded {len(claims)} claims!")
+            print(f"Successfully seeded {len(claims_with_invoices)} claims with invoices!")
+            
+            claims_without_invoices = len(claims) - len(claims_with_invoices)
+            if claims_without_invoices > 0:
+                print(f"Removed {claims_without_invoices} claims that had no invoices available.")
+            
             if skipped_count > 0:
                 print(f"Skipped {skipped_count} invalid records.")
         else:

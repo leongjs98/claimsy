@@ -58,13 +58,13 @@ class Employee(TableBase, Base):
 
 class Invoice(TableBase, Base):
     __tablename__ = "invoices"
-    invoice_number = Column(String(50), unique=True, nullable=False)
+    invoice_number = Column(String(50), nullable=False)
     claim_id = Column(Integer, ForeignKey("claims.id"), nullable=True)
     employee_id = Column(Integer, ForeignKey("employees.id"), nullable=False)
     invoice_date = Column(Date, nullable=False)
-    category = Column(String(100))
-    merchant_name = Column(String(255))
-    merchant_address = Column(String(255))
+    category = Column(String(100), nullable=False)
+    merchant_name = Column(String(255), nullable=False)
+    merchant_address = Column(String(255), nullable=False)
     items_services = Column(JSON)
     remark = Column(Text)
 
@@ -86,7 +86,7 @@ class Invoice(TableBase, Base):
 class Claim(TableBase, Base):
     __tablename__ = "claims"
 
-    claim_number = Column(String(50), unique=True, nullable=False)
+    claim_number = Column(String(50), nullable=False)
     employee_id = Column(Integer, ForeignKey("employees.id"), nullable=False)
     claim_type = Column(String(50))
     reason = Column(Text)
@@ -95,7 +95,7 @@ class Claim(TableBase, Base):
     reviewed_date = Column(Date)
     resolution = Column(Text)
     is_anomaly = Column(Boolean, default=False)
-    anomalyReason = Column(Text, nullable=False)
+    anomalyReason = Column(Text, nullable=True)
 
     employee = relationship(
         "Employee",
