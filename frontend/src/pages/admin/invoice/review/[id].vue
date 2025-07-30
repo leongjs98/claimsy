@@ -115,7 +115,7 @@
                 :key="index"
                 class="bg-gray-200 text-sm text-theme-300"
               >
-                <td class="rounded-l-lg px-4 py-3">{{ item.item }}</td>
+                <td class="rounded-l-lg px-4 py-3">{{ item.description }}</td>
                 <td class="px-4 py-3">{{ invoice?.category }}</td>
                 <td class="px-4 py-3 text-right">{{ item.quantity }}</td>
                 <td class="rounded-r-lg px-4 py-3 text-right">
