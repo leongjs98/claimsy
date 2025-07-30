@@ -154,21 +154,21 @@
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Trip Purpose</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - Client meetings and product demo March 16th
+                - Client meetings and product demo August 16th
                 <br />
-                - First meeting: 10 AM March 16th
+                - First meeting: 10 AM August 16th
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Departure</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - March 15th (evening preferred)
+                - August 15th (evening preferred)
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-900">Return</dt>
               <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                - March 18th (flexible: 17th or 19th for savings)
+                - August 18th (flexible: 17th or 19th for savings)
               </dd>
             </div>
             <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -274,19 +274,19 @@
 ### **✈️ FLIGHT OPTIONS**
 
 **Option 1 (Recommended):**
-- **British Airways BA117** - JFK to LHR
-- **Departure:** March 15, 9:45 PM → **Arrival:** March 16, 8:20 AM +1
-- **Return:** BA112 - March 18, 2:15 PM → 5:45 PM same day
-- **Class:** World Traveller Plus (Premium Economy)
-- **Price:** RM 7,757 roundtrip ($1,847)
-- **Benefits:** Extra legroom, priority boarding, arrives well before your 10 AM meeting
+- **Singapore Airlines SQ108** - KUL to SIN
+- **Departure:** August 15, 7:30 PM → **Arrival:** August 15, 8:45 PM
+- **Return:** SQ103 - August 18, 2:15 PM → 3:30 PM same day
+- **Class:** Premium Economy
+- **Price:** RM 1,680 roundtrip ($400)
+- **Benefits:** Extra legroom, priority boarding, arrives with plenty of time to rest before your 10 AM meeting
 
 **Option 2 (Budget-friendly):**
-- **British Airways BA179** - JFK to LHR
-- **Departure:** March 15, 7:50 PM → **Arrival:** March 16, 6:35 AM +1
-- **Return:** BA178 - March 17, 8:25 PM → 11:55 PM same day
-- **Class:** World Traveller (Economy)
-- **Price:** RM 5,414 roundtrip ($1,289)
+- **Singapore Airlines SQ106** - KUL to SIN
+- **Departure:** August 15, 6:15 PM → **Arrival:** August 15, 7:30 PM
+- **Return:** SQ105 - August 17, 8:25 PM → 9:40 PM same day
+- **Class:** Economy
+- **Price:** RM 980 roundtrip ($233)
 - **Benefits:** Earlier return saves hotel night, still meets your schedule
 
 ---
@@ -294,45 +294,52 @@
 ### **🏨 HOTEL OPTIONS**
 
 **Option 1 (Prime Location):**
-- **London Marriott Hotel County Hall**
-- **Location:** South Bank, 12 mins to Bank/Financial District
-- **Dates:** March 15-18 (3 nights)
-- **Room:** Executive King with Thames view
-- **Price:** RM 7,938 total (RM 2,646/night) [$1,890 total]
-- **Amenities:** Executive lounge, 24hr business center, gym
+- **The Ritz-Carlton, Millenia Singapore**
+- **Location:** Marina Bay, 8 mins to CBD/Financial District
+- **Dates:** August 15-18 (3 nights)
+- **Room:** Deluxe Marina Bay View
+- **Price:** RM 4,200 total (RM 1,400/night) [$1,000 total]
+- **Amenities:** Club lounge, 24hr business center, gym, Marina Bay views
 
 **Option 2 (Business District):**
-- **Marriott London City**
-- **Location:** Heart of Financial District
-- **Dates:** March 15-18 (3 nights)
-- **Room:** Superior King
-- **Price:** RM 6,930 total (RM 2,310/night) [$1,650 total]
-- **Amenities:** Walking distance to meetings, business facilities
+- **JW Marriott Hotel Singapore South Beach**
+- **Location:** Heart of CBD/Financial District
+- **Dates:** August 15-18 (3 nights)
+- **Room:** Premier King
+- **Price:** RM 3,360 total (RM 1,120/night) [$800 total]
+- **Amenities:** Walking distance to meetings, business facilities, rooftop pool
 
 ---
 
 ### **🚗 GROUND TRANSPORTATION**
 
 **Airport Transfers:**
-- **Heathrow Express + Taxi:** £45 each way (~RM 470 total) [$112 total]
-- **Private car service:** £85 each way (~RM 890 total) [$212 total]
-- **Recommendation:** Heathrow Express (15 mins) + short taxi
+- **MRT + Taxi:** S$25 each way (~RM 160 total) [$38 total]
+- **Private car service:** S$45 each way (~RM 290 total) [$69 total]
+- **Grab/Taxi direct:** S$35 each way (~RM 225 total) [$54 total]
+- **Recommendation:** Direct Grab/Taxi (30 mins door-to-door)
 
 ---
 
 ### **💰 TOTAL PACKAGE COSTS**
 
 **Recommended Package:**
-- Flight Option 1: RM 7,757 ($1,847)
-- Hotel Option 2: RM 6,930 ($1,650)
-- Transfers: RM 470 ($112)
-- **Total: RM 15,157** (**$3,609**) (under your RM 16,800 budget!)
+- Flight Option 1: RM 1,680 ($400)
+- Hotel Option 1: RM 4,200 ($1,000)
+- Transfers: RM 225 ($54)
+- **Total: RM 6,105** (**$1,454**) (well under your RM 10,500 budget!)
 
 **Budget Package:**
-- Flight Option 2: RM 5,414 ($1,289)
-- Hotel Option 2: RM 6,930 ($1,650)
-- Transfers: RM 470 ($112)
-- **Total: RM 12,814** (**$3,051**) (saves RM 3,986!)
+- Flight Option 2: RM 980 ($233)
+- Hotel Option 2: RM 3,360 ($800)
+- Transfers: RM 225 ($54)
+- **Total: RM 4,565** (**$1,087**) (saves RM 5,935!)
+
+**Premium Package:**
+- Flight Option 1: RM 1,680 ($400)
+- Hotel Option 1: RM 4,200 ($1,000)
+- Private transfers: RM 290 ($69)
+- **Total: RM 6,170** (**$1,469**) (still under budget with premium comfort!)
 
 Which option interests you most? I can book immediately and send confirmations to your email.
     `,
@@ -345,7 +352,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "I need to fly from New York JFK to London Heathrow.",
+      text: "I need to fly from Kuala Lumpur KUL to Singapore Changi SIN.",
     },
     {
       isSenderUser: false,
@@ -353,7 +360,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "I need to leave March 15th, preferably evening, and return March 18th.",
+      text: "I need to leave August 15th, preferably evening, and return August 18th.",
     },
     {
       isSenderUser: false,
@@ -361,7 +368,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Client meetings and a product demo on March 16th.",
+      text: "Client meetings and a product demo on August 16th.",
     },
     {
       isSenderUser: false,
@@ -369,7 +376,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Client meetings and a product demo on March 16th.",
+      text: "Client meetings and a product demo on August 16th.",
     },
     {
       isSenderUser: false,
@@ -377,7 +384,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Yes, my first meeting is March 16th at 10 AM, so I need to be there the night before.",
+      text: "Yes, my first meeting is August 16th at 10 AM, so I need to be there the night before.",
     },
     {
       isSenderUser: false,
@@ -385,7 +392,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Company budget is $4,000 total for flights and hotel.",
+      text: "Company budget is $2,500 total for flights and hotel.",
     },
     {
       isSenderUser: false,
@@ -401,7 +408,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "I'm Gold status with British Airways and prefer Marriott hotels.",
+      text: "I'm Gold status with Singapore Airlines and prefer Marriott hotels.",
     },
     {
       isSenderUser: false,
@@ -409,7 +416,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Departure date is fixed, but I could return March 17th or 19th if there's significant savings.",
+      text: "Departure date is fixed, but I could return August 17th or 19th if there's significant savings.",
     },
     {
       isSenderUser: false,
@@ -417,7 +424,7 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: true,
-      text: "Yes, somewhere in Central London, close to the financial district.",
+      text: "Yes, somewhere in Central Singapore, close to the Marina Bay or CBD area.",
     },
     {
       isSenderUser: false,
@@ -429,9 +436,9 @@ Which option interests you most? I can book immediately and send confirmations t
     },
     {
       isSenderUser: false,
-      text: "Perfect! I have everything I need. Let me find you the best options with BA flights and a Marriott in Central London within your budget.",
+      text: "Perfect! I have everything I need. Let me find you the best options with Singapore Airlines flights and a Marriott in Central Singapore within your budget.",
     },
-  ];
+];
 
   function getAnswer() {
     showAnswer.value = true;
@@ -456,3 +463,4 @@ Which option interests you most? I can book immediately and send confirmations t
     });
   });
 </script>
+
