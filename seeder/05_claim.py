@@ -137,17 +137,6 @@ def seed_claims():
                     skipped_count += 1
                     continue
                 
-                # Check if there are available invoices for this employee BEFORE creating the claim
-                available_invoices = session.query(Invoice).filter(
-                    Invoice.employee_id == claim_data["employee_id"],
-                    Invoice.claim_id.is_(None)
-                ).all()
-                
-                if not available_invoices:
-                    print(f"Skipping claim {claim_data['claim_number']}: no available invoices for employee_id {claim_data['employee_id']}")
-                    skipped_count += 1
-                    continue
-                
                 # Convert date strings to date objects if needed
                 if isinstance(claim_data.get("submitted_date"), str):
                     claim_data["submitted_date"] = datetime.strptime(
@@ -177,7 +166,6 @@ def seed_claims():
             session.flush()  # Flush to get claim IDs without committing
             
             # Now assign random invoices to each claim
-            claims_with_invoices = []
             for claim in claims:
                 try:
                     # Get invoices with null claim_id for this employee
@@ -185,36 +173,29 @@ def seed_claims():
                         Invoice.employee_id == claim.employee_id,
                         Invoice.claim_id.is_(None)
                     ).all()
+                    print("len(available_invoices)", len(available_invoices))
                     
                     if available_invoices:
                         # Randomly select 1-3 invoices
                         num_invoices_to_assign = random.randint(1, min(3, len(available_invoices)))
+                        print("num_invoices_to_assign", num_invoices_to_assign)
                         selected_invoices = random.sample(available_invoices, num_invoices_to_assign)
+                        print("selected_invoices", selected_invoices)
                         
                         # Assign claim_id to selected invoices
                         for invoice in selected_invoices:
                             invoice.claim_id = claim.id
                             
-                        claims_with_invoices.append(claim)
                         print(f"Assigned {num_invoices_to_assign} invoices to claim {claim.claim_number}")
                     else:
-                        # Remove claim from session if no invoices available
-                        session.expunge(claim)
-                        print(f"Removed claim {claim.claim_number}: no invoices available")
+                        continue
                     
                 except Exception as e:
                     print(f"Error assigning invoices to claim {claim.claim_number}: {e}")
-                    # Remove claim from session if error occurs
-                    session.expunge(claim)
                     continue
             
             session.commit()
-            print(f"Successfully seeded {len(claims_with_invoices)} claims with invoices!")
-            
-            claims_without_invoices = len(claims) - len(claims_with_invoices)
-            if claims_without_invoices > 0:
-                print(f"Removed {claims_without_invoices} claims that had no invoices available.")
-            
+            print(f"Successfully seeded {len(claims)} claims!")
             if skipped_count > 0:
                 print(f"Skipped {skipped_count} invalid records.")
         else:
@@ -230,6 +211,42 @@ def seed_claims():
     finally:
         session.close()
 
+def delete_claims_with_no_invoices():
+    """Delete claims that have no invoices attached to them"""
+    try:
+        # Find claims with no invoices using a subquery
+        claims_with_no_invoices = session.query(Claim).filter(
+            ~Claim.id.in_(
+                session.query(Invoice.claim_id).filter(Invoice.claim_id.isnot(None))
+            )
+        ).all()
+        
+        if not claims_with_no_invoices:
+            print("No claims found with 0 invoices attached.")
+            return 0
+        
+        # Store claim numbers for logging
+        claim_numbers = [claim.claim_number for claim in claims_with_no_invoices]
+        count = len(claims_with_no_invoices)
+        
+        # Delete the claims
+        for claim in claims_with_no_invoices:
+            session.delete(claim)
+        
+        session.commit()
+        
+        print(f"Successfully deleted {count} claims with no invoices:")
+        for claim_number in claim_numbers:
+            print(f"  - {claim_number}")
+        
+        return count
+        
+    except Exception as e:
+        session.rollback()
+        print(f"Error deleting claims with no invoices: {str(e)}")
+        raise
+    finally:
+        session.close()
 
 def show_help():
     """Show usage instructions"""
@@ -254,6 +271,7 @@ if __name__ == "__main__":
         try:
             NUM_CLAIMS = int(sys.argv[2])
             seed_claims()
+            delete_claims_with_no_invoices()
         except ValueError:
             print("Error: Please provide a valid number")
             show_help()

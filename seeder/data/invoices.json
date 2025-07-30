@@ -1428,7 +1428,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-01-15",
-    "category": "Office Supplies",
+    "category": "Supplies and Equipment",
     "merchant_name": "Staples Business Solutions",
     "merchant_address": "123 Business Park Dr, Suite 100, New York, NY 10001",
     "items_services": [
@@ -1452,7 +1452,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-01-22",
-    "category": "Travel",
+    "category": "Travel Expenses",
     "merchant_name": "Delta Airlines",
     "merchant_address": "1030 Delta Blvd, Atlanta, GA 30354",
     "items_services": [
@@ -1470,7 +1470,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-02-05",
-    "category": "Meals & Entertainment",
+    "category": "Meals and Entertainment",
     "merchant_name": "The Capital Grille",
     "merchant_address": "120 Broadway, New York, NY 10271",
     "items_services": [
@@ -1494,7 +1494,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-02-12",
-    "category": "Transportation",
+    "category": "Travel Expenses",
     "merchant_name": "Uber Technologies",
     "merchant_address": "1455 Market St, San Francisco, CA 94103",
     "items_services": [
@@ -1518,7 +1518,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-02-18",
-    "category": "Software & Subscriptions",
+    "category": "Supplies and Equipment",
     "merchant_name": "Adobe Systems Inc",
     "merchant_address": "345 Park Ave, San Jose, CA 95110",
     "items_services": [
@@ -1556,29 +1556,11 @@
     "remark": "Accommodation for conference attendance"
   },
   {
-    "invoice_number": "INV-2024-007",
-    "claim_id": null,
-    "employee_id": 1,
-    "invoice_date": "2024-03-08",
-    "category": "Training & Development",
-    "merchant_name": "LinkedIn Learning",
-    "merchant_address": "1000 W Maude Ave, Sunnyvale, CA 94085",
-    "items_services": [
-      {
-        "description": "Project Management Certification Course",
-        "quantity": 1,
-        "unit_price": 299.99,
-        "total": 299.99
-      }
-    ],
-    "remark": "Professional development course for skill enhancement"
-  },
-  {
     "invoice_number": "INV-2024-008",
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-03-15",
-    "category": "Office Supplies",
+    "category": "Supplies and Equipment",
     "merchant_name": "Best Buy Business",
     "merchant_address": "7601 Penn Ave S, Richfield, MN 55423",
     "items_services": [
@@ -1602,7 +1584,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-03-22",
-    "category": "Telecommunications",
+    "category": "Supplies and Equipment",
     "merchant_name": "Verizon Business",
     "merchant_address": "1095 Avenue of the Americas, New York, NY 10036",
     "items_services": [
@@ -1626,7 +1608,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-03-29",
-    "category": "Meals & Entertainment",
+    "category": "Meals and Entertainment",
     "merchant_name": "Starbucks Corporation",
     "merchant_address": "2401 Utah Ave S, Seattle, WA 98134",
     "items_services": [
@@ -2085,7 +2067,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-01-15",
-    "category": "Office Supplies",
+    "category": "Supplies and Equipment",
     "merchant_name": "Staples Business Solutions",
     "merchant_address": "123 Business Park Dr, Suite 100, New York, NY 10001",
     "items_services": [
@@ -2109,7 +2091,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-01-22",
-    "category": "Travel",
+    "category": "Travel Expenses",
     "merchant_name": "Delta Airlines",
     "merchant_address": "1030 Delta Blvd, Atlanta, GA 30354",
     "items_services": [
@@ -2127,7 +2109,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-02-05",
-    "category": "Meals & Entertainment",
+    "category": "Meals and Entertainment",
     "merchant_name": "The Capital Grille",
     "merchant_address": "120 Broadway, New York, NY 10271",
     "items_services": [
@@ -2151,7 +2133,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-02-12",
-    "category": "Transportation",
+    "category": "Travel Expenses",
     "merchant_name": "Uber Technologies",
     "merchant_address": "1455 Market St, San Francisco, CA 94103",
     "items_services": [
@@ -2175,7 +2157,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-02-18",
-    "category": "Software & Subscriptions",
+    "category": "Supplies and Equipment",
     "merchant_name": "Adobe Systems Inc",
     "merchant_address": "345 Park Ave, San Jose, CA 95110",
     "items_services": [
@@ -2213,29 +2195,11 @@
     "remark": "Accommodation for conference attendance"
   },
   {
-    "invoice_number": "INV-2024-007",
-    "claim_id": null,
-    "employee_id": 1,
-    "invoice_date": "2024-03-08",
-    "category": "Training & Development",
-    "merchant_name": "LinkedIn Learning",
-    "merchant_address": "1000 W Maude Ave, Sunnyvale, CA 94085",
-    "items_services": [
-      {
-        "description": "Project Management Certification Course",
-        "quantity": 1,
-        "unit_price": 299.99,
-        "total": 299.99
-      }
-    ],
-    "remark": "Professional development course for skill enhancement"
-  },
-  {
     "invoice_number": "INV-2024-008",
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-03-15",
-    "category": "Office Supplies",
+    "category": "Supplies and Equipment",
     "merchant_name": "Best Buy Business",
     "merchant_address": "7601 Penn Ave S, Richfield, MN 55423",
     "items_services": [
@@ -2259,7 +2223,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-03-22",
-    "category": "Telecommunications",
+    "category": "Supplies and Equipment",
     "merchant_name": "Verizon Business",
     "merchant_address": "1095 Avenue of the Americas, New York, NY 10036",
     "items_services": [
@@ -2283,7 +2247,7 @@
     "claim_id": null,
     "employee_id": 1,
     "invoice_date": "2024-03-29",
-    "category": "Meals & Entertainment",
+    "category": "Meals and Entertainment",
     "merchant_name": "Starbucks Corporation",
     "merchant_address": "2401 Utah Ave S, Seattle, WA 98134",
     "items_services": [

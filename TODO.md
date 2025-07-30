@@ -1,11 +1,8 @@
 # Code-related Todo's
 ## Todo
 ### Feedbacks
-- [ ] john: smart suggest get it done to impress
 
 ### Essentials
-- [ ] data from kul to sin, all related to nearby
-- [ ] seeder for fix employee demo data (using previous mock data)
 
 ### Nice to have
 - [ ] tax for receipts
@@ -26,8 +23,12 @@
 - [ ] testing
 - [ ] john: invoice/edit (both first and \[id]) unit next to quantity
 - [ ] john: invoice/edit (both first and \[id]) table become input to edit (delete button)
+- [ ] john: smart suggest get it done to impress
 
 ## Done
+- [x] seeder for unsubmitted invoices employee_id 1
+- [x] seeder for fix demo data
+- [x] data from kul to sin, all related to nearby
 - [x] multiple receipt save merchant address, merchant name
 - [x] multiple receipts, long receipt
 - [x] invoice/edit connect backend data
