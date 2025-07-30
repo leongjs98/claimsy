@@ -185,7 +185,12 @@
     </div>
   </div>
 
-  <EmployeeClaimDetailsDialog v-model="showDialog" :data="selectedClaim" />
+  <EmployeeClaimDetailsDialog
+      v-model="showDialog"
+      :data="selectedClaim"
+    :invoices="claimStore.claimInvoices"
+    :loading="claimStore.loading"
+  />
 </template>
 
 <script setup>
@@ -223,9 +228,18 @@ onMounted(async () => {
   await claimStore.initStore(employeeId); // Pass employee ID
 });
 
-const openDetails = (claim) => {
+const openDetails = async (claim) => {
   selectedClaim.value = claim;
-  showDialog.value = true;
+
+  // Fetch invoices for this claim
+  try {
+    await claimStore.fetchInvoicesByClaimId(claim.id);
+    showDialog.value = true;
+  } catch (error) {
+    console.error("Failed to load claim invoices:", error);
+    // Still show dialog even if invoices fail to load
+    showDialog.value = true;
+  }
 };
 
 const formatCurrency = (amount) => {
