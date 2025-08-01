@@ -1,5 +1,17 @@
 # Claimsy
 
+This now archived project (mainly a proof of concept) was a Gamuda AI Academy
+Cohort 3 Project build by the following students (in alphabetical order):
+
+- Abdul Rahman Auf bin Azhar
+- Leong Jia Shean
+- Mark Ferrary Stalin
+- Nur Aisyah Yusof
+- Nurdiana Kamilia binti Mohd Faizal
+- Shojeni A/P Kumeresan
+
+---
+
 !! **only group leader can push to main branch** !!
 
 everyone needs to develop in your own branch and ask to merge to main
